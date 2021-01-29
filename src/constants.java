@@ -1,3 +1,6 @@
+//Team name: NinjaAPY
+//Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (
+
 public class constants {
     public static final int NUM_PLAYERS = 2;
     public static final int NUM_NEUTRALS = 4;

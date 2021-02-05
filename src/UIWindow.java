@@ -56,14 +56,13 @@ public class UIWindow {
     }
 
         private static void createAndShowGUI() {
-        //Create and set up the window.
         JFrame frame = new JFrame("User Interface");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize.width, screenSize.height);
 
         addComponentsToPane(frame.getContentPane());
-
         frame.setVisible(true);
     }
 }

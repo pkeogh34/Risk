@@ -1,13 +1,19 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class UIWindow {
+public class UIWindow{
     final static boolean RIGHT_TO_LEFT = false;
+    private static String userCommand = new String();
+    private static JTextArea textArea = new JTextArea(1, 20);
+    private static JTextField textField = new JTextField( 10);
+
     public UIWindow(){
         createAndShowGUI();
     }
 
-    public static void addComponentsToPane(Container pane) {
+    private static void addComponentsToPane(Container pane) {
         if (RIGHT_TO_LEFT) {
             pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         }
@@ -15,11 +21,10 @@ public class UIWindow {
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        JTextArea textArea = new JTextArea(1, 20);
         textArea.setFont(new Font("Arial", Font.PLAIN, 14));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        textArea.setEditable(true);
+        textArea.setEditable(false);
         textArea.setText("Welcome to Risk");
         JScrollPane scrollPane = new JScrollPane(textArea);
         c.fill = GridBagConstraints.BOTH;
@@ -31,31 +36,36 @@ public class UIWindow {
         c.weighty = 0.0;
         pane.add(scrollPane,c);
 
-        JLabel map = new JLabel("Map Area");
+
+        JLabel map = new JLabel("");
         c.gridwidth = 2;
         c.gridheight = 1;
-        c.ipadx = 0;
         c.gridx = 3;
         c.gridy = 0;
         c.weightx = 1.0;
         c.weighty = 1.0;
         pane.add(map, c);
 
-        textArea = new JTextArea(8, 1);
-        textArea.setFont(new Font("Arial", Font.PLAIN, 14));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setEditable(true);
-        textArea.setText("User input area");
-        scrollPane = new JScrollPane(textArea);
-        c.gridx = 3;       //aligned with button
-        c.gridy = 1;       //third row
+        textField.setFont(new Font("Arial", Font.PLAIN, 14));
+        textField.setEditable(true);
+        textField.setText("User input area");
+
+        ActionListener listener =new AddUIListener();
+        textField.addActionListener(listener);
+
+        c.gridx = 3;
+        c.gridy = 1;
         c.weightx = 0.0;
         c.weighty = 0.0;
-        pane.add(scrollPane, c);
+        c.ipady = 50;
+        pane.add(textField, c);
     }
 
-        private static void createAndShowGUI() {
+    private static void printTextField(String text) {
+        textArea.setText(text);
+    }
+
+    private static void createAndShowGUI() {
         JFrame frame = new JFrame("User Interface");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -65,4 +75,14 @@ public class UIWindow {
         addComponentsToPane(frame.getContentPane());
         frame.setVisible(true);
     }
+
+    static class AddUIListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            userCommand+=("\n" + textField.getText());
+            printTextField(userCommand);
+        }
+    }
+
 }

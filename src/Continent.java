@@ -14,7 +14,8 @@ public class Continent{
                 adjList[i] = new LinkedList<>();
             }
         }
-        public void addEgde(int source, int destination){
+
+        public void addEdge(int source, int destination){
             adjList[source].addFirst(destination);
             adjList[destination].addFirst(source);
         }
@@ -50,15 +51,15 @@ public class Continent{
     public static void main(String[] args) {
         int vertices = 6;
         Graph graph = new Graph(vertices);
-        graph.addEgde(0, 1);
-        graph.addEgde(0, 2);
-        graph.addEgde(1, 2);
-        graph.addEgde(1, 3);
-        graph.addEgde(3, 4);
-        graph.addEgde(2, 3);
-        graph.addEgde(4, 0);
-        graph.addEgde(4, 1);
-        graph.addEgde(4, 5);
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 2);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(2, 3);
+        graph.addEdge(4, 0);
+        graph.addEdge(4, 1);
+        graph.addEdge(4, 5);
         graph.printGraph();
         graph.DFSRecursion(5);
     }

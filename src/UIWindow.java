@@ -5,9 +5,9 @@ import javax.swing.*;
 
 public class UIWindow{
     final static boolean RIGHT_TO_LEFT = false;
-    private static String userCommand = new String();
-    private static JTextArea textArea = new JTextArea(1, 20);
-    private static JTextField textField = new JTextField( 10);
+    private static String userCommand;
+    private static final JTextArea textArea = new JTextArea(1, 20);
+    private static final JTextField textField = new JTextField( 10);
 
     public UIWindow(){
         createAndShowGUI();

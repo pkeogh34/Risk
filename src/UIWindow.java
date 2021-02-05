@@ -55,22 +55,15 @@ public class UIWindow {
         pane.add(scrollPane, c);
     }
 
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
-     */
-    private static void createAndShowGUI() {
+        private static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("User Interface");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize.width, screenSize.height);
 
-        //Set up the content pane.
         addComponentsToPane(frame.getContentPane());
 
-        //Display the window.
         frame.setVisible(true);
     }
 }

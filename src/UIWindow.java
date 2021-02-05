@@ -4,11 +4,7 @@ import javax.swing.*;
 public class UIWindow {
     final static boolean RIGHT_TO_LEFT = false;
     public UIWindow(){
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+        createAndShowGUI();
     }
 
     public static void addComponentsToPane(Container pane) {

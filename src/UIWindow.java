@@ -70,7 +70,7 @@ public class UIWindow{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize(screenSize.width, screenSize.height);
+        frame.setSize(1000, 600);
 
         addComponentsToPane(frame.getContentPane());
         frame.setVisible(true);

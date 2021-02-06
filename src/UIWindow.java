@@ -69,7 +69,7 @@ public class UIWindow{
         JFrame frame = new JFrame("User Interface");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(1000, 600);
 
         addComponentsToPane(frame.getContentPane());

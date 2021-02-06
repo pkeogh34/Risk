@@ -80,8 +80,10 @@ public class UIWindow{
     {
         @Override
         public void actionPerformed(ActionEvent e) {
-            userCommand+=("\n" + textField.getText());
-            printTextField(userCommand);
+            if(textField.getText().charAt(0)!='\0'){
+                userCommand+=("\n" + textField.getText());
+                printTextField(userCommand);
+            }
         }
     }
 

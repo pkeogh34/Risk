@@ -16,11 +16,6 @@ public class UIWindow{
     private static String playerName1;
     private static String playerName2;
 
-    public UIWindow(){
-        createAndShowGUI();
-        getPlayerNames();
-    }
-
     private static void addComponentsToPane(Container pane) {
         if (RIGHT_TO_LEFT) {
             pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
@@ -56,6 +51,7 @@ public class UIWindow{
 
         textField.setFont(new Font("Arial", Font.PLAIN, 14));
         textField.setEditable(true);
+        System.out.print("Enter names for the players in this format: \"1,name\" or \"2,othername\"\n");
 
         ActionListener listener =new AddUIListener();
         textField.addActionListener(listener);
@@ -68,7 +64,21 @@ public class UIWindow{
         pane.add(textField, c);
     }
 
-    private static void createAndShowGUI() {
+    private static void setPlayerName(int i, String name) {
+        if (i==1) {
+            playerName1 = name;
+            textArea.append("Player 1 set to: "+name+"\n");
+        }
+        else if (i ==2 ) {
+            playerName2 = name;
+            textArea.append("Player 2 set to: "+name+"\n");
+        }
+        else {
+            textArea.append("error: invalid player number\n");
+        }
+    }
+
+    public static void createAndShowUI() {
         JFrame frame = new JFrame("User Interface");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -79,19 +89,19 @@ public class UIWindow{
         frame.setVisible(true);
     }
 
-    private static void getPlayerNames(){
-        System.out.println("Please enter name of player 1: ");
-        playerName1=textField.getText();
-        System.out.println("Please enter name of player 2: ");
-        playerName2=textField.getText();
-    }
-
     static class AddUIListener implements ActionListener
     {
         @Override
         public void actionPerformed(ActionEvent e) {
-                userCommand=textField.getText();
-                textArea.append(userCommand + "\n");
+            userCommand=textField.getText();
+            System.out.println(userCommand + "\n");
+            textField.setText(""); //reset the input
+            String bits[] =  userCommand.split(","); // ONLY ACCEPTS commands like this: "1,name" or "2,othername", anything else not work
+            try {
+                setPlayerName(Integer.parseInt(bits[0]), bits[1]);
+            } catch (Exception e1) {
+                System.out.println("error: not a valid command\n");
+            }
         }
     }
 

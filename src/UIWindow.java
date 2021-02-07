@@ -18,15 +18,6 @@ public class UIWindow{
     public UIWindow(){
         createAndShowGUI();
         getPlayerNames();
-        if(playerName1==null){
-            System.out.println("NO");
-        }else{
-            System.out.print("Yes");
-        }
-        System.out.println(playerName1);
-        System.out.println(playerName2);
-
-        System.out.print("Yes");
     }
 
     private static void addComponentsToPane(Container pane) {
@@ -98,7 +89,8 @@ public class UIWindow{
         @Override
         public void actionPerformed(ActionEvent e) {
                 userCommand=textField.getText();
-                System.out.println(userCommand);
+                textArea.append(userCommand + "\n");
         }
     }
+
 }

@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class UIWindow{
     final static boolean RIGHT_TO_LEFT = false;
-    private static String userCommand = new String("");
+    private static String userInput = new String("");
     private static WorldMap map = new WorldMap();
     private static final JTextArea textArea = new JTextArea(1, 16);
     private static final JTextField textField = new JTextField( 1);
@@ -51,7 +51,6 @@ public class UIWindow{
 
         textField.setFont(new Font("Arial", Font.PLAIN, 14));
         textField.setEditable(true);
-        System.out.print("Enter names for the players in this format: \"1,name\" or \"2,othername\"\n");
 
         ActionListener listener =new AddUIListener();
         textField.addActionListener(listener);
@@ -64,18 +63,15 @@ public class UIWindow{
         pane.add(textField, c);
     }
 
-    private static void setPlayerName(int i, String name) {
-        if (i==1) {
-            playerName1 = name;
-            textArea.append("Player 1 set to: "+name+"\n");
-        }
-        else if (i ==2 ) {
-            playerName2 = name;
-            textArea.append("Player 2 set to: "+name+"\n");
-        }
-        else {
-            textArea.append("error: invalid player number\n");
-        }
+    public static void getPlayerNames(){
+        textField.getText();
+        System.out.println(userInput);
+        playerName1=userInput;
+        textField.getText();
+        playerName2=userInput;
+        System.out.println(playerName1);
+        System.out.println(playerName2);
+
     }
 
     public static void createAndShowUI() {
@@ -93,15 +89,9 @@ public class UIWindow{
     {
         @Override
         public void actionPerformed(ActionEvent e) {
-            userCommand=textField.getText();
-            System.out.println(userCommand + "\n");
+            userInput=textField.getText();
+            System.out.println(userInput);
             textField.setText(""); //reset the input
-            String bits[] =  userCommand.split(","); // ONLY ACCEPTS commands like this: "1,name" or "2,othername", anything else not work
-            try {
-                setPlayerName(Integer.parseInt(bits[0]), bits[1]);
-            } catch (Exception e1) {
-                System.out.println("error: not a valid command\n");
-            }
         }
     }
 

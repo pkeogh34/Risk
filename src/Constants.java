@@ -65,8 +65,8 @@ public class Constants {
     public static final String[] CONTINENT_NAMES = {"N America", "Europe", "Asia", "Australia", "S America", "Africa"};  // for reference
     public static final int[] CONTINENT_IDS = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5};
     public static final int[] CONTINENT_VALUES = {5, 5, 7, 2, 2, 3};
-    private static final int FRAME_WIDTH = 1000;    // must be even
-    private static final int FRAME_HEIGHT = 600;
+    private static final int FRAME_WIDTH = 1100;    // must be even
+    private static final int FRAME_HEIGHT = 650;
     private static final int[][] COUNTRY_COORD = {
             {151, 110},     // 0
             {215, 121},
@@ -114,5 +114,12 @@ public class Constants {
 
     public static int getCountryCoord(int x, int y) {
         return COUNTRY_COORD[x][y];
+    }
+
+    public static int getFrameWidth() {
+        return FRAME_WIDTH;
+    }
+    public static int getFrameHeight() {
+        return FRAME_HEIGHT;
     }
 }

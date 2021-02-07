@@ -6,10 +6,8 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
-public class WorldMap extends JComponent
-{
-    public void paintComponent(Graphics g)
-    {
+public class WorldMap extends JComponent{
+    public void paintComponent(Graphics g) {
         // Recover Graphics2D
         Graphics2D g2 = (Graphics2D) g;
 
@@ -22,7 +20,27 @@ public class WorldMap extends JComponent
             int x1 = Constants.getCountryCoord(i,0);
             int y1 = Constants.getCountryCoord(i,1);
             Ellipse2D.Double node = new Ellipse2D.Double(x1, y1, 20, 20);
+            if(i<=8){
+                g2.setColor(Color.RED);
+                g2.fill(node);
+            }else if(i>8 && i<=17){
+                g2.setColor(Color.BLUE);
+                g2.fill(node);
+            }else if(i>17&&i<=23){
+                g2.setColor(Color.PINK);
+                g2.fill(node);
+            }else if(i>23&&i<=29){
+                g2.setColor(Color.MAGENTA);
+                g2.fill(node);
+            }else if(i>29&&i<=35){
+                g2.setColor(Color.YELLOW);
+                g2.fill(node);
+            }else if(i>35&&i<=41){
+                g2.setColor(Color.GREEN);
+                g2.fill(node);
+            }
             g2.draw(node);
+
 
             //Connects the newly created node to its adjacent nodes
             for (int k : Constants.ADJACENT[i]) {

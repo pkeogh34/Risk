@@ -10,6 +10,7 @@ import javax.swing.*;
 public class UIWindow{
     final static boolean RIGHT_TO_LEFT = false;
     private static String userCommand = new String("");
+    private static WorldMap map = new WorldMap();
     private static final JTextArea textArea = new JTextArea(1, 16);
     private static final JTextField textField = new JTextField( 1);
     private static String playerName1;
@@ -45,7 +46,6 @@ public class UIWindow{
         PrintStream outStream = new PrintStream( new TextAreaOutput(textArea));
         System.setOut(outStream);
 
-        WorldMap map = new WorldMap();
         c.gridwidth = 2;
         c.gridheight = 1;
         c.gridx = 3;
@@ -80,7 +80,9 @@ public class UIWindow{
     }
 
     private static void getPlayerNames(){
+        System.out.println("Please enter name of player 1: ");
         playerName1=textField.getText();
+        System.out.println("Please enter name of player 2: ");
         playerName2=textField.getText();
     }
 

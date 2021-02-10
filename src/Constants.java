@@ -65,51 +65,51 @@ public class Constants {
     public static final String[] CONTINENT_NAMES = {"N America", "Europe", "Asia", "Australia", "S America", "Africa"};  // for reference
     public static final int[] CONTINENT_IDS = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5};
     public static final int[] CONTINENT_VALUES = {5, 5, 7, 2, 2, 3};
-    private static final int FRAME_WIDTH = 1100;    // must be even
-    private static final int FRAME_HEIGHT = 650;
+    private static final int FRAME_WIDTH = 1000;    // must be even
+    private static final int FRAME_HEIGHT = 600;
     private static final int[][] COUNTRY_COORD = {
-            {151, 110},     // 0
-            {215, 121},
-            {106, 46},
-            {83, 104},
-            {274, 21},
-            {165, 195},
-            {95, 179},
-            {100, 259},
-            {15, 49},
-            {330, 159},
-            {358, 240},      // 10
-            {425, 230},
-            {507, 140},
-            {420, 160},
-            {353, 87},
-            {423, 82},
-            {588, 187},
-            {639, 292},
-            {532, 298},
-            {821, 173},
-            {605, 112},      // 20
-            {723, 30},
-            {787, 54},
-            {711, 320},
-            {710, 100},
-            {655, 68},
-            {720, 176},
-            {695, 237},
-            {849, 497},
-            {810, 389},
-            {773, 486},       // 30
-            {731, 414},
-            {173, 312},
-            {181, 386},
-            {249, 375},
-            {193, 483},
-            {456, 422},
-            {400, 353},
-            {470, 492},
-            {459, 314},
-            {507, 392},        // 40
-            {546, 505}
+            {191,150},     // 0
+            {255,161},
+            {146,86},
+            {123,144},
+            {314,61},
+            {205,235},
+            {135,219},
+            {140,299},
+            {45,89},
+            {370,199},
+            {398,280},      // 10
+            {465,270},
+            {547,180},
+            {460,200},
+            {393,127},
+            {463,122},
+            {628,227},
+            {679,332},
+            {572,338},
+            {861,213},
+            {645,152},      // 20
+            {763,70},
+            {827,94},
+            {751,360},
+            {750,140},
+            {695,108},
+            {760,216},
+            {735,277},
+            {889,537},
+            {850,429},
+            {813,526},       // 30
+            {771,454},
+            {213,342},
+            {180,405},
+            {289,415},
+            {233,533},
+            {496,462},
+            {440,393},
+            {510,532},
+            {499,354},
+            {547,432},        // 40
+            {576,515}
     };
 
     public static int getCountryCoord(int x, int y) {
@@ -121,5 +121,10 @@ public class Constants {
     }
     public static int getFrameHeight() {
         return FRAME_HEIGHT;
+    }
+
+    private Constants() {
+        //this prevents even the native class from calling this constructor
+        throw new AssertionError();
     }
 }

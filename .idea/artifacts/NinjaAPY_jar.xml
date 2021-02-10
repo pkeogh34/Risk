@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NinjaAPY:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/NinjaAPY_jar</output-path>
+    <root id="archive" name="NinjaAPY.jar">
+      <element id="module-output" name="NinjaAPY" />
+    </root>
+  </artifact>
+</component>

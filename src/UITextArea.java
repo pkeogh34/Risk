@@ -4,7 +4,7 @@ import java.awt.*;
 public class UITextArea extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static final int CHARACTER_WIDTH = 16;
+    private static final int CHARACTER_WIDTH = 14;
     private static final int FONT_SIZE = 14;
 
     JTextArea textArea = new JTextArea(20, CHARACTER_WIDTH);

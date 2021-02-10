@@ -46,7 +46,7 @@ public class UIWindow {
         c.gridy = 1;
         c.weightx = 0.0;
         c.weighty = 0.0;
-        c.ipady = 30;
+        c.ipady = 20;
         window.add(inputArea, c);
     }
 

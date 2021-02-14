@@ -6,24 +6,24 @@ public class Initialisation {
         Board board = new Board();
         UIWindow uiWindow = new UIWindow(board);
         Player[] players = new Player[6];
-        int countryId;
         String name;
 
         // display blank board
         uiWindow.displayMap();
 
         int i;
-        // get player names
+        //Initialise active players
         for(i = 0; i<Constants.NUM_PLAYERS; i++) {
             uiWindow.displayString("Enter the name of player " + (i+1));
             name = uiWindow.getCommand();
             uiWindow.displayString("> " + name);
-            Player player = new Player(name, Constants.getPlayerColors(i),36);
+            Player player = new Player(name, Constants.getPlayerColors(i),Constants.INIT_UNITS_PLAYER);
             players[i]=player;
         }
 
+        //Initialise neutral players
         for(;i<Constants.NUM_NEUTRALS+2;i++){
-            Player neutralPlayer = new Player(("Neutral Player " + i),Constants.getPlayerColors(i),24);
+            Player neutralPlayer = new Player(("Neutral Player " + i),Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
             players[i]=neutralPlayer;
         }
 
@@ -41,7 +41,6 @@ public class Initialisation {
                 countryId++;
             }
         }
-
         // display map
         uiWindow.displayMap();
 

@@ -120,7 +120,6 @@ public class Constants {
     public static int getCountryCoord(int x, int y) {
         return COUNTRY_COORD[x][y];
     }
-
     public static int getFrameWidth() {
         return FRAME_WIDTH;
     }

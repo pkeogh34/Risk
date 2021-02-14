@@ -5,6 +5,7 @@ public class Player {
     private static String playerName;
     private static Color playerColour;
     private static int numArmies;
+    private static int[] numTerritoriesInContinent = new int[6];
     private static ArrayList<Territory> playerTerritories= new ArrayList<Territory>();
     private static TerritoryCard territoryCards[] = new TerritoryCard[5];
 

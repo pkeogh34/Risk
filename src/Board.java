@@ -1,14 +1,14 @@
 public class Board {
 
-   private static Territory[] territories =new Territory[Constants.NUM_COUNTRIES];
+   private Territory[] territories =new Territory[Constants.NUM_COUNTRIES];
 
     Board() {
         for (int i=0; i<Constants.NUM_COUNTRIES; i++) {
-            territories[i].setTerritoryContinent(Constants.CONTINENT_NAMES[Constants.CONTINENT_IDS[i]]);
-            territories[i].setContinentCode(Constants.CONTINENT_IDS[i]);
-            territories[i].setTerritoryName(Constants.COUNTRY_NAMES[i]);
-            territories[i].occupied=false;
-            territories[i].numOccupyingArmies=0;
+            String territoryName=Constants.COUNTRY_NAMES[i];
+            String territoryContinent=Constants.CONTINENT_NAMES[Constants.CONTINENT_IDS[i]];
+            int continentCode= Constants.CONTINENT_IDS[i];
+            Territory territory = new Territory(territoryName,territoryContinent,continentCode, false,0);
+            territories[i]=territory;
         }
     }
 

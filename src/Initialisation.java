@@ -28,16 +28,16 @@ public class Initialisation {
         }
 
         // add units
-        countryId = 0;
-        for (playerId=0; playerId<Constants.NUM_PLAYERS; playerId++) {
-            for (int i=0; i<Constants.INIT_COUNTRIES_PLAYER; i++) {
-                board.addUnits(countryId, playerId, 1);
+        int countryId=0;
+        for (i=0; i<Constants.NUM_PLAYERS; i++) {
+            for (int j=0; j<Constants.INIT_COUNTRIES_PLAYER; j++) {
+                board.addUnits(countryId, i, 1);
                 countryId++;
             }
         }
-        for (; playerId<Constants.NUM_PLAYERS_PLUS_NEUTRALS; playerId++) {
-            for (int i=0; i<Constants.INIT_COUNTRIES_NEUTRAL; i++) {
-                board.addUnits(countryId, playerId, 1);
+        for (; i<Constants.NUM_PLAYERS_PLUS_NEUTRALS; i++) {
+            for (int j=0; j<Constants.INIT_COUNTRIES_NEUTRAL; j++) {
+                board.addUnits(countryId, i, 1);
                 countryId++;
             }
         }

@@ -2,7 +2,6 @@ import java.util.Random;
 
 public class GameLogic {
     public static void main(String[] args) {
-
     }
 
     private static void diceRoll(){

@@ -1,6 +1,6 @@
 public class Board {
 
-   private static Territory territories[]=new Territory[Constants.NUM_COUNTRIES];
+   private static Territory[] territories =new Territory[Constants.NUM_COUNTRIES];
 
     Board() {
         for (int i=0; i<Constants.NUM_COUNTRIES; i++) {
@@ -10,7 +10,6 @@ public class Board {
             territories[i].occupied=false;
             territories[i].numOccupyingArmies=0;
         }
-        return;
     }
 
     public void addUnits (int country, int player, int addNumUnits) {
@@ -20,7 +19,6 @@ public class Board {
             territories[country].playerCode = player;
         }
         territories[country].numOccupyingArmies += addNumUnits;
-        return;
     }
 
     public boolean isOccupied(int country) {

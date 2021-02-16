@@ -6,6 +6,7 @@ public class Board {
         for (int i=0; i<Constants.NUM_COUNTRIES; i++) {
             territories[i].setTerritoryContinent(Constants.CONTINENT_NAMES[Constants.CONTINENT_IDS[i]]);
             territories[i].setContinentCode(Constants.CONTINENT_IDS[i]);
+            territories[i].setTerritoryName(Constants.COUNTRY_NAMES[i]);
             territories[i].occupied=false;
             territories[i].numOccupyingArmies=0;
         }
@@ -18,7 +19,7 @@ public class Board {
             territories[country].occupied = true;
             territories[country].playerCode = player;
         }
-        territories[country].numOccupyingArmies = territories[country].numOccupyingArmies + addNumUnits;
+        territories[country].numOccupyingArmies += addNumUnits;
         return;
     }
 

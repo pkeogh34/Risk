@@ -43,6 +43,6 @@ public class Initialisation {
 
         GameLogic gameLogic = new GameLogic(board, uiWindow,players);
 
-       return gameLogic;
+        return gameLogic;
     }
 }

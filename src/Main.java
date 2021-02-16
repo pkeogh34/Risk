@@ -5,7 +5,5 @@ public class Main {
     public static void main (String args[]) {
         Initialisation initialisation = new Initialisation();
         GameLogic gameLogic=initialisation.initialisation();
-        gameLogic.diceRoll();
-
     }
 }

@@ -41,8 +41,8 @@ public class Initialisation {
         // display map
         uiWindow.displayMap();
 
-        GameLogic gameLogic = new GameLogic(board, uiWindow,players);
 
-        return gameLogic;
+
+        return  new GameLogic(board, uiWindow,players);
     }
 }

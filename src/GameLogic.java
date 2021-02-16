@@ -1,7 +1,14 @@
 import java.util.Random;
 
 public class GameLogic {
-    public static void main(String[] args) {
+    private Board board;
+    private UIWindow uiWindow;
+    private Player[] players;
+
+    public GameLogic(Board board, UIWindow uiWindow, Player[] players){
+        this.board=board;
+        this.uiWindow=uiWindow;
+        this.players=players;
     }
 
     private static void diceRoll(){

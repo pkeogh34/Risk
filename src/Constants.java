@@ -12,8 +12,9 @@ public class Constants {
     public static final int INIT_COUNTRIES_NEUTRAL = 6;
     public static final int INIT_UNITS_PLAYER = 36;
     public static final int INIT_UNITS_NEUTRAL = 24;
-    private static final Color[] PLAYER_COLORS = {Color.RED,Color.BLUE,Color.YELLOW,Color.GREEN,Color.MAGENTA,Color.WHITE};
-	public static final Color[] CONTINENT_COLORS = {new Color(195,133,83), new Color(75,30,165), new Color(255,127,90), new Color(0,112,214), new Color(100,200,150), new Color(255,223,0)};
+    private static final Color[] PLAYER_COLORS = {new Color(255, 60, 0),Color.BLUE,new Color(140, 229, 181),new Color(157, 172, 174),new Color(235, 131, 8),Color.WHITE};
+	//                                                        N.America                            Europe                              Asia                         Australia                         S.America                      Africa
+    public static final Color[] CONTINENT_COLORS = {new Color(195,133,83), new Color(75, 203, 215), new Color(255,127,90), new Color(224, 172, 213), new Color(100,0,150), new Color(255,223,0)};
     public static final String[] COUNTRY_NAMES = {
             "Ontario", "Quebec", "NW Territory", "Alberta", "Greenland", "E United States", "W United States", "Central America", "Alaska",
             "Great Britain", "W Europe", "S Europe", "Ukraine", "N Europe", "Iceland", "Scandinavia",

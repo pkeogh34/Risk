@@ -3,8 +3,6 @@
 
 import java.awt.*;
 
-import static java.awt.Color.RED;
-
 public class Constants {
     public static final int NUM_PLAYERS = 2;
     public static final int NUM_NEUTRALS = 4;

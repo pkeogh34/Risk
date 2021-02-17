@@ -26,7 +26,9 @@ public class TerritoryCard
 		case ARTILLERY:
 			s += "ARTILLERY";
 			break;
-			
+
+
+
 			
 	}
 	

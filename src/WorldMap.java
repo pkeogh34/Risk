@@ -14,7 +14,6 @@ class WorldMap extends JPanel {
     private static final Color TEXT_COLOR = Color.BLACK;
     private static final int ADJACENT_LINE = 1;
     private static final Color ADJACENT_COLOR = Color.GRAY;
-    public static final Color[] CONTINENT_COLORS = {new Color(195,133,83), new Color(75,30,165), new Color(255,127,90), new Color(0,112,214), new Color(100,200,150), new Color(255,223,0)};
     private static final int PLAYER_RADIUS = 8;
    
     private Board board;
@@ -50,7 +49,7 @@ class WorldMap extends JPanel {
         }
         // Display countries
         for (int i=0; i<Constants.NUM_COUNTRIES; i++) {
-            g2.setColor(CONTINENT_COLORS[Constants.CONTINENT_IDS[i]]);
+            g2.setColor(Constants.CONTINENT_COLORS[Constants.CONTINENT_IDS[i]]);
             xPos = Constants.getCountryCoord(i,0) - COUNTRY_RADIUS;
             yPos = Constants.getCountryCoord(i,1) - COUNTRY_RADIUS;
             Ellipse2D.Double ellipse = new Ellipse2D.Double(xPos,yPos,2*COUNTRY_RADIUS,2*COUNTRY_RADIUS);

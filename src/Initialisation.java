@@ -11,11 +11,17 @@ public class Initialisation {
         int i;
         //Initialise active players
         for(i = 0; i<Constants.NUM_PLAYERS; i++) {
-            uiWindow.displayString("Enter the name of player " + (i+1));
+            uiWindow.displayString("Enter the name of player " + (i + 1));
             name = uiWindow.getCommand();
             uiWindow.displayString("> " + name);
-            Player player = new Player(name, Constants.getPlayerColors(i),Constants.INIT_UNITS_PLAYER);
-            players[i]=player;
+            Player player = new Player(name, Constants.getPlayerColors(i), Constants.INIT_UNITS_PLAYER);
+            players[i] = player;
+            if (i>=1){
+                if(players[0].getPlayerName().equals(players[1].getPlayerName())) {
+                    uiWindow.displayString("Players must have different names. Please enter player name again.\n");
+                    i--;
+                }
+            }
         }
 
         //Initialise neutral players
@@ -40,8 +46,6 @@ public class Initialisation {
         }
         // display map
         uiWindow.displayMap();
-
-
 
         return  new GameLogic(board, uiWindow,players);
     }

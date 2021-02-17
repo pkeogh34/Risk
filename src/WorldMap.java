@@ -13,15 +13,15 @@ class WorldMap extends JPanel {
     private static final int NAME_OFFSET_Y = 13;
     private static final Color TEXT_COLOR = Color.BLACK;
     private static final int ADJACENT_LINE = 1;
-    private static final Color ADJACENT_COLOR = Color.LIGHT_GRAY;
-    public static final Color[] CONTINENT_COLORS = {Color.BLACK, Color.CYAN, Color.DARK_GRAY, Color.PINK, Color.ORANGE, Color.GRAY};
+    private static final Color ADJACENT_COLOR = Color.GRAY;
+    public static final Color[] CONTINENT_COLORS = {new Color(195,133,83), new Color(75,30,165), new Color(255,127,90), new Color(0,112,214), new Color(100,200,150), new Color(255,223,0)};
     private static final int PLAYER_RADIUS = 8;
    
     private Board board;
 
     WorldMap (Board inBoard) {
         board = inBoard;
-        setBackground(Color.WHITE);
+        setBackground(new Color(255,255,255));
         return;
     }
 

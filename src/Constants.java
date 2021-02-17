@@ -117,7 +117,7 @@ public class Constants {
             {576,515}
     };
     
-	public static enum UnitType
+	public enum UnitType
 	{
 		INFANTRY,
 		CAVALRY,

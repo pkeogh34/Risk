@@ -116,6 +116,59 @@ public class Constants {
             {547,432},        // 40
             {576,515}
     };
+    
+	public static enum UnitType
+	{
+		INFANTRY,
+		CAVALRY,
+		ARTILLERY
+	}
+	
+	public static final UnitType CARD_UNIT_TYPE[] = {
+		UnitType.CAVALRY,
+		UnitType.ARTILLERY,
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,
+		UnitType.CAVALRY,
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,
+		UnitType.CAVALRY,
+		UnitType.INFANTRY,		
+		UnitType.CAVALRY,		// 10
+		UnitType.INFANTRY,
+		UnitType.CAVALRY,
+		UnitType.ARTILLERY,
+		UnitType.CAVALRY,
+		UnitType.INFANTRY,
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,
+		UnitType.INFANTRY,
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,		// 20		
+		UnitType.CAVALRY,
+		UnitType.CAVALRY,
+		UnitType.CAVALRY,
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,
+		UnitType.ARTILLERY,
+		UnitType.ARTILLERY,
+		UnitType.CAVALRY,
+		UnitType.INFANTRY,		
+		UnitType.CAVALRY,		// 30
+		UnitType.ARTILLERY,
+		UnitType.CAVALRY,
+		UnitType.ARTILLERY,
+		UnitType.CAVALRY,
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,
+		UnitType.CAVALRY,
+		UnitType.INFANTRY,
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,		// 40
+		UnitType.ARTILLERY,
+		UnitType.INFANTRY,
+		
+	};
 
     public static int getCountryCoord(int x, int y) {
         return COUNTRY_COORD[x][y];

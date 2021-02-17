@@ -1,8 +1,5 @@
 public class Initialisation {
-    public Initialisation(){
-        initialisation();
-    }
-    public static void initialisation () {
+    public static GameLogic initialisation () {
         Board board = new Board();
         UIWindow uiWindow = new UIWindow(board);
         Player[] players = new Player[6];
@@ -44,8 +41,8 @@ public class Initialisation {
         // display map
         uiWindow.displayMap();
 
-        GameLogic gameLogic = new GameLogic(board, uiWindow,players);
 
-        return;
+
+        return  new GameLogic(board, uiWindow,players);
     }
 }

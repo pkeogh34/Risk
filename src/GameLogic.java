@@ -11,7 +11,7 @@ public class GameLogic {
         this.players=players;
     }
 
-    private static void diceRoll(){
+    public static void diceRoll(){
         boolean notEqual=false;
         int rollPlayer1, rollPlayer2;
         Random roll =new Random();

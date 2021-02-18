@@ -1,5 +1,5 @@
 public class Initialisation {
-    public static GameLogic initialisation () {
+    public GameLogic initialisation () {
         Board board = new Board();
         UIWindow uiWindow = new UIWindow(board);
         Player[] players = new Player[6];

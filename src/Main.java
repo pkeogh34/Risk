@@ -5,11 +5,6 @@ public class Main {
     public static void main (String args[]) {
         Initialisation initialisation = new Initialisation();
         GameLogic gameLogic=initialisation.initialisation();
-
-        gameLogic.firstPlayer();
-        while(!gameLogic.isGameOver()){
-            gameLogic.turn();
-        }
-        gameLogic.print("" + gameLogic.getWinningPlayer().getPlayerName() + " has won the game!");
+        gameLogic.game();
     }
 }

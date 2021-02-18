@@ -5,14 +5,30 @@ public class GameLogic {
     private Board board;
     private UIWindow uiWindow;
     private Player[] players;
+    private int numPlayers=6;
+    private Player currPlayer;
     private String command; //Maybe change to enum when all commands are known (will require changing return type of getCommand() function also)
     private boolean gameOver = false;
-    private Player winningPlayer;
 
     public GameLogic(Board board, UIWindow uiWindow, Player[] players){
         this.board=board;
         this.uiWindow=uiWindow;
         this.players=players;
+    }
+
+    public void game(){
+        firstPlayer();
+        for(int i=0;!gameOver;i++){
+            uiWindow.displayString("" + currPlayer.getPlayerName() +", it is your turn\n");
+            gameOver=turn();
+            if(i==numPlayers){
+                i=0;
+            }
+            if(gameOver){
+                i--;
+            }
+        }
+        uiWindow.displayString("" + currPlayer.getPlayerName() +" has one the game!");
     }
 
     public void firstPlayer(){
@@ -51,11 +67,11 @@ public class GameLogic {
             uiWindow.displayString("" + players[0].getPlayerName() + " will go first\n");
         }
 
+        currPlayer=players[0];
     }
 
-    public void turn(){
-        gameOver=true;
-        winningPlayer=players[0];
+    public boolean turn(){
+        return true;
     }
 
     public boolean checkCommand(String correctInput){
@@ -70,17 +86,5 @@ public class GameLogic {
     public int diceRoll(){
         Random random =new Random();
         return random.nextInt(5)+1;
-    }
-
-    public void print(String msg){
-        uiWindow.displayString(msg);
-    }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    public Player getWinningPlayer() {
-        return winningPlayer;
     }
 }

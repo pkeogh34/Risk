@@ -47,5 +47,4 @@ public class UserInputArea extends JPanel  {
         }
         return command;
     }
-
 }

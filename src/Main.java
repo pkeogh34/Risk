@@ -5,5 +5,10 @@ public class Main {
     public static void main (String args[]) {
         Initialisation initialisation = new Initialisation();
         GameLogic gameLogic=initialisation.initialisation();
+
+        while(!gameLogic.isGameOver()){
+            GameLogic.turn();
+        }
+        System.out.println("" + gameLogic.getWinningPlayer() + " has won the game!");
     }
 }

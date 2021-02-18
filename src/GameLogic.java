@@ -4,11 +4,17 @@ public class GameLogic {
     private Board board;
     private UIWindow uiWindow;
     private Player[] players;
+    private boolean gameOver = false;
+    private Player winningPlayer;
 
     public GameLogic(Board board, UIWindow uiWindow, Player[] players){
         this.board=board;
         this.uiWindow=uiWindow;
         this.players=players;
+    }
+
+    public static void turn(){
+
     }
 
     public static void diceRoll(){
@@ -28,5 +34,13 @@ public class GameLogic {
                }
            }
         }
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public Player getWinningPlayer() {
+        return winningPlayer;
     }
 }

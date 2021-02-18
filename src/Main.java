@@ -6,9 +6,10 @@ public class Main {
         Initialisation initialisation = new Initialisation();
         GameLogic gameLogic=initialisation.initialisation();
 
+        gameLogic.firstPlayer();
         while(!gameLogic.isGameOver()){
-            GameLogic.turn();
+            gameLogic.turn();
         }
-        System.out.println("" + gameLogic.getWinningPlayer() + " has won the game!");
+        gameLogic.print("" + gameLogic.getWinningPlayer().getPlayerName() + " has won the game!");
     }
 }

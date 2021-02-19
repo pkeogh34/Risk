@@ -2,88 +2,62 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class GameLogic {
-    private Board board;
+    Initialisation I;
     private UIWindow uiWindow;
     private Player[] players;
+    private int[] playerOrder;
     private int numPlayers=6;
     private Player currPlayer;
-    private String command; //Maybe change to enum when all commands are known (will require changing return type of getCommand() function also)
-    private boolean gameOver = false;
+    private int territoryCode;
+    public static String command; //Maybe change to enum when all commands are known (will require changing return type of getCommand() function also)
 
-    public GameLogic(Board board, UIWindow uiWindow, Player[] players){
-        this.board=board;
-        this.uiWindow=uiWindow;
-        this.players=players;
+
+
+    public GameLogic(){
+        I=new Initialisation();
+        I.initialisation();
+        uiWindow=I.getUiWindow();
+        players=I.getPlayers();
+        playerOrder=I.getPlayerOrder();
+
+        currPlayer=players[playerOrder[0]];
     }
 
     public void game(){
-        firstPlayer();
-        for(int i=0;!gameOver;i++){
+        for(int i=0;numPlayers>1;i++){
             uiWindow.displayString("" + currPlayer.getPlayerName() +", it is your turn\n");
-            gameOver=turn();
+            if(i<=1){
+               turnPlayer();
+            }else{
+                turnNeutral();
+            }
             if(i==numPlayers){
                 i=0;
-            }
-            if(gameOver){
-                i--;
             }
         }
         uiWindow.displayString("" + currPlayer.getPlayerName() +" has one the game!");
     }
 
-    public void firstPlayer(){
-        int roll1=0, roll2=0;
-        boolean equal=true;
+    public void turnPlayer(){
+        uiWindow.displayString("Please enter the name of the territory in which you wish to place your troops: ");
+        command=uiWindow.getCommand();
 
-        while(equal){
-            uiWindow.displayString("" + players[0].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
-            command=uiWindow.getCommand();
-            checkCommand("ROLL");
-            roll1=diceRoll();
-            uiWindow.displayString("" + players[0].getPlayerName() + " rolled " + roll1 + "\n");
-
-            uiWindow.displayString("" + players[1].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
-            command=uiWindow.getCommand();
-            checkCommand("ROLL");
-            roll2=diceRoll();
-            uiWindow.displayString("" + players[1].getPlayerName() + " rolled " + roll2 +"\n");
-
-            if(roll1!=roll2){
-                equal=false;
-            }
-
-            if(equal){
-                uiWindow.displayString("Players rolled the same number. Please roll again.\n");
-            }
-        }
-
-        if(roll1<roll2){
-            uiWindow.displayString("" + players[1].getPlayerName() + " will go first\n");
-            Player temp;
-            temp=players[0];
-            players[0]=players[1];
-            players[1]=temp;
-        }else{
-            uiWindow.displayString("" + players[0].getPlayerName() + " will go first\n");
-        }
-
-        currPlayer=players[0];
     }
 
-    public boolean turn(){
-        return true;
+    public void turnNeutral(){
+
     }
 
-    public boolean checkCommand(String correctInput){
+    //Maybe just use checkCommmand from initialisation class?
+    public void checkCommand(String correctInput){
         if(!command.equals(correctInput)){
             uiWindow.displayString("You must enter '" + correctInput + "'. Please enter your command again\n");
             command=uiWindow.getCommand();
             checkCommand(correctInput);
         }
-        return true;
     }
 
-    public int diceRoll(){
+    public static int diceRoll(){
         Random random =new Random();
         return random.nextInt(5)+1;
     }

@@ -12,25 +12,31 @@ public class Board {
         }
     }
 
-    public void addUnits (int country, int player, int addNumUnits) {
+    public void addUnits (int territory, int player, int addNumUnits) {
         // prerequisite: country must be unoccupied or already occupied by this player
-        if (!territories[country].occupied) {
-            territories[country].occupied = true;
-            territories[country].playerCode = player;
+        if (!territories[territory].occupied) {
+            territories[territory].occupied = true;
+            territories[territory].playerCode = player;
+
         }
-        territories[country].numOccupyingArmies += addNumUnits;
+        territories[territory].numOccupyingArmies += addNumUnits;
     }
 
-    public boolean isOccupied(int country) {
-        return territories[country].occupied;
+    //Create just one getter and add getters in Territory class?
+    public boolean isOccupied(int territory) {
+        return territories[territory].occupied;
     }
 
-    public int getOccupier (int country) {
-        return territories[country].playerCode;
+    public int getOccupier (int territory) {
+        return territories[territory].playerCode;
     }
 
-    public int getNumUnits (int country) {
-        return territories[country].numOccupyingArmies;
+    public int getNumUnits (int territory) {
+        return territories[territory].numOccupyingArmies;
+    }
+
+    public Territory getTerritory(int territory){
+        return territories[territory];
     }
 
 }

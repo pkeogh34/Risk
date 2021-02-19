@@ -3,7 +3,7 @@
 
 public class Main {
     public static void main (String args[]) {
-        GameLogic gameLogic=Initialisation.initialisation(GameLogic);
+        GameLogic gameLogic=new GameLogic();
         gameLogic.game();
     }
 }

@@ -14,7 +14,7 @@ public class Initialisation {
             uiWindow.displayString("Enter the name of player " + (i + 1));
             name = uiWindow.getCommand();
             uiWindow.displayString("> " + name);
-            Player player = new Player(name, Constants.getPlayerColors(i), Constants.INIT_UNITS_PLAYER);
+            Player player = new Player(name, Constants.getPlayerColors(i), Constants.INIT_UNITS_PLAYER,false);
             players[i] = player;
             if (i>=1){
                 if(players[0].getPlayerName().equals(players[1].getPlayerName())) {
@@ -26,7 +26,7 @@ public class Initialisation {
 
         //Initialise neutral players
         for(;i<Constants.NUM_NEUTRALS+2;i++){
-            Player neutralPlayer = new Player(("Neutral Player " + i),Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
+            Player neutralPlayer = new Player(("Neutral Player " + i),Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL,true);
             players[i]=neutralPlayer;
         }
 

@@ -8,16 +8,27 @@ public class Player {
     private int[] numTerritoriesInContinent = {0,0,0,0,0,0};
     private ArrayList<Territory> playerTerritories= new ArrayList<Territory>();
     private TerritoryCard territoryCards[] = new TerritoryCard[5];
+    private boolean isNeutral ;
 
-    public Player(String playerName, Color playerColour,int numArmies){
+    public Player(String playerName, Color playerColour,int numArmies, boolean isNeutral){
         this.playerName = playerName;
         this.playerColour = playerColour;
         this.numArmies = numArmies;
+        this.isNeutral=isNeutral;
 
     }
 
     public String getPlayerName() {
         return playerName;
+    }
+
+    public int getNumArmies()
+    {
+       return numArmies;
+    }
+    public boolean getPlayerType()
+    {
+       return isNeutral;
     }
 }
 

@@ -7,7 +7,7 @@ public class Player {
     private int numArmies;
     private int[] numTerritoriesInContinent = {0,0,0,0,0,0};
     private ArrayList<Territory> playerTerritories= new ArrayList<Territory>();
-    private TerritoryCard territoryCards[] = new TerritoryCard[5];
+    private ArrayList<TerritoryCard> territoryCards = new ArrayList<TerritoryCard>();
     private boolean isNeutral ;
 
     public Player(String playerName, Color playerColour,int numArmies, boolean isNeutral){
@@ -29,6 +29,24 @@ public class Player {
     public boolean getPlayerType()
     {
        return isNeutral;
+    }
+
+    public void drawCard(Deck d)
+    {
+        TerritoryCard tc = d.drawCard();
+        territoryCards.add(tc);
+    }
+
+    public String showCards()
+    {
+        String s = "";
+        for (int i = 0; i < territoryCards.size(); i++)
+        {
+            s += territoryCards.get(i);
+
+        }
+        return s;
+
     }
 }
 

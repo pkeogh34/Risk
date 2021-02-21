@@ -5,6 +5,8 @@ import java.util.Random;
 public class Deck 
 {
 	private static ArrayList<TerritoryCard> theDeck = new ArrayList<TerritoryCard>();
+
+	//not sure if need this yet
 	private static ArrayList<TerritoryCard> discardPile = new ArrayList<TerritoryCard>();
 	
 	public Deck() {
@@ -37,9 +39,16 @@ public class Deck
 	}
 	
 	public TerritoryCard drawCard() {
-		//TODO check deck not empty
-		TerritoryCard tc = theDeck.remove(0);
-		discardPile.add(tc);
+		TerritoryCard tc = null;
+
+		try{
+			tc = theDeck.remove(0);
+			//discardPile.add(tc);
+		}
+		catch(IndexOutOfBoundsException e){
+			System.out.println("Error: desk is empty;");
+		}
+
 		return tc;
 	}
 }

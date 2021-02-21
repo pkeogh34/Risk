@@ -7,7 +7,7 @@ public class Board {
             String territoryName=Constants.COUNTRY_NAMES[i];
             String territoryContinent=Constants.CONTINENT_NAMES[Constants.CONTINENT_IDS[i]];
             int continentCode= Constants.CONTINENT_IDS[i];
-            Territory territory = new Territory(territoryName,territoryContinent,continentCode, false,0);
+            Territory territory = new Territory(territoryName,i, territoryContinent,continentCode, false,0);
             territories[i]=territory;
         }
     }

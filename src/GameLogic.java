@@ -8,7 +8,7 @@ public class GameLogic {
     private int numPlayers=6;
     private Player currPlayer;
     private int territoryCode;
-    private int numTurns=0;
+    private int numTurns=1;
     public static String command; /*Maybe change to enum when all commands
                                     are known (will require changing return type
                                     of getCommand() function also).
@@ -24,6 +24,7 @@ public class GameLogic {
     public void game(){
         for(int i=0;i<54;i++){
             currPlayer=players[playerOrder[i]];
+            uiWindow.displayString("Turn "+ numTurns);
             uiWindow.displayString("" + currPlayer.getPlayerName() +", it is your turn\n You must place 3 troops in a territory that you own\n");
             if(i<=1){
                 placeTroops(3);
@@ -31,7 +32,7 @@ public class GameLogic {
                 turnNeutral();
             }
 
-            if(i==numPlayers){
+            if(i==numPlayers-1){
                 i=0;
             }
             numTurns++;
@@ -77,7 +78,7 @@ public class GameLogic {
         for (int i = 0; i < currPlayer.getNumPlayerTerritories(); i++) {
             if (command.equals(currPlayer.getPlayerTerritory(i).territoryName)) {
                 check = true;
-                territoryCode=i;
+                territoryCode=currPlayer.getPlayerTerritory(i).territoryCode;
             }
         }
         if (!check) {

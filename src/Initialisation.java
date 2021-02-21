@@ -45,6 +45,7 @@ public class Initialisation {
             for (int j=0; j<Constants.INIT_COUNTRIES_NEUTRAL; j++) {
                 board.addUnits(territoryId, 1);
                 board.setOccupier(territoryId,i);
+                players[i].addTerritory(board.getTerritory(territoryId));
                 territoryId++;
             }
         }

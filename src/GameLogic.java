@@ -25,12 +25,18 @@ public class GameLogic {
     public void game(){
         for(int i=0;i<54;i++){
             currPlayer=players[playerOrder[i]];
-            uiWindow.displayString("Turn "+ numTurns);
-            uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\nYou must place 3 troops in a territory that you own\n");
+            uiWindow.displayString("Turn "+ numTurns );
             if(i<=1){
+                uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n\nYou must place 3 troops in a territory that you own\n");
                 placeTroops(3);
             }else{
-                turnNeutral();
+                uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n\nYou must place 1 troop in a territory that you own\n");
+                Random random =new Random();
+                territoryCode=currPlayer.getPlayerTerritory(random.nextInt(currPlayer.getNumPlayerTerritories())).territoryCode;
+                uiWindow.board.addUnits(territoryCode,1);
+                currPlayer.addArmies(-1);
+                uiWindow.displayString("" + currPlayer.getPlayerName() + " placed their troops in " + uiWindow.board.getTerritory(territoryCode).territoryName + "\n");
+                uiWindow.displayMap();
             }
 
             if(i==numPlayers-1){
@@ -66,11 +72,23 @@ public class GameLogic {
     }
 
     //Maybe just use checkCommmand from initialisation class?
-    public void checkCommand(String correctInput){
-        if(!command.equalsIgnoreCase(correctInput)){
-            uiWindow.displayString("You must enter '" + correctInput + "'. Please enter your command again\n");
-            command=uiWindow.getCommand();
-            checkCommand(correctInput);
+    public void checkCommand(String[] correctInputs) {
+        boolean check=false;
+        String msg = ("'" + correctInputs[0] + "'");
+        for (int i = 0; i < correctInputs.length;i++) {
+            if (command.equalsIgnoreCase(correctInputs[i])) {
+                check=true;
+            }
+            if(i==correctInputs.length-1 && i!=0){
+                msg+=(" or '" + correctInputs[i] + "'");
+            }else if(i>1){
+                msg+=(", " + correctInputs[i]);
+            }
+        }
+        if (!check) {
+            uiWindow.displayString("You must enter " + msg  + ". Please enter your command again\n");
+            command = uiWindow.getCommand();
+            checkCommand(correctInputs);
         }
     }
 
@@ -98,12 +116,17 @@ public class GameLogic {
     }
 
     private void placeTroops(int numTroops){
-        uiWindow.displayString("Please enter the name of the territory in which you wish to place your troops\n");
-        command=uiWindow.getCommand();
-        territoryCode = checkHasTerritory();
-        uiWindow.displayString("Please enter 'FORTIFY' to add your troops to " + uiWindow.board.getTerritory(territoryCode).territoryName + "\n");
-        command=uiWindow.getCommand();
-        checkCommand("FORTIFY");
+        while(true) {
+            uiWindow.displayString("Please enter the name of the territory in which you wish to place your troops\n");
+            command = uiWindow.getCommand();
+            territoryCode = checkHasTerritory();
+            uiWindow.displayString("Please enter 'FORTIFY' to add your troops to " + uiWindow.board.getTerritory(territoryCode).territoryName + ".\nEnter 'CHANGE' to select another territory\n");
+            command = uiWindow.getCommand();
+            checkCommand(new String[]{"FORTIFY", "CHANGE"});
+            if (!command.equalsIgnoreCase("CHANGE")) {
+                break;
+            }
+        }
         uiWindow.board.addUnits(territoryCode,numTroops);
         currPlayer.addArmies(-numTroops);
         uiWindow.displayMap();

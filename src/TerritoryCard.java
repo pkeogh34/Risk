@@ -14,22 +14,20 @@ public class TerritoryCard
 	public String toString() 
 	{
 		
-		String s = countryName + " ";
+		String s = null;
 		switch (type)
 		{
 		case INFANTRY:
-		s += "INFANTRY";
+		s = "INFANTRY";
 		break;
 		case CAVALRY:
-			s += "CAVALRY";
+			s = "CAVALRY";
 			break;
 		case ARTILLERY:
-			s += "ARTILLERY";
+			s = "ARTILLERY";
 			break;
 		}
-	  	s += "\n";
-		
-		return s;
+		return (countryName + "("+ s + ")\n");
 	}
 	
 }

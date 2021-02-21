@@ -14,7 +14,7 @@ public class Initialisation {
         for(i = 0; i<Constants.NUM_PLAYERS; i++) {
             uiWindow.displayString("Enter the name of player " + (i + 1));
             name = uiWindow.getCommand();
-            uiWindow.displayString("> " + name);
+            uiWindow.displayString("> " + name + "\n");
             Player player = new Player(name, i, Constants.getPlayerColors(i), Constants.INIT_UNITS_PLAYER);
             players[i] = player;
             if (i>=1){
@@ -27,7 +27,7 @@ public class Initialisation {
 
         //Initialise neutral players
         for(;i<Constants.NUM_NEUTRALS+2;i++){
-            Player neutralPlayer = new Player(("Neutral Player " + i),i,Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
+            Player neutralPlayer = new Player(("Neutral Player " + (i-1)),i,Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
             players[i]=neutralPlayer;
         }
 
@@ -90,7 +90,7 @@ public class Initialisation {
 
 
     public void checkCommand(String correctInput){
-        if(!GameLogic.command.equals(correctInput)){
+        if(!GameLogic.command.equalsIgnoreCase(correctInput)){
             uiWindow.displayString("You must enter '" + correctInput + "'. Please enter your command again\n");
             GameLogic.command=uiWindow.getCommand();
             checkCommand(correctInput);

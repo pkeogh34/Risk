@@ -38,16 +38,16 @@ public class Player {
         return numTerritoriesInContinent[continentCode];
     }
 
-    public Color getPlayerColour() {
-        return playerColour;
-    }
-
     public int getNumArmies() {
         return numArmies;
     }
 
     public void addArmies(int numArmies) {
         this.numArmies += numArmies;
+    }
+
+    public int getPlayerCode() {
+        return playerCode;
     }
 }
 

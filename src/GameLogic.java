@@ -1,3 +1,4 @@
+import java.util.Locale;
 import java.util.Random;
 
 public class GameLogic {
@@ -25,7 +26,7 @@ public class GameLogic {
         for(int i=0;i<54;i++){
             currPlayer=players[playerOrder[i]];
             uiWindow.displayString("Turn "+ numTurns);
-            uiWindow.displayString("" + currPlayer.getPlayerName() +", it is your turn\n You must place 3 troops in a territory that you own\n");
+            uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\nYou must place 3 troops in a territory that you own\n");
             if(i<=1){
                 placeTroops(3);
             }else{
@@ -40,7 +41,8 @@ public class GameLogic {
 
         for(int i=0;numPlayers>1;i++){
             currPlayer=players[playerOrder[i]];
-            uiWindow.displayString("" + currPlayer.getPlayerName() +", it is your turn\n");
+            uiWindow.displayString("Turn "+ numTurns);
+            uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
             if(i<=1){
                turnPlayer();
             }else{
@@ -65,7 +67,7 @@ public class GameLogic {
 
     //Maybe just use checkCommmand from initialisation class?
     public void checkCommand(String correctInput){
-        if(!command.equals(correctInput)){
+        if(!command.equalsIgnoreCase(correctInput)){
             uiWindow.displayString("You must enter '" + correctInput + "'. Please enter your command again\n");
             command=uiWindow.getCommand();
             checkCommand(correctInput);
@@ -76,7 +78,7 @@ public class GameLogic {
         boolean check = false;
         int territoryCode=0;
         for (int i = 0; i < currPlayer.getNumPlayerTerritories(); i++) {
-            if (command.equals(currPlayer.getPlayerTerritory(i).territoryName)) {
+            if (command.equalsIgnoreCase(currPlayer.getPlayerTerritory(i).territoryName)) {
                 check = true;
                 territoryCode=currPlayer.getPlayerTerritory(i).territoryCode;
             }

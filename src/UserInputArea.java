@@ -1,3 +1,6 @@
+//Team name: NinjaAPY
+//Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
+
 import java.awt.event.ActionEvent;
 import java.util.*;
 import java.awt.event.ActionListener;

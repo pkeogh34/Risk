@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
 public class UITextArea extends JPanel {
@@ -15,6 +16,8 @@ public class UITextArea extends JPanel {
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         textArea.setEditable(false);
+        DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         add(scrollPane);
         return;
     }

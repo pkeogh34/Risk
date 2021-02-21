@@ -15,7 +15,7 @@ public class Initialisation {
             uiWindow.displayString("Enter the name of player " + (i + 1));
             name = uiWindow.getCommand();
             uiWindow.displayString("> " + name);
-            Player player = new Player(name, Constants.getPlayerColors(i), Constants.INIT_UNITS_PLAYER);
+            Player player = new Player(name, i, Constants.getPlayerColors(i), Constants.INIT_UNITS_PLAYER);
             players[i] = player;
             if (i>=1){
                 if(players[0].getPlayerName().equals(players[1].getPlayerName())) {
@@ -27,7 +27,7 @@ public class Initialisation {
 
         //Initialise neutral players
         for(;i<Constants.NUM_NEUTRALS+2;i++){
-            Player neutralPlayer = new Player(("Neutral Player " + i),Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
+            Player neutralPlayer = new Player(("Neutral Player " + i),i,Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
             players[i]=neutralPlayer;
         }
 
@@ -35,14 +35,16 @@ public class Initialisation {
         int territoryId=0;
         for (i=0; i<Constants.NUM_PLAYERS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_PLAYER; j++) {
-                board.addUnits(territoryId, i, 1);
+                board.addUnits(territoryId, 1);
+                board.setOccupier(territoryId,i);
                 players[i].addTerritory(board.getTerritory(territoryId));
                 territoryId++;
             }
         }
         for (; i<Constants.NUM_PLAYERS_PLUS_NEUTRALS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_NEUTRAL; j++) {
-                board.addUnits(territoryId, i, 1);
+                board.addUnits(territoryId, 1);
+                board.setOccupier(territoryId,i);
                 territoryId++;
             }
         }
@@ -84,6 +86,8 @@ public class Initialisation {
             playerOrder[1]=0;
         }
     }
+
+
 
     public void checkCommand(String correctInput){
         if(!GameLogic.command.equals(correctInput)){

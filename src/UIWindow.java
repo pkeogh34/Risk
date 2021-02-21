@@ -6,12 +6,14 @@ import javax.swing.JFrame;
 public class UIWindow {
 
     final static boolean RIGHT_TO_LEFT = false;
+    public final Board board;
     private JFrame window = new JFrame();
     private WorldMap map;
     private UITextArea textArea = new UITextArea();
     private UserInputArea inputArea = new UserInputArea();
 
     UIWindow (Board board) {
+        this.board=board;
         if (RIGHT_TO_LEFT) {
             window.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         }

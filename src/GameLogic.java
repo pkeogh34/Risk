@@ -57,8 +57,14 @@ public class GameLogic {
     public void turnPlayer(){
       //placeTroops();
     }
-
+    //method that places one unit for each neutral on a territory chosen at random
     public void turnNeutral(){
+        Random rand=new Random();
+        //i represents the code of the territory where the unit is going to be placed
+        int i= rand.nextInt(6); //the upper bound is 6 because each neutral player controls 6 territories
+        currPlayer.getPlayerTerritory(i).numOccupyingArmies++;
+        currPlayer.addArmies(-1);
+        uiWindow.displayMap();
 
     }
 

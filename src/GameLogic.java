@@ -77,6 +77,7 @@ public class GameLogic {
     }
 
     //Maybe just use checkCommmand from initialisation class?
+    //Recursive function to check if a player has entered a valid command
     public void checkCommand(String[] correctInputs) {
         boolean check=false;
         String msg = ("'" + correctInputs[0] + "'");
@@ -97,6 +98,7 @@ public class GameLogic {
         }
     }
 
+    //Recursive function to check if a player owns the entered territory
     public int checkHasTerritory() {
         boolean check = false;
         int territoryCode=0;

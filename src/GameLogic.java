@@ -2,9 +2,9 @@ import java.util.Random;
 
 public class GameLogic {
     Initialisation I;
-    private UIWindow uiWindow;
+    private final UIWindow uiWindow;
     private Player[] players;
-    private int[] playerOrder;
+    private final int[] playerOrder;
     private int numPlayers=6;
     private Player currPlayer;
     private int territoryCode;
@@ -25,7 +25,12 @@ public class GameLogic {
         for(int i=0;i<54;i++){
             currPlayer=players[playerOrder[i]];
             uiWindow.displayString("" + currPlayer.getPlayerName() +", it is your turn\n You must place 3 troops in a territory that you own\n");
-            placeTroops(3);
+            if(i<=1){
+                placeTroops(3);
+            }else{
+                turnNeutral();
+            }
+
             if(i==numPlayers){
                 i=0;
             }

@@ -19,7 +19,7 @@ public class Board {
     public void addUnits (int territory, int addNumUnits) {
         // prerequisite: country must be unoccupied or already occupied by this player
         if (!territories[territory].occupied) {
-            territories[territory].occupied = true;;
+            territories[territory].occupied = true;
         }
         territories[territory].numOccupyingArmies += addNumUnits;
     }

@@ -25,6 +25,26 @@ public class GameLogic {
     }
 
     public void game(){
+        initialTroopPlacement();
+        for(int i=0;numPlayers>1;i++){
+            currPlayer=players[playerOrder[i]];
+            uiWindow.displayString("Turn "+ numTurns);
+            uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
+            if(i<=1){
+               turnPlayer();
+            }else{
+                turnNeutral();
+            }
+            if(i==numPlayers){
+                i=0;
+            }
+            numTurns++;
+
+        }
+        uiWindow.displayString("" + currPlayer.getPlayerName() +" has one the game!");
+    }
+
+    public void initialTroopPlacement(){
         for(int i=0;i<54;i++){
             currPlayer=players[playerOrder[i]];
             uiWindow.displayString("Turn "+ numTurns );
@@ -46,23 +66,6 @@ public class GameLogic {
             }
             numTurns++;
         }
-
-        for(int i=0;numPlayers>1;i++){
-            currPlayer=players[playerOrder[i]];
-            uiWindow.displayString("Turn "+ numTurns);
-            uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
-            if(i<=1){
-               turnPlayer();
-            }else{
-                turnNeutral();
-            }
-            if(i==numPlayers){
-                i=0;
-            }
-            numTurns++;
-
-        }
-        uiWindow.displayString("" + currPlayer.getPlayerName() +" has one the game!");
     }
 
     public void turnPlayer(){

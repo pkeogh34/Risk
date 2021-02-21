@@ -101,7 +101,8 @@ public class GameLogic {
         boolean check = false;
         int territoryCode=0;
         for (int i = 0; i < currPlayer.getNumPlayerTerritories(); i++) {
-            if (command.equalsIgnoreCase(currPlayer.getPlayerTerritory(i).territoryName)) {
+
+            if (command.substring(0,3).equalsIgnoreCase(currPlayer.getPlayerTerritory(i).territoryName.substring(0,3))) {
                 check = true;
                 territoryCode=currPlayer.getPlayerTerritory(i).territoryCode;
             }

@@ -11,7 +11,7 @@ public class Player {
     private int numArmies;
     private int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
     private ArrayList<Territory> playerTerritories = new ArrayList<Territory>();
-    private TerritoryCard[] territoryCards = new TerritoryCard[5];
+    private ArrayList<TerritoryCard> territoryCards = new ArrayList<TerritoryCard>();
 
     public Player(String playerName, int playerCode, Color playerColour, int numArmies) {
         this.playerName = playerName;
@@ -51,6 +51,25 @@ public class Player {
 
     public int getPlayerCode() {
         return playerCode;
+    }
+
+
+    public void drawCard(Deck d)
+    {
+        TerritoryCard tc = d.drawCard();
+        territoryCards.add(tc);
+    }
+
+    public String showCards()
+    {
+        String s = "";
+        for (int i = 0; i < territoryCards.size(); i++)
+        {
+            s += territoryCards.get(i);
+
+        }
+        return s;
+
     }
 }
 

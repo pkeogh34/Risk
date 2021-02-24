@@ -25,8 +25,12 @@ public class GameLogic {
     }
 
     public void game(){
+        for(int i=0;i<6;i++){
+            uiWindow.displayString(""+ playerOrder[i]);
+        }
         initialTroopPlacement();
         for(int i=0;numPlayers>1;i++){
+
             currPlayer=players[playerOrder[i]];
             uiWindow.displayString("Turn "+ numTurns);
             uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
@@ -36,7 +40,7 @@ public class GameLogic {
                 turnNeutral();
             }
             if(i==numPlayers){
-                i=0;
+                i=-1;
             }
             numTurns++;
 
@@ -62,7 +66,7 @@ public class GameLogic {
             }
 
             if(i==numPlayers-1){
-                i=0;
+                i=-1;
             }
             numTurns++;
         }

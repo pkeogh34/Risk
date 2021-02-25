@@ -25,9 +25,6 @@ public class GameLogic {
     }
 
     public void game(){
-        for(int i=0;i<6;i++){
-            uiWindow.displayString(""+ playerOrder[i]);
-        }
         initialTroopPlacement();
         for(int i=0;numPlayers>1;i++){
 

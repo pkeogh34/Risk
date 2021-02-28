@@ -2,7 +2,7 @@
 //Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
 
 import java.awt.*;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class UIWindow {
 
@@ -10,7 +10,7 @@ public class UIWindow {
     public final Board board;
     private JFrame window = new JFrame();
     private WorldMap map;
-    private UITextArea textArea = new UITextArea();
+    private UITextArea uiTextArea = new UITextArea();
     private UserInputArea inputArea = new UserInputArea();
 
     UIWindow (Board board) {
@@ -22,7 +22,7 @@ public class UIWindow {
         map = new WorldMap(board);
         window.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        window.setSize(1100,650);
+        window.setSize(1130,660);
         window.setTitle("Risk");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
@@ -35,7 +35,7 @@ public class UIWindow {
         c.gridwidth = 1;
         c.weightx = 0.0;
         c.weighty = 0.0;
-        window.add(textArea);
+        window.add(uiTextArea.scrollPane,c);
 
         c.gridwidth = 2;
         c.gridheight = 1;
@@ -51,6 +51,20 @@ public class UIWindow {
         c.weighty = 0.0;
         c.ipady = 20;
         window.add(inputArea, c);
+
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        SwingUtilities.updateComponentTreeUI(inputArea);
+
     }
 
     public String getCommand () {
@@ -63,7 +77,7 @@ public class UIWindow {
     }
 
     public void displayString (String string) {
-        textArea.addText(string);
+        uiTextArea.addText(string);
         return;
     }
 

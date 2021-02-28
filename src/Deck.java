@@ -37,8 +37,6 @@ public class Deck
 			theDeck.add(c);
 			
 		}
-		
-		
 	}
 	
 	public TerritoryCard drawCard() {

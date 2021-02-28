@@ -76,6 +76,7 @@ public class GameLogic {
             uiWindow.displayString("You have " + currPlayer.getNumArmies() + " troops to place\n");
             placeTroops(false);
         }
+        uiWindow.displayString("You have placed all your troops. It is now your attack phase.");
     }
 
     public void turnNeutral(){

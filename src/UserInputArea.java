@@ -30,7 +30,7 @@ public class UserInputArea extends JPanel  {
         }
         ActionListener listener = new AddActionListener();
         commandField.addActionListener(listener);
-        commandField.setFont(new Font("Times New Roman", Font.PLAIN, FONT_SIZE));
+        commandField.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, FONT_SIZE));
         setLayout(new BorderLayout());
         add(commandField, BorderLayout.CENTER);
         return;

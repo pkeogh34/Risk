@@ -14,8 +14,8 @@ public class UserInputArea extends JPanel  {
     private static final long serialVersionUID = 1L;
     private static final int FONT_SIZE = 14;
 
-    private JTextField commandField = new JTextField();
-    private LinkedList<String> commandBuffer = new LinkedList<String>();
+    private final JTextField commandField = new JTextField();
+    private final LinkedList<String> commandBuffer = new LinkedList<>();
 
     UserInputArea () {
         class AddActionListener implements ActionListener {

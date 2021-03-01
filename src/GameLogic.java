@@ -86,7 +86,7 @@ public class GameLogic {
         uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPLease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip attack phase\n");
         uiWindow.getCommand();
         checkCommand(new String[]{"CONTINUE", "SKIP"});
-        if(command=="CONTINUE"){
+        if(command.equals("CONTINUE")){
             attack();
         }
     }
@@ -131,13 +131,13 @@ public class GameLogic {
 
     private int getTroops(){
         int numTroops;
-        String strForNumTroops="";
+        StringBuilder strForNumTroops= new StringBuilder();
         numTroops= (int) Math.floor(currPlayer.getNumPlayerTerritories()/3);
-        strForNumTroops +=("You received " + numTroops + " troops for holding " + currPlayer.getNumPlayerTerritories() + " territories\n");
+        strForNumTroops.append("You received ").append(numTroops).append(" troops for holding ").append(currPlayer.getNumPlayerTerritories()).append(" territories\n");
         for(int i=0;i<Constants.NUM_CONTINENTS;i++){
             if(currPlayer.getNumTerritoriesInContinent(i)==Constants.CONTINENT_VALUES[0][i]){
                 numTroops+=Constants.CONTINENT_VALUES[1][i];
-                strForNumTroops+=("You received " + Constants.CONTINENT_VALUES[1][i] + " troops for holding " + Constants.CONTINENT_NAMES[i] + "\n");
+                strForNumTroops.append("You received ").append(Constants.CONTINENT_VALUES[1][i]).append(" troops for holding ").append(Constants.CONTINENT_NAMES[i]).append("\n");
             }
         }
         if(numTroops<3){
@@ -145,7 +145,7 @@ public class GameLogic {
         }
 
         uiWindow.displayString("You have received " + numTroops + " troops in total");
-        uiWindow.displayString(strForNumTroops);
+        uiWindow.displayString(strForNumTroops.toString());
         return numTroops;
     }
 
@@ -171,15 +171,14 @@ public class GameLogic {
         } while (command.equals("NO"));
 
         if(!command.equals("RETURN")){
-
             uiWindow.displayMap();
         }
     }
-    //Maybe just use checkCommmand from initialisation class?
+    //Maybe just use checkCommand from initialisation class?
     //Recursive function to check if a player has entered a valid command
     public void checkCommand(String[] correctInputs) {
         boolean check=false;
-        String msg = ("'" + correctInputs[0] + "'");
+        StringBuilder msg = new StringBuilder(("'" + correctInputs[0] + "'"));
         for (int i = 0; i < correctInputs.length;i++) {
             if(command.length()>=correctInputs[i].length()) {
                 if (command.substring(0,correctInputs[i].length()).equalsIgnoreCase(correctInputs[i])){
@@ -188,13 +187,13 @@ public class GameLogic {
                 }
             }
             if(i==correctInputs.length-1 && i!=0){
-                msg+=(" or '" + correctInputs[i] + "'");
+                msg.append(" or '").append(correctInputs[i]).append("'");
             }else if(i>1){
-                msg+=(", " + correctInputs[i]);
+                msg.append(", ").append(correctInputs[i]);
             }
         }
         if (!check) {
-            uiWindow.displayString("You must enter " + msg  + ". Please enter your command again\n");
+            uiWindow.displayString("You must enter " + msg.toString()  + ". Please enter your command again\n");
             command = uiWindow.getCommand();
             checkCommand(correctInputs);
         }

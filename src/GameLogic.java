@@ -156,6 +156,10 @@ public class GameLogic {
             uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
             command = uiWindow.getCommand();
             territoryCode = checkHasTerritory();
+            if(uiWindow.board.getNumUnits(territoryCode)<=1){
+                uiWindow.displayString("The attacking territory must have at least 2 troops. Please try again");
+                continue;
+            }
             uiWindow.displayString("Do you wish to attack from " + uiWindow.board.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
             command = uiWindow.getCommand();
             checkCommand(new String[]{"YES", "NO"});

@@ -67,13 +67,13 @@ public class Initialisation {
         while (equal) {
             uiWindow.displayString("" + players[0].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
             GameLogic.command = uiWindow.getCommand();
-            checkCommand("ROLL");
+            checkCommand(new String[]{"ROLL"});
             roll1 = GameLogic.diceRoll();
             uiWindow.displayString("" + players[0].getPlayerName() + " rolled " + roll1 + "\n");
 
             uiWindow.displayString("" + players[1].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
             GameLogic.command = uiWindow.getCommand();
-            checkCommand("ROLL");
+            checkCommand(new String[]{"ROLL"});
             roll2 = GameLogic.diceRoll();
             uiWindow.displayString("" + players[1].getPlayerName() + " rolled " + roll2 + "\n");
 
@@ -95,11 +95,26 @@ public class Initialisation {
 
 
 
-    public void checkCommand(String correctInput){
-        if(!GameLogic.command.substring(0,correctInput.length()).equalsIgnoreCase(correctInput)){
-            uiWindow.displayString("You must enter '" + correctInput + "'. Please enter your command again\n");
-            GameLogic.command=uiWindow.getCommand();
-            checkCommand(correctInput);
+    public void checkCommand(String[] correctInputs) {
+        boolean check=false;
+        StringBuilder msg = new StringBuilder(("'" + correctInputs[0] + "'"));
+        for (int i = 0; i < correctInputs.length;i++) {
+            if(GameLogic.command.length()>=correctInputs[i].length()) {
+                if (GameLogic.command.substring(0,correctInputs[i].length()).equalsIgnoreCase(correctInputs[i])){
+                    GameLogic.command=correctInputs[i];
+                    check=true;
+                }
+            }
+            if(i==correctInputs.length-1 && i!=0){
+                msg.append(" or '").append(correctInputs[i]).append("'");
+            }else if(i>1){
+                msg.append(", ").append(correctInputs[i]);
+            }
+        }
+        if (!check) {
+            uiWindow.displayString("You must enter " + msg.toString()  + ". Please enter your command again\n");
+            GameLogic.command = uiWindow.getCommand();
+            checkCommand(correctInputs);
         }
     }
 

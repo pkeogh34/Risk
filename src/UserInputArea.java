@@ -48,6 +48,12 @@ public class UserInputArea extends JPanel  {
             }
             command = commandBuffer.pop();
         }
-        return command.replaceAll(" ", "");
+        command=command.replaceAll(" ", "");
+
+        if (command.isEmpty()) {
+            return getCommand();
+        }
+
+        return command;
     }
 }

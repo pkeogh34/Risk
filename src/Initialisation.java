@@ -39,6 +39,7 @@ public class Initialisation {
         for (i=0; i<Constants.NUM_PLAYERS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_PLAYER; j++) {
                 board.addUnits(territoryId, 1);
+                players[i].addArmies(-1);
                 board.setOccupier(territoryId,i);
                 players[i].addTerritory(board.getTerritory(territoryId));
                 territoryId++;
@@ -47,6 +48,7 @@ public class Initialisation {
         for (; i<Constants.NUM_PLAYERS_PLUS_NEUTRALS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_NEUTRAL; j++) {
                 board.addUnits(territoryId, 1);
+                players[i].addArmies(-1);
                 board.setOccupier(territoryId,i);
                 players[i].addTerritory(board.getTerritory(territoryId));
                 territoryId++;
@@ -94,7 +96,7 @@ public class Initialisation {
 
 
     public void checkCommand(String correctInput){
-        if(!GameLogic.command.equalsIgnoreCase(correctInput)){
+        if(!GameLogic.command.substring(0,correctInput.length()).equalsIgnoreCase(correctInput)){
             uiWindow.displayString("You must enter '" + correctInput + "'. Please enter your command again\n");
             GameLogic.command=uiWindow.getCommand();
             checkCommand(correctInput);

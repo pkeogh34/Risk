@@ -12,6 +12,7 @@ public class Player {
     private int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
     private ArrayList<Territory> playerTerritories = new ArrayList<Territory>();
     private ArrayList<TerritoryCard> territoryCards = new ArrayList<TerritoryCard>();
+    private boolean defeated=false;
 
     public Player(String playerName, int playerCode, Color playerColour, int numArmies) {
         this.playerName = playerName;
@@ -70,6 +71,14 @@ public class Player {
         }
         return s;
 
+    }
+
+    public boolean getStatus() {
+        return defeated;
+    }
+
+    public void setStatus() {
+        this.defeated = true;
     }
 }
 

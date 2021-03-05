@@ -93,8 +93,6 @@ public class Initialisation {
         }
     }
 
-
-
     public void checkCommand(String[] correctInputs) {
         boolean check=false;
         StringBuilder msg = new StringBuilder(("'" + correctInputs[0] + "'"));

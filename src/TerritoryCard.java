@@ -1,3 +1,6 @@
+//Team name: NinjaAPY
+//Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
+
 public class TerritoryCard
 {
 	private Constants.UnitType type;
@@ -14,26 +17,20 @@ public class TerritoryCard
 	public String toString() 
 	{
 		
-		String s = countryName + " ";
+		String s = null;
 		switch (type)
 		{
 		case INFANTRY:
-		s += "INFANTRY";
+		s = "INFANTRY";
 		break;
 		case CAVALRY:
-			s += "CAVALRY";
+			s = "CAVALRY";
 			break;
 		case ARTILLERY:
-			s += "ARTILLERY";
+			s = "ARTILLERY";
 			break;
-
-
-
-			
-	}
-	
-		
-		return s;
+		}
+		return (countryName + "("+ s + ")\n");
 	}
 	
 }

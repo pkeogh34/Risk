@@ -1,3 +1,6 @@
+//Team name: NinjaAPY
+//Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -8,7 +11,8 @@ public class Player {
     private int numArmies;
     private int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
     private ArrayList<Territory> playerTerritories = new ArrayList<Territory>();
-    private TerritoryCard[] territoryCards = new TerritoryCard[5];
+    private ArrayList<TerritoryCard> territoryCards = new ArrayList<TerritoryCard>();
+    private boolean defeated=false;
 
     public Player(String playerName, int playerCode, Color playerColour, int numArmies) {
         this.playerName = playerName;
@@ -38,16 +42,43 @@ public class Player {
         return numTerritoriesInContinent[continentCode];
     }
 
-    public Color getPlayerColour() {
-        return playerColour;
-    }
-
     public int getNumArmies() {
         return numArmies;
     }
 
     public void addArmies(int numArmies) {
         this.numArmies += numArmies;
+    }
+
+    public int getPlayerCode() {
+        return playerCode;
+    }
+
+
+    public void drawCard(Deck d)
+    {
+        TerritoryCard tc = d.drawCard();
+        territoryCards.add(tc);
+    }
+
+    public String showCards()
+    {
+        String s = "";
+        for (int i = 0; i < territoryCards.size(); i++)
+        {
+            s += territoryCards.get(i);
+
+        }
+        return s;
+
+    }
+
+    public boolean getStatus() {
+        return defeated;
+    }
+
+    public void setStatus() {
+        this.defeated = true;
     }
 }
 

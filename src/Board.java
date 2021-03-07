@@ -1,3 +1,7 @@
+//Team name: NinjaAPY
+//Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
+
+//Board class may be irrelevant and should be removed later
 public class Board {
 
    private Territory[] territories =new Territory[Constants.NUM_COUNTRIES];
@@ -7,7 +11,7 @@ public class Board {
             String territoryName=Constants.COUNTRY_NAMES[i];
             String territoryContinent=Constants.CONTINENT_NAMES[Constants.CONTINENT_IDS[i]];
             int continentCode= Constants.CONTINENT_IDS[i];
-            Territory territory = new Territory(territoryName,territoryContinent,continentCode, false,0);
+            Territory territory = new Territory(territoryName,i, territoryContinent,continentCode, false,0);
             territories[i]=territory;
         }
     }
@@ -15,7 +19,7 @@ public class Board {
     public void addUnits (int territory, int addNumUnits) {
         // prerequisite: country must be unoccupied or already occupied by this player
         if (!territories[territory].occupied) {
-            territories[territory].occupied = true;;
+            territories[territory].occupied = true;
         }
         territories[territory].numOccupyingArmies += addNumUnits;
     }

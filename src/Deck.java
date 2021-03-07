@@ -1,3 +1,6 @@
+//Team name: NinjaAPY
+//Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -5,6 +8,8 @@ import java.util.Random;
 public class Deck 
 {
 	private static ArrayList<TerritoryCard> theDeck = new ArrayList<TerritoryCard>();
+
+	//not sure if need this yet
 	private static ArrayList<TerritoryCard> discardPile = new ArrayList<TerritoryCard>();
 	
 	public Deck() {
@@ -32,14 +37,19 @@ public class Deck
 			theDeck.add(c);
 			
 		}
-		
-		
 	}
 	
 	public TerritoryCard drawCard() {
-		//TODO check deck not empty
-		TerritoryCard tc = theDeck.remove(0);
-		discardPile.add(tc);
+		TerritoryCard tc = null;
+
+		try{
+			tc = theDeck.remove(0);
+			//discardPile.add(tc);
+		}
+		catch(IndexOutOfBoundsException e){
+			System.out.println("Error: desk is empty;");
+		}
+
 		return tc;
 	}
 }

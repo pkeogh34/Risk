@@ -1,3 +1,6 @@
+//Team name: NinjaAPY
+//Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
+
 public class Initialisation {
     private final Board board = new Board();
     private final UIWindow uiWindow = new UIWindow(board);
@@ -14,7 +17,7 @@ public class Initialisation {
         for(i = 0; i<Constants.NUM_PLAYERS; i++) {
             uiWindow.displayString("Enter the name of player " + (i + 1));
             name = uiWindow.getCommand();
-            uiWindow.displayString("> " + name);
+            uiWindow.displayString("> " + name + "\n");
             Player player = new Player(name, i, Constants.getPlayerColors(i), Constants.INIT_UNITS_PLAYER);
             players[i] = player;
             if (i>=1){
@@ -27,7 +30,7 @@ public class Initialisation {
 
         //Initialise neutral players
         for(;i<Constants.NUM_NEUTRALS+2;i++){
-            Player neutralPlayer = new Player(("Neutral Player " + i),i,Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
+            Player neutralPlayer = new Player(("Neutral Player " + (i-1)),i,Constants.getPlayerColors(i),Constants.INIT_UNITS_NEUTRAL);
             players[i]=neutralPlayer;
         }
 
@@ -36,6 +39,7 @@ public class Initialisation {
         for (i=0; i<Constants.NUM_PLAYERS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_PLAYER; j++) {
                 board.addUnits(territoryId, 1);
+                players[i].addArmies(-1);
                 board.setOccupier(territoryId,i);
                 players[i].addTerritory(board.getTerritory(territoryId));
                 territoryId++;
@@ -44,7 +48,9 @@ public class Initialisation {
         for (; i<Constants.NUM_PLAYERS_PLUS_NEUTRALS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_NEUTRAL; j++) {
                 board.addUnits(territoryId, 1);
+                players[i].addArmies(-1);
                 board.setOccupier(territoryId,i);
+                players[i].addTerritory(board.getTerritory(territoryId));
                 territoryId++;
             }
         }
@@ -61,13 +67,13 @@ public class Initialisation {
         while (equal) {
             uiWindow.displayString("" + players[0].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
             GameLogic.command = uiWindow.getCommand();
-            checkCommand("ROLL");
+            checkCommand(new String[]{"ROLL"});
             roll1 = GameLogic.diceRoll();
             uiWindow.displayString("" + players[0].getPlayerName() + " rolled " + roll1 + "\n");
 
             uiWindow.displayString("" + players[1].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
             GameLogic.command = uiWindow.getCommand();
-            checkCommand("ROLL");
+            checkCommand(new String[]{"ROLL"});
             roll2 = GameLogic.diceRoll();
             uiWindow.displayString("" + players[1].getPlayerName() + " rolled " + roll2 + "\n");
 
@@ -87,13 +93,26 @@ public class Initialisation {
         }
     }
 
-
-
-    public void checkCommand(String correctInput){
-        if(!GameLogic.command.equals(correctInput)){
-            uiWindow.displayString("You must enter '" + correctInput + "'. Please enter your command again\n");
-            GameLogic.command=uiWindow.getCommand();
-            checkCommand(correctInput);
+    public void checkCommand(String[] correctInputs) {
+        boolean check=false;
+        StringBuilder msg = new StringBuilder(("'" + correctInputs[0] + "'"));
+        for (int i = 0; i < correctInputs.length;i++) {
+            if(GameLogic.command.length()>=correctInputs[i].length()) {
+                if (GameLogic.command.substring(0,correctInputs[i].length()).equalsIgnoreCase(correctInputs[i])){
+                    GameLogic.command=correctInputs[i];
+                    check=true;
+                }
+            }
+            if(i==correctInputs.length-1 && i!=0){
+                msg.append(" or '").append(correctInputs[i]).append("'");
+            }else if(i>1){
+                msg.append(", ").append(correctInputs[i]);
+            }
+        }
+        if (!check) {
+            uiWindow.displayString("You must enter " + msg.toString()  + ". Please enter your command again\n");
+            GameLogic.command = uiWindow.getCommand();
+            checkCommand(correctInputs);
         }
     }
 

@@ -13,6 +13,7 @@ public class Constants {
     public static final int INIT_UNITS_PLAYER = 36;
     public static final int INIT_UNITS_NEUTRAL = 24;
     private static final Color[] PLAYER_COLORS = {new Color(255, 20, 0),Color.BLUE,new Color(140, 229, 181),new Color(157, 172, 174),new Color(235, 161, 0),Color.WHITE};
+    public static final String[] PLAYER_COLOR_NAME = {"RED","BLUE","GREEN","GREY","ORANGE","WHITW"};
 	//                                                        N.America                            Europe                              Asia                         Australia                         S.America                      Africa
     public static final Color[] CONTINENT_COLORS = {new Color(195,133,83), new Color(75, 203, 215), new Color(255,127,90), new Color(224, 172, 213), new Color(100,0,150), new Color(255,223,0)};
     public static final String[] COUNTRY_NAMES = {
@@ -69,7 +70,7 @@ public class Constants {
     public static final int NUM_CONTINENTS = 6;
     public static final String[] CONTINENT_NAMES = {"N America", "Europe", "Asia", "Australia", "S America", "Africa"};  // for reference
     public static final int[] CONTINENT_IDS = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5};
-    public static final int[] CONTINENT_VALUES = {5, 5, 7, 2, 2, 3};
+    public static final int[][] CONTINENT_VALUES = {{9, 7, 12, 4, 4, 6},{5, 5, 7, 2, 2, 3}};
     private static final int FRAME_WIDTH = 1000;    // must be even
     private static final int FRAME_HEIGHT = 600;
     private static final int[][] COUNTRY_COORD = {

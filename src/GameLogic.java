@@ -231,7 +231,6 @@ public class GameLogic {
                 return;
             }
         } while (command.equals("NO"));
-
         //TODO later: add a check to see if territories are adjacent, functionality to choose
         // number of dice, a check to see if number of dice is valid, functionality for executing
         // the attack, functionality to stop attack, functionality to deal with outcome of the
@@ -241,7 +240,24 @@ public class GameLogic {
 
         uiWindow.displayMap();
     }
+    public boolean checkAdjacentTerritories(int territoryCode1, int territoryCode2){
+        int check=0;
+        for(int i=0;i < Constants.ADJACENT.length;i++){
+            check=0;
+            for(int j=0;j<Constants.ADJACENT[i].length;j++){
+                if(Constants.ADJACENT[i][j]==territoryCode1 || Constants.ADJACENT[i][j]==territoryCode2)
+                    check++;
 
+            }
+            if(check==2) {
+                break;
+            }
+        }
+        if(check==2)
+            return true;
+        else return false;
+
+    }
     private void fortify() {
         //TODO later: add functionality for choosing territory to move troops from
         // and the territory to them to, check to see if there is a valid path between

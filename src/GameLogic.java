@@ -180,7 +180,7 @@ public class GameLogic {
 
     private void attack(){
         //Perhaps find a way to generalise getting territory name
-        int attackingTerritory,defendingTerritory;
+        int attackingTerritory = 0,defendingTerritory=0;
         do{
             do{
                 uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
@@ -231,6 +231,10 @@ public class GameLogic {
                 return;
             }
         } while (command.equals("NO"));
+        if(checkAdjacentTerritories(defendingTerritory,attackingTerritory)==true){
+            //functionality for executing the attack
+
+        }
         //TODO later: add a check to see if territories are adjacent, functionality to choose
         // number of dice, a check to see if number of dice is valid, functionality for executing
         // the attack, functionality to stop attack, functionality to deal with outcome of the
@@ -240,22 +244,27 @@ public class GameLogic {
 
         uiWindow.displayMap();
     }
+    //function that checks if 2 territories are adjacent
     public boolean checkAdjacentTerritories(int territoryCode1, int territoryCode2){
         int check=0;
+        //checking each row from the ADJACENT array
         for(int i=0;i < Constants.ADJACENT.length;i++){
             check=0;
+            //checking all elements in a row
             for(int j=0;j<Constants.ADJACENT[i].length;j++){
                 if(Constants.ADJACENT[i][j]==territoryCode1 || Constants.ADJACENT[i][j]==territoryCode2)
                     check++;
 
             }
+            //when check=2 the territories are in the same row of the ADJACENT array
+            //meaning that the 2 territories are adjacent
             if(check==2) {
-                break;
+                break; //jump out of the loop since there is no point in checking the others rows
             }
         }
         if(check==2)
-            return true;
-        else return false;
+            return true; //the territories are adjacent
+        else return false; //the territories are not adjacent
 
     }
     private void fortify() {

@@ -125,7 +125,7 @@ public class Constants {
 		ARTILLERY
 	}
 	
-	public static final UnitType CARD_UNIT_TYPE[] = {
+	public static final UnitType[] CARD_UNIT_TYPE = {
 		UnitType.CAVALRY,
 		UnitType.ARTILLERY,
 		UnitType.ARTILLERY,

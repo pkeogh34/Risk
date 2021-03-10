@@ -180,7 +180,7 @@ public class GameLogic {
 
     private void attack(){
         //Perhaps find a way to generalise getting territory name
-        int attackingTerritory,defendingTerritory;
+        int attackingTerritory=0,defendingTerritory=0;
         do{
             do{
                 uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
@@ -211,13 +211,14 @@ public class GameLogic {
                 uiWindow.displayString("Please enter the name of the territory you wish to attack\n");
                 command = uiWindow.getCommand();
                 checkCommand(new String[]{"SKIP"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("SKIP")){
-                return;
-            }
+                } while (command.equals("CONTINUE"));
+                if (command.equals("SKIP")) {
+                    return;
+                }
 
-            territoryCode = checkHasTerritory(2);
-            defendingTerritory=territoryCode;
+                territoryCode = checkHasTerritory(2);
+                defendingTerritory = checkAdjacent(attackingTerritory,territoryCode,1);;
+
             do {
                 uiWindow.displayString("Do you wish to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to attack from another territory\n");
                 command = uiWindow.getCommand();
@@ -355,5 +356,24 @@ public class GameLogic {
         }
 
         return number;
+    }
+
+    public int checkAdjacent(int territory1, int territory2, int checkType) {
+        boolean check = false;
+        if(checkType==1) {
+            for (int i = 0; i < Constants.ADJACENT[territory1].length; i++) {
+                if (Constants.ADJACENT[territory1][i] == territory2) {
+                    check=true;
+                    break;
+                }
+            }
+        }
+        if (!check&&checkType==1) {
+            uiWindow.displayString("These territories are not adjacent. Please enter the name of another territory\n");
+            command = uiWindow.getCommand();
+            territoryCode=checkHasTerritory(1);
+        }
+
+        return territory2;
     }
 }

@@ -156,7 +156,7 @@ public class GameLogic {
     private int getTroops(){
         int numTroops;
         StringBuilder strForNumTroops= new StringBuilder();
-        numTroops= (int) Math.floor(currPlayer.getNumPlayerTerritories()/3);
+        numTroops= (int) Math.floor(currPlayer.getNumPlayerTerritories()/3.0);
         strForNumTroops.append("You received ").append(numTroops).append(" troops for holding ").append(currPlayer.getNumPlayerTerritories()).append(" territories\n");
         for(int i=0;i<Constants.NUM_CONTINENTS;i++){
             if(currPlayer.getNumTerritoriesInContinent(i)==Constants.CONTINENT_VALUES[0][i]){
@@ -175,7 +175,7 @@ public class GameLogic {
 
     private void attack(){
         //Perhaps find a way to generalise getting territory name
-        int attackingTerritory=0,defendingTerritory=0;
+        int attackingTerritory=0,defendingTerritory;
         do{
             do{
                 uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
@@ -209,7 +209,7 @@ public class GameLogic {
                 }
 
                 territoryCode = checkHasTerritory(2);
-                defendingTerritory = checkAdjacent(attackingTerritory,territoryCode,1);;
+                defendingTerritory = checkAdjacent(attackingTerritory,territoryCode,1);
 
             do {
                 uiWindow.displayString("Do you wish to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to attack from another territory\n");
@@ -225,6 +225,7 @@ public class GameLogic {
         } while (command.equals("NO"));
 
         territoryCode=attackingTerritory;
+        label:
         while(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies>1&&uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies>0) {
             do{
                 uiWindow.displayString("Please enter the number of dice you wish to place. Enter 'STOP' if you want to stop attacking");
@@ -246,12 +247,13 @@ public class GameLogic {
                 uiWindow.displayString("Please enter 'ATTACK' to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking");
                 checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
             }while(command.equals("CONTINUE"));
-            if(command.equals("SKIP")) {
-                return;
-            }else if(command.equals("CHANGE")){
-                continue;
-            }else if(command.equals("STOP")){
-                break;
+            switch (command) {
+                case "SKIP":
+                    return;
+                case "CHANGE":
+                    continue;
+                case "STOP":
+                    break label;
             }
 
             int[] redDice = new int[numRedDice];
@@ -265,6 +267,19 @@ public class GameLogic {
                 }else{
                     msg.append("\n");
                 }
+
+                if(i>0){
+                    if(redDice[i]>redDice[1]){
+                        int tmp=redDice[i];
+                        redDice[i]=redDice[1];
+                        redDice[1]=tmp;
+                    }
+                    if(redDice[1]>redDice[0]){
+                        int tmp=redDice[i];
+                        redDice[i]=redDice[0];
+                        redDice[0]=tmp;
+                    }
+                }
             }
 
             msg = new StringBuilder("" + players[uiWindow.board.getTerritory(defendingTerritory).playerCode].getPlayerName() + " rolled ");
@@ -276,7 +291,16 @@ public class GameLogic {
                 }else{
                     msg.append("\n");
                 }
+
+                if(i>0){
+                    if(whiteDice[i]>whiteDice[0]){
+                        int tmp=whiteDice[i];
+                        whiteDice[i]=whiteDice[0];
+                        whiteDice[0]=tmp;
+                    }
+                }
             }
+
 
 
         }
@@ -317,33 +341,37 @@ public class GameLogic {
             }
         }
 
-        if(command.equals("SKIP")){
-            uiWindow.displayString("Are sure you wish to move to the Fortify phase?\nEnter 'YES' to move to the Fortify phase or 'NO' to continue Attack phase\n");
-            checkCommand(new String[]{"YES", "NO"});
-            if(command.equals("YES")){
-                command="SKIP";
-            }else{
-                command="CONTINUE";
+        switch (command) {
+            case "SKIP" -> {
+                uiWindow.displayString("Are sure you wish to move to the Fortify phase?\nEnter 'YES' to move to the Fortify phase or 'NO' to continue Attack phase\n");
+                checkCommand(new String[]{"YES", "NO"});
+                if (command.equals("YES")) {
+                    command = "SKIP";
+                } else {
+                    command = "CONTINUE";
+                }
+                return;
             }
-            return;
-        }else if(command.equals("STOP")){
-            uiWindow.displayString("Are you sure you wish to stop attacking?\nEnter 'YES' to end your turn or 'NO' to continue Fortify phase\n");
-            checkCommand(new String[]{"YES", "NO"});
-            if(command.equals("YES")){
-                command="STOP";
-            }else{
-                command="CONTINUE";
+            case "STOP" -> {
+                uiWindow.displayString("Are you sure you wish to stop attacking?\nEnter 'YES' to end your turn or 'NO' to continue Fortify phase\n");
+                checkCommand(new String[]{"YES", "NO"});
+                if (command.equals("YES")) {
+                    command = "STOP";
+                } else {
+                    command = "CONTINUE";
+                }
+                return;
             }
-            return;
-        }else if(command.equals("END")) {
-            uiWindow.displayString("Are you sure you wish to end your turn?\nEnter 'YES' to end your turn or 'NO' to continue Fortify phase\n");
-            checkCommand(new String[]{"YES", "NO"});
-            if (command.equals("YES")) {
-                command = "END";
-            } else {
-                command = "CONTINUE";
+            case "END" -> {
+                uiWindow.displayString("Are you sure you wish to end your turn?\nEnter 'YES' to end your turn or 'NO' to continue Fortify phase\n");
+                checkCommand(new String[]{"YES", "NO"});
+                if (command.equals("YES")) {
+                    command = "END";
+                } else {
+                    command = "CONTINUE";
+                }
+                return;
             }
-            return;
         }
 
 

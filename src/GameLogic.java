@@ -63,7 +63,7 @@ public class GameLogic {
 
     public void initialTroopPlacement(){
         for(int i=0;numTurns<54;i++){
-            players[currPlayer]=players[playerOrder.get(i)];
+            currPlayer=playerOrder.get(i);
             uiWindow.displayString("Turn "+ numTurns );
             if(i<=1){
                 uiWindow.displayString("" + players[currPlayer].getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[players[currPlayer].getPlayerCode()] + "), it is your turn\n\nYou must place 3 troops in a territory that you own\n");

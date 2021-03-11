@@ -1,11 +1,15 @@
 //Team name: NinjaAPY
 //Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class Initialisation {
     private final Board board = new Board();
     private final UIWindow uiWindow = new UIWindow(board);
     private Player[] players = new Player[6];
-    private int[] playerOrder={0,1,2,3,4,5};
+    private ArrayList<Integer> playerOrder= new ArrayList<>();
 
     public void initialisation () {
         String name;
@@ -86,11 +90,19 @@ public class Initialisation {
             }
         }
 
-        if (roll1 < roll2) {
+        if (roll1 > roll2) {
             uiWindow.displayString("" + players[1].getPlayerName() + " will go first\n");
-            playerOrder[0]=1;
-            playerOrder[1]=0;
+            playerOrder.add(0);
+            playerOrder.add(1);
+        }else{
+            playerOrder.add(1);
+            playerOrder.add(0);
         }
+
+        playerOrder.add(2);
+        playerOrder.add(3);
+        playerOrder.add(4);
+        playerOrder.add(5);
     }
 
     public void checkCommand(String[] correctInputs) {
@@ -124,7 +136,7 @@ public class Initialisation {
         return players;
     }
 
-    public int[] getPlayerOrder() {
+    public ArrayList<Integer> getPlayerOrder() {
         return playerOrder;
     }
 }

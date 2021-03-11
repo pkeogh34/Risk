@@ -2,10 +2,10 @@
 //Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
 
 public class Territory {
-    public String territoryName;
-    public int territoryCode;
-    public String territoryContinent;
-    public int continentCode;
+    public final String territoryName;
+    public final int territoryCode;
+    public final String territoryContinent;
+    public final int continentCode;
     public boolean occupied;
     public int numOccupyingArmies;
     public int playerCode;

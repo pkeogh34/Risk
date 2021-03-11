@@ -1,17 +1,18 @@
 //Team name: NinjaAPY
 //Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameLogic {
     Initialisation I;
     private final UIWindow uiWindow;
     private Player[] players;
-    private final int[] playerOrder;
-    private int numPlayers=6;
+    private ArrayList<Integer> playerOrder;
     private Player currPlayer;
     private int territoryCode;
     private int numTurns=1;
+    private int numSets=0;
     public static String command; /*Maybe change to enum when all commands
                                     are known (will require changing return type
                                     of getCommand() function also).
@@ -26,12 +27,12 @@ public class GameLogic {
 
     public void game(){
         initialTroopPlacement();
-        for(int i=0;numPlayers>1;i++){
+        for(int i = 0; !command.equals("GAME OVER"); i++){
             uiWindow.displayString("Turn "+ numTurns);
-            currPlayer=players[playerOrder[i]];
+            currPlayer=players[playerOrder.get(i)];
             while(currPlayer.getStatus()){
                 i++;
-                currPlayer=players[playerOrder[i]];
+                currPlayer=players[playerOrder.get(i)];
             }
 
             uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
@@ -52,18 +53,17 @@ public class GameLogic {
                 }
                 uiWindow.displayString("" + currPlayer.getPlayerName() + " has placed all their troops\n");
             }
-            if(i==numPlayers){
+            if(i==playerOrder.size()-1){
                 i=-1;
             }
             numTurns++;
-
         }
         uiWindow.displayString("" + currPlayer.getPlayerName() +" has one the game!");
     }
 
     public void initialTroopPlacement(){
         for(int i=0;numTurns<54;i++){
-            currPlayer=players[playerOrder[i]];
+            currPlayer=players[playerOrder.get(i)];
             uiWindow.displayString("Turn "+ numTurns );
             if(i<=1){
                 uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n\nYou must place 3 troops in a territory that you own\n");
@@ -74,7 +74,7 @@ public class GameLogic {
                 randTroopPlacement(1);
             }
 
-            if(i==numPlayers-1){
+            if(i==playerOrder.size()-1){
                 i=-1;
             }
             numTurns++;
@@ -88,10 +88,14 @@ public class GameLogic {
             uiWindow.displayString("You have " + currPlayer.getNumArmies() + " troops to place\n");
             placeTroops(false);
         }
+
         uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase. You may also 'SKIP' at any time to move to the Fortify phase\n");
         checkCommand(new String[]{"CONTINUE", "SKIP"});
         while(command.equals("CONTINUE")){
             attack();
+            if(command.equals("GAME OVER")){
+                return;
+            }
             if(command.equals("SKIP")){
                 break;
             }
@@ -225,28 +229,30 @@ public class GameLogic {
         } while (command.equals("NO"));
 
         territoryCode=attackingTerritory;
+
+        int numRedDice = 0;
         label:
         while(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies>1&&uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies>0) {
-            do{
+            do {
                 uiWindow.displayString("Please enter the number of dice you wish to place. Enter 'STOP' if you want to stop attacking");
-                checkCommand(new String[]{"SKIP","STOP"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("SKIP")){
+                checkCommand(new String[]{"SKIP", "STOP"});
+            } while (command.equals("CONTINUE"));
+            if (command.equals("SKIP")) {
                 return;
-            }else if(command.equals("STOP")){
+            } else if (command.equals("STOP")) {
                 break;
             }
 
-            int numRedDice = checkNumber(2);
+            numRedDice = checkNumber(2);
             int numWhiteDice = 1;
             if (uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies > 1) {
                 numWhiteDice = 2;
             }
 
-            do{
+            do {
                 uiWindow.displayString("Please enter 'ATTACK' to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking");
                 checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
-            }while(command.equals("CONTINUE"));
+            } while (command.equals("CONTINUE"));
             switch (command) {
                 case "SKIP":
                     return;
@@ -259,59 +265,125 @@ public class GameLogic {
             int[] redDice = new int[numRedDice];
             int[] whiteDice = new int[numWhiteDice];
             StringBuilder msg = new StringBuilder("" + currPlayer.getPlayerName() + " rolled ");
-            for(int i=0;i<numRedDice;i++){
-                redDice[i]=diceRoll();
+            for (int i = 0; i < numRedDice; i++) {
+                redDice[i] = diceRoll();
                 msg.append(redDice[i]);
-                if(i!=numRedDice-1){
+                if (i != numRedDice - 1) {
                     msg.append(", ");
-                }else{
+                } else {
                     msg.append("\n");
                 }
 
-                if(i>0){
-                    if(redDice[i]>redDice[1]){
-                        int tmp=redDice[i];
-                        redDice[i]=redDice[1];
-                        redDice[1]=tmp;
+                if (i > 0) {
+                    if (redDice[i] > redDice[1]) {
+                        int tmp = redDice[i];
+                        redDice[i] = redDice[1];
+                        redDice[1] = tmp;
                     }
-                    if(redDice[1]>redDice[0]){
-                        int tmp=redDice[i];
-                        redDice[i]=redDice[0];
-                        redDice[0]=tmp;
+                    if (redDice[1] > redDice[0]) {
+                        int tmp = redDice[i];
+                        redDice[i] = redDice[0];
+                        redDice[0] = tmp;
                     }
                 }
             }
 
-            msg = new StringBuilder("" + players[uiWindow.board.getTerritory(defendingTerritory).playerCode].getPlayerName() + " rolled ");
-            for(int i=0;i<numWhiteDice;i++){
-                whiteDice[i]=diceRoll();
+            msg = new StringBuilder("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " rolled ");
+            for (int i = 0; i < numWhiteDice; i++) {
+                whiteDice[i] = diceRoll();
                 msg.append(whiteDice[i]);
-                if(i!=numWhiteDice-1){
+                if (i != numWhiteDice - 1) {
                     msg.append(", ");
-                }else{
+                } else {
                     msg.append("\n");
                 }
 
-                if(i>0){
-                    if(whiteDice[i]>whiteDice[0]){
-                        int tmp=whiteDice[i];
-                        whiteDice[i]=whiteDice[0];
-                        whiteDice[0]=tmp;
+                if (i > 0) {
+                    if (whiteDice[i] > whiteDice[0]) {
+                        int tmp = whiteDice[i];
+                        whiteDice[i] = whiteDice[0];
+                        whiteDice[0] = tmp;
                     }
                 }
             }
 
+            int redLoss = 0, whiteLoss = 0;
+            if (redDice[0] > whiteDice[0]) {
+                whiteLoss++;
+            } else {
+                redLoss++;
+            }
+
+            if (numWhiteDice > 1 && numRedDice > 1) {
+                if (redDice[1] > whiteDice[1]) {
+                    whiteLoss++;
+                } else {
+                    redLoss++;
+                }
+            }
+
+            uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies -= redLoss;
+            uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies -= whiteLoss;
+            uiWindow.displayMap();
 
 
+            if (redLoss > 0){
+                if(redLoss > 1) {
+                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troops");
+                }else {
+                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troop");
+                }
+            }
+            if (redLoss > 0) {
+                if(redLoss > 1) {
+                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troops");
+                }else {
+                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troop");
+                }
+            }
         }
 
+        int defendingPlayer=uiWindow.board.getOccupier(defendingTerritory);
+        if(uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies==0){
+            uiWindow.displayString("" + players[defendingPlayer].getPlayerName() + " has lost " + uiWindow.board.getTerritory(defendingTerritory).territoryName);
+            players[defendingPlayer].removeTerritory(defendingTerritory);
+            uiWindow.board.setOccupier(defendingTerritory,currPlayer.getPlayerCode());
+            currPlayer.addTerritory(uiWindow.board.getTerritory(defendingTerritory));
 
-        //TODO later: functionality to deal with outcome of the
-        // attack (e.g. moving troops from attacking territory, transferring ownership
-        // of the territory, altering continent ownership), functionality to check if the defending player
-        // was wiped out
+            int numTroopsToTransfer;
+            uiWindow.displayString("" + currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + uiWindow.board.getTerritory(defendingTerritory).territoryName +"\n");
+            uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least that many troops\n");
+            do {
+                uiWindow.displayString("Please enter the number of troops to be transferred\n");
+                command= uiWindow.getCommand();
+                numTroopsToTransfer=checkNumber(3+(numRedDice-1));
+                if(numTroopsToTransfer==1){
+                    uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+                }else{
+                    uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+                }
+                checkCommand(new String[]{"YES", "NO"});
+            } while (command.equals("NO"));
 
-        uiWindow.displayMap();
+            uiWindow.board.addUnits(attackingTerritory,-numTroopsToTransfer);
+            uiWindow.board.addUnits(defendingTerritory,numTroopsToTransfer);
+            uiWindow.displayMap();
+
+        }else if(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies==1){
+            uiWindow.displayString("" + currPlayer + " has failed to take over " + uiWindow.board.getTerritory(defendingTerritory).territoryName);
+        }
+
+        if(players[defendingPlayer].getNumPlayerTerritories()==0){
+            uiWindow.displayString("" + players[defendingPlayer].getPlayerName() + " has been wiped out!");
+            int i=0;
+            while(playerOrder.get(i)!=defendingPlayer){
+                i++;
+            }
+            if(defendingPlayer==0||defendingPlayer==1){
+                command="GAME OVER";
+            }
+            playerOrder.remove(i);
+        }
     }
 
     private void fortify() {
@@ -388,7 +460,6 @@ public class GameLogic {
         boolean check = false;
         int territoryCode=0;
         for (int i = 0; i < currPlayer.getNumPlayerTerritories(); i++) {
-
             if (command.substring(0,3).equalsIgnoreCase(currPlayer.getPlayerTerritory(i).territoryName.replaceAll(" ", "").substring(0,3))) {
                 check = true;
                 territoryCode=currPlayer.getPlayerTerritory(i).territoryCode;
@@ -442,6 +513,24 @@ public class GameLogic {
                 checkCommand(new String[]{"SKIP"});//todo
                 number=checkNumber(numType);
             }
+        }else if(numType>2){
+            if(number<(numType-3)){
+                if((numType-3)==1){
+                    uiWindow.displayString("You must transfer at least " + (numType - 3) + " troop");
+                }else {
+                    uiWindow.displayString("You must transfer at least " + (numType - 3) + " troops");
+                }
+                command=uiWindow.getCommand();
+                number=checkNumber(numType);
+            }
+        }else if(number==uiWindow.board.getTerritory(territoryCode).numOccupyingArmies){
+            uiWindow.displayString("You must leave at least one troop in your territory at all times");
+            command=uiWindow.getCommand();
+            number=checkNumber(numType);
+        }else if(number>uiWindow.board.getTerritory(territoryCode).numOccupyingArmies){
+            uiWindow.displayString("You do not have that many troops to transfer");
+            command=uiWindow.getCommand();
+            number=checkNumber(numType);
         }
 
         return number;

@@ -10,7 +10,7 @@ public class Player {
     private final Color playerColour;
     private int numArmies;
     private int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
-    private ArrayList<Territory> playerTerritories = new ArrayList<Territory>();
+    private ArrayList<Territory> playerTerritories = new ArrayList<>();
     private ArrayList<TerritoryCard> territoryCards = new ArrayList<TerritoryCard>();
     private boolean defeated=false;
 
@@ -36,6 +36,16 @@ public class Player {
     public void addTerritory(Territory territory) {
         numTerritoriesInContinent[territory.continentCode]++;
         this.playerTerritories.add(territory);
+    }
+
+    public void removeTerritory(int territoryCode) {
+        for(int i=0;i<playerTerritories.size();i++){
+            if(playerTerritories.get(i).territoryCode==territoryCode){
+                numTerritoriesInContinent[playerTerritories.get(i).continentCode]--;
+                this.playerTerritories.remove(i);
+                break;
+            }
+        }
     }
 
     public int getNumTerritoriesInContinent(int continentCode) {

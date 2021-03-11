@@ -89,7 +89,7 @@ public class GameLogic {
             placeTroops(false);
         }
 
-        uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase. You may also 'SKIP' at any time to move to the Fortify phase\n");
+        uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase. You may also enter 'SKIP' at any time to move to the Fortify phase\n");
         checkCommand(new String[]{"CONTINUE", "SKIP"});
         while(command.equals("CONTINUE")){
             attack();
@@ -235,7 +235,7 @@ public class GameLogic {
         label:
         while(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies>1&&uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies>0) {
             do {
-                uiWindow.displayString("Please enter the number of dice you wish to place. Enter 'STOP' if you want to stop attacking\n");
+                uiWindow.displayString("Please enter the number of dice you wish to roll. Enter 'STOP' if you want to stop attacking\n");
                 checkCommand(new String[]{"SKIP", "STOP"});
             } while (command.equals("CONTINUE"));
             if (command.equals("SKIP")) {
@@ -325,25 +325,24 @@ public class GameLogic {
                 }
             }
 
-            uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies -= redLoss;
-            uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies -= whiteLoss;
-            uiWindow.displayMap();
-
-
             if (redLoss > 0){
                 if(redLoss > 1) {
-                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troops");
+                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troops\n");
                 }else {
-                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troop");
+                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troop\n");
                 }
             }
             if (whiteLoss > 0) {
                 if(whiteLoss > 1) {
-                    uiWindow.displayString("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troops");
+                    uiWindow.displayString("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troops\n");
                 }else {
-                    uiWindow.displayString("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troop");
+                    uiWindow.displayString("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troop\n");
                 }
             }
+
+            uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies -= redLoss;
+            uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies -= whiteLoss;
+            uiWindow.displayMap();
         }
 
         int defendingPlayer=uiWindow.board.getOccupier(defendingTerritory);
@@ -355,11 +354,11 @@ public class GameLogic {
 
             int numTroopsToTransfer;
             uiWindow.displayString("" + currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + uiWindow.board.getTerritory(defendingTerritory).territoryName +"\n");
-            uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least" + (numRedDice-1) + "\n");
+            uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least " + numRedDice + "\n");
             do {
                 uiWindow.displayString("Please enter the number of troops to be transferred\n");
                 command= uiWindow.getCommand();
-                numTroopsToTransfer=checkNumber(4+(numRedDice-1));
+                numTroopsToTransfer=checkNumber(4+(numRedDice));
                 if(numTroopsToTransfer==1){
                     uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
                 }else{
@@ -373,11 +372,11 @@ public class GameLogic {
             uiWindow.displayMap();
 
         }else if(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies==1){
-            uiWindow.displayString("" + currPlayer.getPlayerName() + " has failed to take over " + uiWindow.board.getTerritory(defendingTerritory).territoryName);
+            uiWindow.displayString("" + currPlayer.getPlayerName() + " has failed to take over " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "\n");
         }
 
         if(players[defendingPlayer].getNumPlayerTerritories()==0){
-            uiWindow.displayString("" + players[defendingPlayer].getPlayerName() + " has been wiped out!");
+            uiWindow.displayString("" + players[defendingPlayer].getPlayerName() + " has been wiped out!\n");
             int i=0;
             while(playerOrder.get(i)!=defendingPlayer){
                 i++;
@@ -401,7 +400,7 @@ public class GameLogic {
             }
             territoryCode = checkHasTerritory(1);
             if(uiWindow.board.getNumUnits(territoryCode)<=1){
-                uiWindow.displayString("The territory must have at least 2 troops. Please try again");
+                uiWindow.displayString("The territory must have at least 2 troops. Please try again\n");
                 continue;
             }
             territory1=territoryCode;
@@ -426,7 +425,7 @@ public class GameLogic {
             do {
                 territoryCode = checkHasTerritory(1);
                 if(!checkHasValidPath(territory1,territoryCode,currPlayer.getPlayerTerritories())){
-                    uiWindow.displayString("There is no valid path between these territories. Please select another territory");
+                    uiWindow.displayString("There is no valid path between these territories. Please select another territory\n");
                     continue;
                 }
                 territory2=territoryCode;

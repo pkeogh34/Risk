@@ -142,7 +142,8 @@ public class GameLogic {
         if(!initial){
             do {
                 uiWindow.displayString("Please enter the number of troops you wish to place: \n");
-                checkNumber(1);
+                command= uiWindow.getCommand();
+                numTroops=checkNumber(1);
                 uiWindow.displayString("Do you wish to place " + numTroops + " troops in " + uiWindow.board.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
                 checkCommand(new String[]{"YES", "NO", "RETURN"});
                 if(command.equals("RETURN")){
@@ -172,7 +173,7 @@ public class GameLogic {
             numTroops=3;
         }
 
-        uiWindow.displayString("You have received " + numTroops + " troops in total");
+        uiWindow.displayString("You have received " + numTroops + " troops in total\n");
         uiWindow.displayString(strForNumTroops.toString());
         return numTroops;
     }
@@ -211,9 +212,9 @@ public class GameLogic {
                 if (command.equals("SKIP")) {
                     return;
                 }
-
                 territoryCode = checkHasTerritory(2);
-                defendingTerritory = checkAdjacent(attackingTerritory,territoryCode,1);
+                checkAdjacent(attackingTerritory,territoryCode,1);
+                defendingTerritory=territoryCode;
 
             do {
                 uiWindow.displayString("Do you wish to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to attack from another territory\n");
@@ -234,7 +235,7 @@ public class GameLogic {
         label:
         while(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies>1&&uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies>0) {
             do {
-                uiWindow.displayString("Please enter the number of dice you wish to place. Enter 'STOP' if you want to stop attacking");
+                uiWindow.displayString("Please enter the number of dice you wish to place. Enter 'STOP' if you want to stop attacking\n");
                 checkCommand(new String[]{"SKIP", "STOP"});
             } while (command.equals("CONTINUE"));
             if (command.equals("SKIP")) {
@@ -250,7 +251,7 @@ public class GameLogic {
             }
 
             do {
-                uiWindow.displayString("Please enter 'ATTACK' to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking");
+                uiWindow.displayString("Please enter 'ATTACK' to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n");
                 checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
             } while (command.equals("CONTINUE"));
             switch (command) {
@@ -287,6 +288,7 @@ public class GameLogic {
                     }
                 }
             }
+            uiWindow.displayString(msg.toString());
 
             msg = new StringBuilder("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " rolled ");
             for (int i = 0; i < numWhiteDice; i++) {
@@ -306,6 +308,7 @@ public class GameLogic {
                     }
                 }
             }
+            uiWindow.displayString(msg.toString());
 
             int redLoss = 0, whiteLoss = 0;
             if (redDice[0] > whiteDice[0]) {
@@ -334,11 +337,11 @@ public class GameLogic {
                     uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troop");
                 }
             }
-            if (redLoss > 0) {
-                if(redLoss > 1) {
-                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troops");
+            if (whiteLoss > 0) {
+                if(whiteLoss > 1) {
+                    uiWindow.displayString("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troops");
                 }else {
-                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troop");
+                    uiWindow.displayString("" + players[uiWindow.board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troop");
                 }
             }
         }
@@ -352,11 +355,11 @@ public class GameLogic {
 
             int numTroopsToTransfer;
             uiWindow.displayString("" + currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + uiWindow.board.getTerritory(defendingTerritory).territoryName +"\n");
-            uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least that many troops\n");
+            uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least" + (numRedDice-1) + "\n");
             do {
                 uiWindow.displayString("Please enter the number of troops to be transferred\n");
                 command= uiWindow.getCommand();
-                numTroopsToTransfer=checkNumber(3+(numRedDice-1));
+                numTroopsToTransfer=checkNumber(4+(numRedDice-1));
                 if(numTroopsToTransfer==1){
                     uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + uiWindow.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
                 }else{
@@ -370,7 +373,7 @@ public class GameLogic {
             uiWindow.displayMap();
 
         }else if(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies==1){
-            uiWindow.displayString("" + currPlayer + " has failed to take over " + uiWindow.board.getTerritory(defendingTerritory).territoryName);
+            uiWindow.displayString("" + currPlayer.getPlayerName() + " has failed to take over " + uiWindow.board.getTerritory(defendingTerritory).territoryName);
         }
 
         if(players[defendingPlayer].getNumPlayerTerritories()==0){
@@ -387,11 +390,75 @@ public class GameLogic {
     }
 
     private void fortify() {
-        //TODO later: add functionality for choosing territory to move troops from
-        // and the territory to them to, check to see if there is a valid path between
-        // these territories, functionality to get number of troops to be transferred, a check
-        // to see if troop number is valid, functionality to transfer the troops,
-        // functionality to end turn/skip fortify phase
+        int territory1=0,territory2=0;
+        do{
+            do{
+                uiWindow.displayString("Please enter the name of the territory from which you wish to move your troops\n");
+                checkCommand(new String[]{"END"});
+            }while(command.equals("CONTINUE"));
+            if(command.equals("END")){
+                return;
+            }
+            territoryCode = checkHasTerritory(1);
+            if(uiWindow.board.getNumUnits(territoryCode)<=1){
+                uiWindow.displayString("The territory must have at least 2 troops. Please try again");
+                continue;
+            }
+            territory1=territoryCode;
+            do {
+                uiWindow.displayString("Do you wish to move your troops from " + uiWindow.board.getTerritory(territory1).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
+                checkCommand(new String[]{"YES", "NO", "SKIP"});
+            }while(command.equals("CONTINUE"));
+            if(command.equals("SKIP")){
+                return;
+            }
+        } while (command.equals("NO"));
+
+        do{
+            do {
+                uiWindow.displayString("Please enter the name of the territory you wish to transfer your troops to\n");
+                checkCommand(new String[]{"END"});
+            } while (command.equals("CONTINUE"));
+            if (command.equals("END")) {
+                return;
+            }
+
+            do {
+                territoryCode = checkHasTerritory(1);
+                if(!checkHasValidPath(territory1,territoryCode,currPlayer.getPlayerTerritories())){
+                    uiWindow.displayString("There is no valid path between these territories. Please select another territory");
+                    continue;
+                }
+                territory2=territoryCode;
+                uiWindow.displayString("Do you wish to transfer troops from " + uiWindow.board.getTerritory(territory1).territoryName + " to " + uiWindow.board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to move troops from another territory\n");
+                checkCommand(new String[]{"YES", "NO","RETURN","END"});
+            }while(command.equals("CONTINUE"));
+            if(command.equals("END")){
+                return;
+            }
+            if(command.equals("RETURN")){
+                fortify();
+                return;
+            }
+        } while (command.equals("NO"));
+
+        int numTroopsToTransfer;
+        do{
+            uiWindow.displayString("Please enter the number of troops to be transferred\n");
+            command= uiWindow.getCommand();
+            territoryCode=territory1;
+            numTroopsToTransfer=checkNumber(3);
+            if(numTroopsToTransfer==1){
+                uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + uiWindow.board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+            }else{
+                uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + uiWindow.board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+            }
+            checkCommand(new String[]{"YES", "NO"});
+        } while (command.equals("NO"));
+
+        uiWindow.board.addUnits(territory1,-numTroopsToTransfer);
+        uiWindow.board.addUnits(territory2,numTroopsToTransfer);
+        uiWindow.displayMap();
     }
 
     //Recursive function to check if a player has entered a valid command
@@ -425,7 +492,7 @@ public class GameLogic {
                 return;
             }
             case "STOP" -> {
-                uiWindow.displayString("Are you sure you wish to stop attacking?\nEnter 'YES' to end your turn or 'NO' to continue Fortify phase\n");
+                uiWindow.displayString("Are you sure you wish to stop attacking?\nEnter 'YES' to stop attacking or 'NO' to continue attacking\n");
                 checkCommand(new String[]{"YES", "NO"});
                 if (command.equals("YES")) {
                     command = "STOP";
@@ -447,7 +514,7 @@ public class GameLogic {
         }
 
 
-        if (!check&&(!correctInputs[correctInputs.length - 1].equals("SKIP")||!correctInputs[correctInputs.length - 1].equals("END"))){
+        if (!check&&!correctInputs[0].equals("SKIP")&&!correctInputs[0].equals("END")){
             uiWindow.displayString("You must enter " + msg.toString()  + ". Please enter your command again\n");
             command = uiWindow.getCommand();
             checkCommand(correctInputs);
@@ -473,6 +540,14 @@ public class GameLogic {
             uiWindow.displayString("You already own this territory. Please enter the name of another territory\n");
             command = uiWindow.getCommand();
             territoryCode=checkHasTerritory(2);
+        }
+
+        if(checkType==2){
+            for (int i = 0; i < Constants.COUNTRY_NAMES.length; i++) {
+                if (command.substring(0,3).equalsIgnoreCase(Constants.COUNTRY_NAMES[i].replaceAll(" ", "").substring(0,3))) {
+                    territoryCode=i;
+                }
+            }
         }
 
         return territoryCode;
@@ -508,19 +583,9 @@ public class GameLogic {
                 uiWindow.displayString("The maximum number of dice that can be rolled is 3. Please try again");
                 checkCommand(new String[]{"SKIP"});//todo
                 number=checkNumber(numType);
-            }else if(number>=currPlayer.getPlayerTerritory(territoryCode).numOccupyingArmies){
-                uiWindow.displayString("You can only roll " + currPlayer.getPlayerTerritory(territoryCode).numOccupyingArmies + " dice. Please try again");
+            }else if(number>=uiWindow.board.getNumUnits(territoryCode)){
+                uiWindow.displayString("You can only roll " + (currPlayer.getPlayerTerritory(territoryCode).numOccupyingArmies-1) + " dice. Please try again");
                 checkCommand(new String[]{"SKIP"});//todo
-                number=checkNumber(numType);
-            }
-        }else if(numType>2){
-            if(number<(numType-3)){
-                if((numType-3)==1){
-                    uiWindow.displayString("You must transfer at least " + (numType - 3) + " troop");
-                }else {
-                    uiWindow.displayString("You must transfer at least " + (numType - 3) + " troops");
-                }
-                command=uiWindow.getCommand();
                 number=checkNumber(numType);
             }
         }else if(number==uiWindow.board.getTerritory(territoryCode).numOccupyingArmies){
@@ -531,27 +596,57 @@ public class GameLogic {
             uiWindow.displayString("You do not have that many troops to transfer");
             command=uiWindow.getCommand();
             number=checkNumber(numType);
+        }else if(numType>3) {
+            if (number < (numType - 4)) {
+                if ((numType - 4) == 1) {
+                    uiWindow.displayString("You must transfer at least " + (numType - 4) + " troop");
+                } else {
+                    uiWindow.displayString("You must transfer at least " + (numType - 4) + " troops");
+                }
+                command = uiWindow.getCommand();
+                number = checkNumber(numType);
+            }
         }
 
         return number;
     }
 
-    public int checkAdjacent(int territory1, int territory2, int checkType) {
+    public boolean checkAdjacent(int territory1, int territory2, int checkType) {
         boolean check = false;
-        if(checkType==1) {
-            for (int i = 0; i < Constants.ADJACENT[territory1].length; i++) {
-                if (Constants.ADJACENT[territory1][i] == territory2) {
-                    check=true;
-                    break;
-                }
+        for (int i = 0; i < Constants.ADJACENT[territory1].length; i++) {
+            if (Constants.ADJACENT[territory1][i] == territory2) {
+                check=true;
+                break;
             }
         }
-        if (!check&&checkType==1) {
+        if(!check&&checkType==1) {
             uiWindow.displayString("These territories are not adjacent. Please enter the name of another territory\n");
             command = uiWindow.getCommand();
             territoryCode=checkHasTerritory(1);
+            checkAdjacent(territory1,territoryCode,1);//maybe remove territory2
+        }else if(!check&&checkType==2){
+            return false;
         }
 
-        return territory2;
+        return true;
+    }
+
+    private boolean checkHasValidPath(int territory1,int territory2,ArrayList<Territory> playerTerritories){
+        int i=0;
+        while(playerTerritories.size()>0&&i<playerTerritories.size()){
+            if(checkAdjacent(territory1,territory2,2)){
+                return true;
+            }
+            if(checkAdjacent(territory1,playerTerritories.get(i).territoryCode,2)){
+                territory1=playerTerritories.get(i).territoryCode;
+                playerTerritories.remove(i);
+                i--;
+                if(checkHasValidPath(territory1,territory2,playerTerritories)){
+                    return true;
+                }
+            }
+            i++;
+        }
+        return false;
     }
 }

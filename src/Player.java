@@ -64,6 +64,10 @@ public class Player {
         return playerCode;
     }
 
+    public ArrayList<Territory> getPlayerTerritories(){
+        return playerTerritories;
+    }
+
 
     public void drawCard(Deck d)
     {

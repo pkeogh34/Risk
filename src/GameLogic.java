@@ -583,7 +583,7 @@ public class GameLogic {
                 checkCommand(new String[]{"SKIP"});//todo
                 number=checkNumber(numType);
             }else if(number>=uiWindow.board.getNumUnits(territoryCode)){
-                uiWindow.displayString("You can only roll " + (currPlayer.getPlayerTerritory(territoryCode).numOccupyingArmies-1) + " dice. Please try again");
+                uiWindow.displayString("You can only roll " + (uiWindow.board.getNumUnits(territoryCode)-1) + " dice. Please try again");
                 checkCommand(new String[]{"SKIP"});//todo
                 number=checkNumber(numType);
             }

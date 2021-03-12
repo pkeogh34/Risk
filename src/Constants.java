@@ -13,7 +13,7 @@ public class Constants {
     public static final int INIT_UNITS_PLAYER = 36;
     public static final int INIT_UNITS_NEUTRAL = 24;
     private static final Color[] PLAYER_COLORS = {new Color(255, 20, 0),Color.BLUE,new Color(140, 229, 181),new Color(157, 172, 174),new Color(235, 161, 0),Color.WHITE};
-    public static final String[] PLAYER_COLOR_NAME = {"RED","BLUE","GREEN","GREY","ORANGE","WHITW"};
+    public static final String[] PLAYER_COLOR_NAME = {"RED","BLUE","GREEN","GREY","ORANGE","WHITE"};
 	//                                                        N.America                            Europe                              Asia                         Australia                         S.America                      Africa
     public static final Color[] CONTINENT_COLORS = {new Color(195,133,83), new Color(75, 203, 215), new Color(255,127,90), new Color(224, 172, 213), new Color(100,0,150), new Color(255,223,0)};
     public static final String[] COUNTRY_NAMES = {

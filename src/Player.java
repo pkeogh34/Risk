@@ -11,7 +11,7 @@ public class Player {
     private int numArmies;
     private int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
     private ArrayList<Territory> playerTerritories = new ArrayList<>();
-    private ArrayList<TerritoryCard> territoryCards = new ArrayList<TerritoryCard>();
+    private ArrayList<TerritoryCard> territoryCards = new ArrayList<>();
     private boolean defeated=false;
 
     public Player(String playerName, int playerCode, Color playerColour, int numArmies) {

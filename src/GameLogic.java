@@ -233,35 +233,45 @@ public class GameLogic {
         territoryCode=attackingTerritory;
 
         int numRedDice = 0;
+        int numWhiteDice = 1;
         label:
         while(uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies>1&&uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies>0) {
-            do {
-                uiWindow.displayString("Please enter the number of dice you wish to roll.\nEnter 'STOP' if you want to stop attacking\n");
-                checkCommand(new String[]{"SKIP", "STOP"});
-            } while (command.equals("CONTINUE"));
-            if (command.equals("SKIP")) {
-                return;
-            } else if (command.equals("STOP")) {
-                break;
+
+            if(!command.equals("BLITZ")) {
+                do {
+                    uiWindow.displayString("Please enter the number of dice you wish to roll.\nEnter 'STOP' if you want to stop attacking or enter 'BLITZ' to auto-run the attack sequence\n");
+                    checkCommand(new String[]{"SKIP", "STOP", "BLITZ"});
+                } while (command.equals("CONTINUE"));
+                if (command.equals("SKIP")) {
+                    return;
+                } else if (command.equals("STOP")) {
+                    break;
+                }
             }
 
-            numRedDice = checkNumber(2);
-            int numWhiteDice = 1;
             if (uiWindow.board.getTerritory(defendingTerritory).numOccupyingArmies > 1) {
                 numWhiteDice = 2;
             }
 
-            do {
-                uiWindow.displayString("Please enter 'ATTACK' to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n");
-                checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
-            } while (command.equals("CONTINUE"));
-            switch (command) {
-                case "SKIP":
-                    return;
-                case "CHANGE":
-                    continue;
-                case "STOP":
-                    break label;
+            if(!command.equals("BLITZ")) {
+                numRedDice = checkNumber(2);
+                do {
+                    uiWindow.displayString("Please enter 'ATTACK' to attack " + uiWindow.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n");
+                    checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
+                } while (command.equals("CONTINUE"));
+                switch (command) {
+                    case "SKIP":
+                        return;
+                    case "CHANGE":
+                        continue;
+                    case "STOP":
+                        break label;
+                }
+            }else{
+                numRedDice=uiWindow.board.getTerritory(attackingTerritory).numOccupyingArmies-1;
+                if(numRedDice>3){
+                    numRedDice=3;
+                }
             }
 
             int[] redDice = new int[numRedDice];

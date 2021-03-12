@@ -530,7 +530,7 @@ public class GameLogic {
         }
     }
 
-    //Perhaps implement check to see if territory is valid first (within this check)
+    //todo: Perhaps implement check to see if territory is valid first (within this check)
     //Recursive function to check if a player owns the entered territory
     public int checkHasTerritory(int checkType) {
         boolean check = false;

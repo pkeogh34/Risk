@@ -6,12 +6,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Initialisation {
-    private final Board board = new Board();
-    private final UIWindow uiWindow = new UIWindow(board);
-    private Player[] players = new Player[6];
-    private ArrayList<Integer> playerOrder= new ArrayList<>();
 
-    public void initialisation () {
+    public static void initialisation (UIWindow uiWindow, Player[] players, ArrayList<Integer> playerOrder) {
         String name;
         // display blank board
         uiWindow.displayMap();
@@ -42,42 +38,40 @@ public class Initialisation {
         int territoryId=0;
         for (i=0; i<Constants.NUM_PLAYERS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_PLAYER; j++) {
-                board.addUnits(territoryId, 1);
+                uiWindow.board.addUnits(territoryId, 1);
                 players[i].addArmies(-1);
-                board.setOccupier(territoryId,i);
-                players[i].addTerritory(board.getTerritory(territoryId));
+                uiWindow.board.setOccupier(territoryId,i);
+                players[i].addTerritory(uiWindow.board.getTerritory(territoryId));
                 territoryId++;
             }
         }
         for (; i<Constants.NUM_PLAYERS_PLUS_NEUTRALS; i++) {
             for (int j=0; j<Constants.INIT_COUNTRIES_NEUTRAL; j++) {
-                board.addUnits(territoryId, 1);
+                uiWindow.board.addUnits(territoryId, 1);
                 players[i].addArmies(-1);
-                board.setOccupier(territoryId,i);
-                players[i].addTerritory(board.getTerritory(territoryId));
+                uiWindow.board.setOccupier(territoryId,i);
+                players[i].addTerritory(uiWindow.board.getTerritory(territoryId));
                 territoryId++;
             }
         }
         // display map
         uiWindow.displayMap();
-
-        firstPlayer();
     }
 
-    public void firstPlayer() {
+    public static void firstPlayer(UIWindow uiWindow, Player[] players, ArrayList<Integer> playerOrder) {
         int roll1 = 0, roll2 = 0;
         boolean equal = true;
 
         while (equal) {
             uiWindow.displayString("" + players[0].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
             GameLogic.command = uiWindow.getCommand();
-            checkCommand(new String[]{"ROLL"});
+            checkCommand(new String[]{"ROLL"},uiWindow);
             roll1 = GameLogic.diceRoll();
             uiWindow.displayString("" + players[0].getPlayerName() + " rolled " + roll1 + "\n");
 
             uiWindow.displayString("" + players[1].getPlayerName() + " please enter 'ROLL' to roll the dice\n");
             GameLogic.command = uiWindow.getCommand();
-            checkCommand(new String[]{"ROLL"});
+            checkCommand(new String[]{"ROLL"},uiWindow);
             roll2 = GameLogic.diceRoll();
             uiWindow.displayString("" + players[1].getPlayerName() + " rolled " + roll2 + "\n");
 
@@ -105,7 +99,7 @@ public class Initialisation {
         playerOrder.add(5);
     }
 
-    public void checkCommand(String[] correctInputs) {
+    public static void checkCommand(String[] correctInputs,UIWindow uiWindow) {
         boolean check=false;
         StringBuilder msg = new StringBuilder(("'" + correctInputs[0] + "'"));
         for (int i = 0; i < correctInputs.length;i++) {
@@ -124,19 +118,7 @@ public class Initialisation {
         if (!check) {
             uiWindow.displayString("You must enter " + msg.toString()  + ". Please enter your command again\n");
             GameLogic.command = uiWindow.getCommand();
-            checkCommand(correctInputs);
+            checkCommand(correctInputs,uiWindow);
         }
-    }
-
-    public UIWindow getUiWindow() {
-        return uiWindow;
-    }
-
-    public Player[] getPlayers() {
-        return players;
-    }
-
-    public ArrayList<Integer> getPlayerOrder() {
-        return playerOrder;
     }
 }

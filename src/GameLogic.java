@@ -245,6 +245,7 @@ public class GameLogic {
                 }
             }
 
+            //todo: error in blitz mode
             if (board.getTerritory(defendingTerritory).numOccupyingArmies > 1) {
                 numWhiteDice = 2;
             }

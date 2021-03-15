@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameLogic {
-    private final Board board = new Board();
-    private final UIWindow uiWindow = new UIWindow(board);
-    private final Player[] players = new Player[6];
-    private ArrayList<Integer> playerOrder = new ArrayList<>();
-    private Player currPlayer;
-    private int territoryCode;
+    public static final Board board = new Board();
+    public static final UIWindow uiWindow = new UIWindow(board);
+    public static final Player[] players = new Player[6];
+    public static ArrayList<Integer> playerOrder = new ArrayList<>();
+    public static Player currPlayer;
+    public static int territoryCode;
     private int numTurns=1;
     private int numSets=0;
     public static String command; /*Maybe change to enum when all commands
@@ -88,7 +88,7 @@ public class GameLogic {
         uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase. You may also enter 'SKIP' at any time to move to the Fortify phase\n");
         checkCommand(new String[]{"CONTINUE", "SKIP"});
         while(command.equals("CONTINUE")){
-            attack();
+            Attack.attack();
             if(command.equals("GAME OVER")){
                 return;
             }
@@ -102,7 +102,7 @@ public class GameLogic {
         uiWindow.displayString("It is now your fortify phase.\nPlease enter 'CONTINUE' to fortify one of your territories or 'END' to skip the Fortify phase and end your turn\n");
         checkCommand(new String[]{"CONTINUE", "END"});
         if(command.equals("CONTINUE")){
-            fortify();
+            Fortify.fortify();
         }
 
     }
@@ -176,300 +176,8 @@ public class GameLogic {
         return numTroops;
     }
 
-    private void attack(){
-        //Perhaps find a way to generalise getting territory name
-        int attackingTerritory=0,defendingTerritory;
-        do{
-            do{
-                uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
-                checkCommand(new String[]{"SKIP"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("SKIP")){
-                return;
-            }
-            territoryCode = checkHasTerritory(1);
-            if(board.getNumUnits(territoryCode)<=1){
-                uiWindow.displayString("The attacking territory must have at least 2 troops. Please try again");
-                continue;
-            }
-            attackingTerritory=territoryCode;
-            do {
-                uiWindow.displayString("Do you wish to attack from " + board.getTerritory(attackingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
-                checkCommand(new String[]{"YES", "NO", "SKIP"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("SKIP")){
-                return;
-            }
-        } while (command.equals("NO"));
-
-        do{
-            do {
-                uiWindow.displayString("Please enter the name of the territory you wish to attack\n");
-                checkCommand(new String[]{"SKIP"});
-                } while (command.equals("CONTINUE"));
-                if (command.equals("SKIP")) {
-                    return;
-                }
-                territoryCode = checkHasTerritory(2);
-                checkAdjacent(attackingTerritory,territoryCode,1);
-                defendingTerritory=territoryCode;
-
-            do {
-                uiWindow.displayString("Do you wish to attack " + board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to attack from another territory\n");
-                checkCommand(new String[]{"YES", "NO","RETURN","SKIP"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("SKIP")){
-                return;
-            }
-            if(command.equals("RETURN")){
-                attack();
-                return;
-            }
-        } while (command.equals("NO"));
-
-        territoryCode=attackingTerritory;
-
-        int numRedDice = 0;
-        int numWhiteDice = 1;
-        label:
-        while(board.getTerritory(attackingTerritory).numOccupyingArmies>1&&board.getTerritory(defendingTerritory).numOccupyingArmies>0) {
-            if(!command.equals("BLITZ")) {
-                do {
-                    uiWindow.displayString("Please enter the number of dice you wish to roll.\nEnter 'STOP' if you want to stop attacking or enter 'BLITZ' to auto-run the attack sequence\n");
-                    checkCommand(new String[]{"SKIP", "STOP", "BLITZ"});
-                } while (command.equals("CONTINUE"));
-                if (command.equals("SKIP")) {
-                    return;
-                } else if (command.equals("STOP")) {
-                    break;
-                }
-            }
-
-            //todo: error in blitz mode
-            if (board.getTerritory(defendingTerritory).numOccupyingArmies > 1) {
-                numWhiteDice = 2;
-            }
-
-            if(!command.equals("BLITZ")) {
-                numRedDice = checkNumber(2);
-                do {
-                    uiWindow.displayString("Please enter 'ATTACK' to attack " + board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n");
-                    checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
-                } while (command.equals("CONTINUE"));
-                switch (command) {
-                    case "SKIP":
-                        return;
-                    case "CHANGE":
-                        continue;
-                    case "STOP":
-                        break label;
-                }
-            }else{
-                numRedDice=board.getTerritory(attackingTerritory).numOccupyingArmies-1;
-                if(numRedDice>3){
-                    numRedDice=3;
-                }
-            }
-
-            int[] redDice = new int[numRedDice];
-            int[] whiteDice = new int[numWhiteDice];
-            StringBuilder msg = new StringBuilder("" + currPlayer.getPlayerName() + " rolled ");
-            for (int i = 0; i < numRedDice; i++) {
-                redDice[i] = diceRoll();
-                msg.append(redDice[i]);
-                if (i != numRedDice - 1) {
-                    msg.append(", ");
-                } else {
-                    msg.append("\n");
-                }
-
-                if (i > 0) {
-                    if (redDice[i] > redDice[1]) {
-                        int tmp = redDice[i];
-                        redDice[i] = redDice[1];
-                        redDice[1] = tmp;
-                    }
-                    if (redDice[1] > redDice[0]) {
-                        int tmp = redDice[i];
-                        redDice[i] = redDice[0];
-                        redDice[0] = tmp;
-                    }
-                }
-            }
-            uiWindow.displayString(msg.toString());
-
-            msg = new StringBuilder("" + players[board.getOccupier(defendingTerritory)].getPlayerName() + " rolled ");
-            for (int i = 0; i < numWhiteDice; i++) {
-                whiteDice[i] = diceRoll();
-                msg.append(whiteDice[i]);
-                if (i != numWhiteDice - 1) {
-                    msg.append(", ");
-                } else {
-                    msg.append("\n");
-                }
-
-                if (i > 0) {
-                    if (whiteDice[i] > whiteDice[0]) {
-                        int tmp = whiteDice[i];
-                        whiteDice[i] = whiteDice[0];
-                        whiteDice[0] = tmp;
-                    }
-                }
-            }
-            uiWindow.displayString(msg.toString());
-
-            int redLoss = 0, whiteLoss = 0;
-            if (redDice[0] > whiteDice[0]) {
-                whiteLoss++;
-            } else {
-                redLoss++;
-            }
-
-            if (numWhiteDice > 1 && numRedDice > 1) {
-                if (redDice[1] > whiteDice[1]) {
-                    whiteLoss++;
-                } else {
-                    redLoss++;
-                }
-            }
-
-            if (redLoss > 0){
-                if(redLoss > 1) {
-                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troops\n");
-                }else {
-                    uiWindow.displayString("" + currPlayer.getPlayerName() + " lost " + redLoss + " troop\n");
-                }
-            }
-            if (whiteLoss > 0) {
-                if(whiteLoss > 1) {
-                    uiWindow.displayString("" + players[board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troops\n");
-                }else {
-                    uiWindow.displayString("" + players[board.getOccupier(defendingTerritory)].getPlayerName() + " lost " + whiteLoss + " troop\n");
-                }
-            }
-
-            board.getTerritory(attackingTerritory).numOccupyingArmies -= redLoss;
-            board.getTerritory(defendingTerritory).numOccupyingArmies -= whiteLoss;
-            uiWindow.displayMap();
-        }
-
-        int defendingPlayer=board.getOccupier(defendingTerritory);
-        if(board.getTerritory(defendingTerritory).numOccupyingArmies==0){
-            uiWindow.displayString("" + players[defendingPlayer].getPlayerName() + " has lost " + board.getTerritory(defendingTerritory).territoryName);
-            players[defendingPlayer].removeTerritory(defendingTerritory);
-            board.setOccupier(defendingTerritory,currPlayer.getPlayerCode());
-            currPlayer.addTerritory(board.getTerritory(defendingTerritory));
-
-            int numTroopsToTransfer;
-            uiWindow.displayString("" + currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + board.getTerritory(defendingTerritory).territoryName +"\n");
-            uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least " + numRedDice + "\n");
-            do {
-                uiWindow.displayString("Please enter the number of troops to be transferred\n");
-                command= uiWindow.getCommand();
-                numTroopsToTransfer=checkNumber(4+(numRedDice));
-                if(numTroopsToTransfer==1){
-                    uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
-                }else{
-                    uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
-                }
-                checkCommand(new String[]{"YES", "NO"});
-            } while (command.equals("NO"));
-
-            board.addUnits(attackingTerritory,-numTroopsToTransfer);
-            board.addUnits(defendingTerritory,numTroopsToTransfer);
-            uiWindow.displayMap();
-
-        }else if(board.getTerritory(attackingTerritory).numOccupyingArmies==1){
-            uiWindow.displayString("" + currPlayer.getPlayerName() + " has failed to take over " + board.getTerritory(defendingTerritory).territoryName + "\n");
-        }
-
-        if(players[defendingPlayer].getNumPlayerTerritories()==0){
-            uiWindow.displayString("" + players[defendingPlayer].getPlayerName() + " has been wiped out!\n");
-            int i=0;
-            while(playerOrder.get(i)!=defendingPlayer){
-                i++;
-            }
-            if(defendingPlayer==0||defendingPlayer==1){
-                command="GAME OVER";
-            }
-            playerOrder.remove(i);
-        }
-    }
-
-    private void fortify() {
-        int territory1=0,territory2=0;
-        do{
-            do{
-                uiWindow.displayString("Please enter the name of the territory from which you wish to move your troops\n");
-                checkCommand(new String[]{"END"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("END")){
-                return;
-            }
-            territoryCode = checkHasTerritory(1);
-            if(board.getNumUnits(territoryCode)<=1){
-                uiWindow.displayString("The territory must have at least 2 troops. Please try again\n");
-                continue;
-            }
-            territory1=territoryCode;
-            do {
-                uiWindow.displayString("Do you wish to move your troops from " + board.getTerritory(territory1).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
-                checkCommand(new String[]{"YES", "NO", "SKIP"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("SKIP")){
-                return;
-            }
-        } while (command.equals("NO"));
-
-        do{
-            do {
-                uiWindow.displayString("Please enter the name of the territory you wish to transfer your troops to\n");
-                checkCommand(new String[]{"END"});
-            } while (command.equals("CONTINUE"));
-            if (command.equals("END")) {
-                return;
-            }
-
-            do {
-                territoryCode = checkHasTerritory(1);
-                if(!checkHasValidPath(territory1,territoryCode,new ArrayList<>(currPlayer.getPlayerTerritories()))){
-                    uiWindow.displayString("There is no valid path between these territories. Please select another territory\n");
-                    continue;
-                }
-                territory2=territoryCode;
-                uiWindow.displayString("Do you wish to transfer troops from " + board.getTerritory(territory1).territoryName + " to " + board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to move troops from another territory\n");
-                checkCommand(new String[]{"YES", "NO","RETURN","END"});
-            }while(command.equals("CONTINUE"));
-            if(command.equals("END")){
-                return;
-            }
-            if(command.equals("RETURN")){
-                fortify();
-                return;
-            }
-        } while (command.equals("NO"));
-
-        int numTroopsToTransfer;
-        do{
-            uiWindow.displayString("Please enter the number of troops to be transferred\n");
-            command= uiWindow.getCommand();
-            territoryCode=territory1;
-            numTroopsToTransfer=checkNumber(3);
-            if(numTroopsToTransfer==1){
-                uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
-            }else{
-                uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
-            }
-            checkCommand(new String[]{"YES", "NO"});
-        } while (command.equals("NO"));
-
-        board.addUnits(territory1,-numTroopsToTransfer);
-        board.addUnits(territory2,numTroopsToTransfer);
-        uiWindow.displayMap();
-    }
-
     //Recursive function to check if a player has entered a valid command
-    public void checkCommand(String[] correctInputs) {
+    public static void checkCommand(String[] correctInputs) {
         command= uiWindow.getCommand();
         boolean check=false;
         StringBuilder msg = new StringBuilder(("'" + correctInputs[0] + "'"));
@@ -520,7 +228,6 @@ public class GameLogic {
             }
         }
 
-
         if (!check&&!correctInputs[0].equals("SKIP")&&!correctInputs[0].equals("END")){
             uiWindow.displayString("You must enter " + msg.toString()  + ". Please enter your command again\n");
             checkCommand(correctInputs);
@@ -529,23 +236,28 @@ public class GameLogic {
 
     //todo: Perhaps implement check to see if territory is valid first (within this check)
     //Recursive function to check if a player owns the entered territory
-    public int checkHasTerritory(int checkType) {
+    public static int checkHasTerritory(int checkType) {
         boolean check = false;
         int territoryCode=0,cutOff=4;
         if(command.length()<4){
             cutOff=command.length();
-            if(command.length()<2) {
+            if(cutOff==3 && command.substring(0,cutOff).equalsIgnoreCase("gre")){
+                cutOff=2;
+            }
+            if(cutOff<=2) {
                 uiWindow.displayString("You must enter a valid territory name. Please try again\n");
                 command = uiWindow.getCommand();
-                territoryCode = checkHasTerritory(1);
+                territoryCode = checkHasTerritory(checkType);
             }
         }
+
         for (int i = 0; i < currPlayer.getNumPlayerTerritories(); i++) {
             if (command.substring(0,cutOff).equalsIgnoreCase(currPlayer.getPlayerTerritory(i).territoryName.replaceAll(" ", "").substring(0,cutOff))) {
                 check = true;
                 territoryCode=currPlayer.getPlayerTerritory(i).territoryCode;
             }
         }
+
         if (!check&&checkType==1) {
             uiWindow.displayString("You do not own this territory. Please enter the name of another territory\n");
             command = uiWindow.getCommand();
@@ -558,7 +270,7 @@ public class GameLogic {
 
         if(checkType==2){
             for (int i = 0; i < Constants.COUNTRY_NAMES.length; i++) {
-                if (command.substring(0,3).equalsIgnoreCase(Constants.COUNTRY_NAMES[i].replaceAll(" ", "").substring(0,3))) {
+                if (command.substring(0,cutOff).equalsIgnoreCase(Constants.COUNTRY_NAMES[i].replaceAll(" ", "").substring(0,cutOff))) {
                     territoryCode=i;
                 }
             }
@@ -568,7 +280,7 @@ public class GameLogic {
     }
 
     //Recursive function to check if the number supplied by the player is valid
-    public int checkNumber(int numType){
+    public static int checkNumber(int numType){
         int number;
         try{
             Integer.parseInt(command);
@@ -625,7 +337,7 @@ public class GameLogic {
         return number;
     }
 
-    public boolean checkAdjacent(int territory1, int territory2, int checkType) {
+    public static boolean checkAdjacent(int territory1, int territory2, int checkType) {
         boolean check = false;
         for (int i = 0; i < Constants.ADJACENT[territory1].length; i++) {
             if (Constants.ADJACENT[territory1][i] == territory2) {
@@ -633,6 +345,7 @@ public class GameLogic {
                 break;
             }
         }
+
         if(!check&&checkType==1) {
             uiWindow.displayString("These territories are not adjacent. Please enter the name of another territory\n");
             command = uiWindow.getCommand();
@@ -643,12 +356,13 @@ public class GameLogic {
         return true;
     }
 
-    private boolean checkHasValidPath(int territory1,int territory2,ArrayList<Territory> playerTerritories){
+    public static boolean checkHasValidPath(int territory1,int territory2,ArrayList<Territory> playerTerritories){
         int i=0;
         while(playerTerritories.size()>0&&i<playerTerritories.size()){
             if(checkAdjacent(territory1,territory2,2)){
                 return true;
             }
+
             if(checkAdjacent(territory1,playerTerritories.get(i).territoryCode,2)){
                 territory1=playerTerritories.get(i).territoryCode;
                 playerTerritories.remove(i);

@@ -8,48 +8,44 @@ public class GameLogic {
     public static final Board board = new Board();
     public static final UIWindow uiWindow = new UIWindow(board);
     public static final Player[] players = new Player[6];
-    public static ArrayList<Integer> playerOrder = new ArrayList<>();
-    public static Player currPlayer;
-    public static int territoryCode;
-    private int numTurns=1;
-    private int numSets=0;
-    public static String command; /*Maybe change to enum when all commands
-                                    are known (will require changing return type
-                                    of getCommand() function also).
-                                    Creating a drop down menu is another option*/
+    public static ArrayList<Integer> playerOrder = new ArrayList<>();//Arraylist of the playing order, containing player codes
+    public static Player currPlayer;//The current player whose turn it is
+    public static int territoryCode;//Holds the code of a territory
+    private int numTurns=1;//Keeps track of the number turns
+    private int numSets=0;//Keeps track of the number of card sets turned in
+    public static String command;//Holds the command entered by the player
+
     public GameLogic(){
+        //Initialised all the main data of the game
         Initialisation.initialisation(uiWindow,players,playerOrder);
+        //Decides player order
         Initialisation.firstPlayer(uiWindow,players,playerOrder);
     }
 
     public void game(){
-        initialTroopPlacement();
-        for(int i = 0; !command.equals("GAME OVER"); i++){
-            uiWindow.displayString("Turn "+ numTurns);
-            currPlayer=players[playerOrder.get(i)];
-            while(currPlayer.getStatus()){
-                i++;
-                currPlayer=players[playerOrder.get(i)];
-            }
-
+        initialTroopPlacement();//Runs the initial troop placement for the game
+        for(int i = 0; !command.equals("GAME OVER"); i++){//Runs the loop until the game id finished i.e a player wins
+            uiWindow.displayString("Turn "+ numTurns);//Prints turn number
+            currPlayer=players[playerOrder.get(i)];//Changes current player
             uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
-            if(i<=1){
+            if(i<=1){//Human Player
                 turnPlayer();
-            }else{
-                currPlayer.addArmies(getTroops());
-                while(currPlayer.getNumArmies()>0) {
+            }else{//Neutral Player
+                currPlayer.addArmies(getTroops());//Gives the number of troops earned to the current player
+                while(currPlayer.getNumArmies()>0) {//Loops until all armies are placed
                     Random random =new Random();
                     int troops;
                     if(currPlayer.getNumArmies()==1){
                         troops=1;
                     }else{
+                        //Gets a random number of troops
                         troops=(random.nextInt(currPlayer.getNumArmies()-1)+1);
                     }
-                    randTroopPlacement(troops);
+                    randTroopPlacement(troops);//Random places the neutral players troops
                 }
                 uiWindow.displayString("" + currPlayer.getPlayerName() + " has placed all their troops\n");
             }
-            if(i==playerOrder.size()-1){
+            if(i==playerOrder.size()-1){//Resets loops
                 i=-1;
             }
             numTurns++;
@@ -234,7 +230,6 @@ public class GameLogic {
         }
     }
 
-    //todo: Perhaps implement check to see if territory is valid first (within this check)
     //Recursive function to check if a player owns the entered territory
     public static int checkHasTerritory(int checkType) {
         boolean check = false;
@@ -307,13 +302,17 @@ public class GameLogic {
         }else if(numType==2){
             if(number>3){
                 uiWindow.displayString("The maximum number of dice that can be rolled is 3. Please try again\n");
-                checkCommand(new String[]{"SKIP"});//todo
-                number=checkNumber(numType);
+                checkCommand(new String[]{"SKIP"});
             }else if(number>=board.getNumUnits(territoryCode)){
-                uiWindow.displayString("You can only roll " + (board.getNumUnits(territoryCode)-1) + " dice. Please try again\n");
-                checkCommand(new String[]{"SKIP"});//todo
-                number=checkNumber(numType);
+                do {
+                    uiWindow.displayString("You can only roll " + (board.getNumUnits(territoryCode) - 1) + " dice. Please try again\n");
+                    checkCommand(new String[]{"SKIP"});
+                }while(command.equals("CONTINUE"));
             }
+            if(command.equals("SKIP")){
+                return -1;
+            }
+            number=checkNumber(numType);
         }else if(number==board.getTerritory(territoryCode).numOccupyingArmies){
             uiWindow.displayString("You must leave at least one troop in your territory at all times\n");
             command=uiWindow.getCommand();

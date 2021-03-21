@@ -12,7 +12,6 @@ public class Player {
     private int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
     private ArrayList<Territory> playerTerritories = new ArrayList<>();
     private ArrayList<TerritoryCard> territoryCards = new ArrayList<>();
-    private boolean defeated=false;
 
     public Player(String playerName, int playerCode, Color playerColour, int numArmies) {
         this.playerName = playerName;
@@ -25,7 +24,7 @@ public class Player {
         return playerName;
     }
 
-    public int getNumPlayerTerritories(){
+    public int getNumPlayerTerritories() {
         return playerTerritories.size();
     }
 
@@ -39,8 +38,8 @@ public class Player {
     }
 
     public void removeTerritory(int territoryCode) {
-        for(int i=0;i<playerTerritories.size();i++){
-            if(playerTerritories.get(i).territoryCode==territoryCode){
+        for (int i = 0; i < playerTerritories.size(); i++) {
+            if (playerTerritories.get(i).territoryCode == territoryCode) {
                 numTerritoriesInContinent[playerTerritories.get(i).continentCode]--;
                 this.playerTerritories.remove(i);
                 break;
@@ -64,35 +63,24 @@ public class Player {
         return playerCode;
     }
 
-    public ArrayList<Territory> getPlayerTerritories(){
+    public ArrayList<Territory> getPlayerTerritories() {
         return playerTerritories;
     }
 
 
-    public void drawCard(Deck d)
-    {
+    public void drawCard(Deck d) {
         TerritoryCard tc = d.drawCard();
         territoryCards.add(tc);
     }
 
-    public String showCards()
-    {
+    public String showCards() {
         String s = "";
-        for (int i = 0; i < territoryCards.size(); i++)
-        {
+        for (int i = 0; i < territoryCards.size(); i++) {
             s += territoryCards.get(i);
 
         }
         return s;
 
-    }
-
-    public boolean getStatus() {
-        return defeated;
-    }
-
-    public void setStatus() {
-        this.defeated = true;
     }
 }
 

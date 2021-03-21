@@ -53,9 +53,11 @@ public class Attack {
         GameLogic.territoryCode=attackingTerritory;
 
         int numRedDice = 0;
-        int numWhiteDice = 1;
+        int numWhiteDice;
         label:
         while(GameLogic.board.getTerritory(attackingTerritory).numOccupyingArmies>1&&GameLogic.board.getTerritory(defendingTerritory).numOccupyingArmies>0) {
+            numRedDice = 0;
+            numWhiteDice = 1;
             if(!GameLogic.command.equals("BLITZ")) {
                 do {
                     GameLogic.uiWindow.displayString("Please enter the number of dice you wish to roll.\nEnter 'STOP' if you want to stop attacking or enter 'BLITZ' to auto-run the attack sequence\n");
@@ -68,13 +70,16 @@ public class Attack {
                 }
             }
 
-            //todo: error in blitz mode
             if (GameLogic.board.getTerritory(defendingTerritory).numOccupyingArmies > 1) {
                 numWhiteDice = 2;
             }
 
             if(!GameLogic.command.equals("BLITZ")) {
                 numRedDice = GameLogic.checkNumber(2);
+                if(numRedDice==-1){
+                    return;
+                }
+
                 do {
                     GameLogic.uiWindow.displayString("Please enter 'ATTACK' to attack " + GameLogic.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n");
                     GameLogic.checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});

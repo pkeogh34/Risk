@@ -197,7 +197,7 @@ public class GameLogic {
             }
             if(i==correctInputs.length-1 && i!=0){
                 msg.append(" or '").append(correctInputs[i]).append("'");
-            }else if(i>1){
+            }else if(i>=1){
                 msg.append(", ").append(correctInputs[i]);
             }
         }
@@ -252,26 +252,38 @@ public class GameLogic {
             if(cutOff==3 && command.substring(0,cutOff).equalsIgnoreCase("gre")){
                 cutOff=2;
             }
-            if(cutOff<=2) {
-                uiWindow.displayString("You must enter a valid territory name. Please try again\n");
-                command = uiWindow.getCommand();
-                territoryCode = checkHasTerritory(checkType);
+        }
+
+        for (int i = 0; i < Constants.COUNTRY_NAMES.length; i++) {
+            if (command.substring(0,cutOff).equalsIgnoreCase(Constants.COUNTRY_NAMES[i].replaceAll(" ", "").substring(0,cutOff))) {
+               command=Constants.COUNTRY_NAMES[i];
+               check=true;
             }
         }
 
+        if(cutOff<=2) {
+            check=false;
+        }
+        if(!check){
+            uiWindow.displayString("You must enter a valid territory name. Please try again\n");
+            command = uiWindow.getCommand();
+            territoryCode = checkHasTerritory(checkType);
+        }
+
+        check=false;
         for (int i = 0; i < currPlayer.getNumPlayerTerritories(); i++) {
-            if (command.substring(0,cutOff).equalsIgnoreCase(currPlayer.getPlayerTerritory(i).territoryName.replaceAll(" ", "").substring(0,cutOff))) {
+            if (command.equalsIgnoreCase(currPlayer.getPlayerTerritory(i).territoryName)) {
                 check = true;
                 territoryCode=currPlayer.getPlayerTerritory(i).territoryCode;
             }
         }
 
         if (!check&&checkType==1) {//Tells the player that they do not own the territory and must select another one
-            uiWindow.displayString("You do not own this territory. Please enter the name of another territory\n");
+            uiWindow.displayString("You do not own " + command + ". Please enter the name of another territory\n");
             command = uiWindow.getCommand();
             territoryCode=checkHasTerritory(1);
         }else if(check&&checkType==2){//Tells the player that they do not own the territory and must select another one (for attacking)
-            uiWindow.displayString("You already own this territory. Please enter the name of another territory\n");
+            uiWindow.displayString("You already own " + command + ". Please enter the name of another territory\n");
             command = uiWindow.getCommand();
             territoryCode=checkHasTerritory(2);
         }
@@ -279,7 +291,7 @@ public class GameLogic {
         //If a territory that a player does not own is required,  this searches all territories
         if(checkType==2){
             for (int i = 0; i < Constants.COUNTRY_NAMES.length; i++) {
-                if (command.substring(0,cutOff).equalsIgnoreCase(Constants.COUNTRY_NAMES[i].replaceAll(" ", "").substring(0,cutOff))) {
+                if (command.equalsIgnoreCase(Constants.COUNTRY_NAMES[i])) {
                     territoryCode=i;
                 }
             }

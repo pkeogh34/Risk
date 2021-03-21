@@ -36,11 +36,29 @@ public class Fortify {
             }
 
             do {
-                GameLogic.territoryCode = GameLogic.checkHasTerritory(1);
-                if(!GameLogic.checkHasValidPath(territory1,GameLogic.territoryCode,new ArrayList<>(GameLogic.currPlayer.getPlayerTerritories()))){
-                    GameLogic.uiWindow.displayString("There is no valid path between these territories. Please select another territory\n");
-                    continue;
-                }
+                boolean check=true;
+                do {
+                    GameLogic.territoryCode = GameLogic.checkHasTerritory(1);
+                    ArrayList<Territory> temp = new ArrayList<>(GameLogic.currPlayer.getPlayerTerritories());
+                    for (int i = 0; i < temp.size(); i++) {
+                        if (temp.get(i).territoryCode == territory1) {
+                            temp.remove(i);
+                            break;
+                        }
+                    }
+
+                    if (!GameLogic.checkHasValidPath(territory1, GameLogic.territoryCode, temp)) {
+                        do {
+                            GameLogic.uiWindow.displayString("There is no valid path between these territories. Please select another territory\n");
+                            GameLogic.checkCommand(new String[]{"END"});
+                        } while (GameLogic.command.equals("CONTINUE"));
+                        if (GameLogic.command.equals("END")) {
+                            return;
+                        }
+                        check=false;
+                    }
+                }while(!check);
+
                 territory2=GameLogic.territoryCode;
                 GameLogic.uiWindow.displayString("Do you wish to transfer troops from " + GameLogic.board.getTerritory(territory1).territoryName + " to " + GameLogic.board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to move troops from another territory\n");
                 GameLogic.checkCommand(new String[]{"YES", "NO","RETURN","END"});

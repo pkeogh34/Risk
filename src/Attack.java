@@ -111,15 +111,17 @@ public class Attack {
                     msg.append("\n");
                 }
 
-                if (i > 0) {
-                    if (redDice[i] > redDice[1]) {
-                        int tmp = redDice[i];
-                        redDice[i] = redDice[1];
-                        redDice[1] = tmp;
+                if (i>0) {
+                    if(i>1){
+                        if (redDice[2] > redDice[1]) {
+                            int tmp = redDice[2];
+                            redDice[2] = redDice[1];
+                            redDice[1] = tmp;
+                        }
                     }
                     if (redDice[1] > redDice[0]) {
-                        int tmp = redDice[i];
-                        redDice[i] = redDice[0];
+                        int tmp = redDice[1];
+                        redDice[1] = redDice[0];
                         redDice[0] = tmp;
                     }
                 }
@@ -136,10 +138,10 @@ public class Attack {
                     msg.append("\n");
                 }
 
-                if (i > 0) {
-                    if (whiteDice[i] > whiteDice[0]) {
-                        int tmp = whiteDice[i];
-                        whiteDice[i] = whiteDice[0];
+                if (i==1) {
+                    if (whiteDice[1] > whiteDice[0]) {
+                        int tmp = whiteDice[1];
+                        whiteDice[1] = whiteDice[0];
                         whiteDice[0] = tmp;
                     }
                 }

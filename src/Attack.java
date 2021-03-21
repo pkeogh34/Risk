@@ -3,18 +3,22 @@ public class Attack {
         //Perhaps find a way to generalise getting territory name
         int attackingTerritory=0,defendingTerritory;
         do{
-            do{
-                GameLogic.uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
-                GameLogic.checkCommand(new String[]{"SKIP"});
-            }while(GameLogic.command.equals("CONTINUE"));
-            if(GameLogic.command.equals("SKIP")){
-                return;
-            }
-            GameLogic.territoryCode = GameLogic.checkHasTerritory(1);
-            if(GameLogic.board.getNumUnits(GameLogic.territoryCode)<=1){
-                GameLogic.uiWindow.displayString("The attacking territory must have at least 2 troops. Please try again");
-                continue;
-            }
+            boolean check=true;
+            do {
+                do {
+                    GameLogic.uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
+                    GameLogic.checkCommand(new String[]{"SKIP"});
+                } while (GameLogic.command.equals("CONTINUE"));
+                if (GameLogic.command.equals("SKIP")) {
+                    return;
+                }
+                GameLogic.territoryCode = GameLogic.checkHasTerritory(1);
+                if (GameLogic.board.getNumUnits(GameLogic.territoryCode) <= 1) {
+                    GameLogic.uiWindow.displayString("The attacking territory must have at least 2 troops. Please try again");
+                    check=false;
+                }
+            }while(!check);
+
             attackingTerritory=GameLogic.territoryCode;
             do {
                 GameLogic.uiWindow.displayString("Do you wish to attack from " + GameLogic.board.getTerritory(attackingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");

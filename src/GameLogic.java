@@ -14,12 +14,17 @@ public class GameLogic {
     private int numTurns=1;//Keeps track of the number turns
     private int numSets=0;//Keeps track of the number of card sets turned in
     public static String command;//Holds the command entered by the player
+    public static Deck cardsDeck; //Deck of Territory cards
 
     public GameLogic(){
         //Initialised all the main data of the game
         Initialisation.initialisation(uiWindow,players,playerOrder);
         //Decides player order
         Initialisation.firstPlayer(uiWindow,players,playerOrder);
+
+        //Create new Deck object and shuffle it
+        cardsDeck = new Deck();
+        cardsDeck.shuffle();
     }
 
     public void game(){
@@ -50,8 +55,8 @@ public class GameLogic {
             }
             numTurns++;//Increases number of turns
         }
-        //Prints who ahs one the game
-        uiWindow.displayString("" + currPlayer.getPlayerName() +" has one the game!");
+        //Prints who has won the game
+        uiWindow.displayString("" + currPlayer.getPlayerName() +" has won the game!");
     }
 
     public void initialTroopPlacement(){//Function to place initial troops
@@ -104,6 +109,8 @@ public class GameLogic {
         if(command.equals("CONTINUE")){
             Fortify.fortify();//Executes functionality for players fortify phase
         }
+
+
 
     }
 

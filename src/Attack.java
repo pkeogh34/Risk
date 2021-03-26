@@ -182,6 +182,7 @@ public class Attack {
                 }
             }
 
+            //updates board units but doesn't seem to update player units ever
             GameLogic.board.getTerritory(attackingTerritory).numOccupyingArmies -= redLoss;
             GameLogic.board.getTerritory(defendingTerritory).numOccupyingArmies -= whiteLoss;
             GameLogic.uiWindow.displayMap();
@@ -193,6 +194,10 @@ public class Attack {
             GameLogic.players[defendingPlayer].removeTerritory(defendingTerritory);
             GameLogic.board.setOccupier(defendingTerritory, GameLogic.currPlayer.getPlayerCode());
             GameLogic.currPlayer.addTerritory(GameLogic.board.getTerritory(defendingTerritory));
+            // award territoryCard phase
+            GameLogic.uiWindow.displayString("You have concoured at least one territory, now you have been award a territory card.");//TODO: optional print message to tell user what card they got
+            TerritoryCard tc = GameLogic.currPlayer.drawCard(GameLogic.cardsDeck);
+            GameLogic.uiWindow.displayString(tc.toString());
 
             int numTroopsToTransfer;
             GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + GameLogic.board.getTerritory(defendingTerritory).territoryName +"\n");
@@ -209,6 +214,7 @@ public class Attack {
                 GameLogic.checkCommand(new String[]{"YES", "NO"});
             } while (GameLogic.command.equals("NO"));
 
+            // again, only changes units on board, not the player
             GameLogic.board.addUnits(attackingTerritory,-numTroopsToTransfer);
             GameLogic.board.addUnits(defendingTerritory,numTroopsToTransfer);
             GameLogic.uiWindow.displayMap();

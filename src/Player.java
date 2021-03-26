@@ -68,9 +68,10 @@ public class Player {
     }
 
 
-    public void drawCard(Deck d) {
+    public TerritoryCard drawCard(Deck d) {
         TerritoryCard tc = d.drawCard();
         territoryCards.add(tc);
+        return tc;
     }
 
     public String showCards() {

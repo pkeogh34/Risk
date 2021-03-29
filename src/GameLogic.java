@@ -8,11 +8,13 @@ public class GameLogic {
     public static final Board board = new Board();
     public static final UIWindow uiWindow = new UIWindow(board);
     public static final Player[] players = new Player[6];
+    private static final Deck gameDeck = new Deck();//Territory card deck
     public static ArrayList<Integer> playerOrder = new ArrayList<>();//Arraylist of the playing order, containing player codes
     public static Player currPlayer;//The current player whose turn it is
     public static int territoryCode;//Holds the code of a territory
     private int numTurns=1;//Keeps track of the number turns
-    private int numSets=0;//Keeps track of the number of card sets turned in
+    public static int numSets=0;//Keeps track of the number of card sets turned in
+    private static boolean getsCard;//True if the current player has conquered at least one territory
     public static String command;//Holds the command entered by the player
 
     public GameLogic(){
@@ -50,8 +52,8 @@ public class GameLogic {
             }
             numTurns++;//Increases number of turns
         }
-        //Prints who ahs one the game
-        uiWindow.displayString("" + currPlayer.getPlayerName() +" has one the game!");
+        //Prints who has won the game
+        uiWindow.displayString("" + currPlayer.getPlayerName() +" has won the game!");
     }
 
     public void initialTroopPlacement(){//Function to place initial troops
@@ -76,12 +78,7 @@ public class GameLogic {
 
     public void turnPlayer(){//Function to execute player turns
        //Deploy phase
-        currPlayer.addArmies(getTroops());//Gives the current player the number of troops that they have earned
-        placeTroops(false);//Allows the current player to place their troops
-        while(currPlayer.getNumArmies()>0){//Loops until the player has placed all there troops
-            uiWindow.displayString("You have " + currPlayer.getNumArmies() + " troops to place\n");
-            placeTroops(false);
-        }
+        Deploy.deploy();
 
         //Attack phase
         uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase. You may also enter 'SKIP' at any time to move to the Fortify phase\n");
@@ -98,13 +95,21 @@ public class GameLogic {
             checkCommand(new String[]{"CONTINUE", "SKIP"});
         }
 
+        //Draw a card if a territory was conquered
+        if(gameDeck.getCardPile().size()!=0){
+            if(getsCard){
+                getsCard=false;
+                uiWindow.displayString("You have received a territory card for successfully conquering a territory");
+                currPlayer.addTerritoryCard(gameDeck.drawCard());
+            }
+        }
+
         //Fortify phase
         uiWindow.displayString("It is now your fortify phase.\nPlease enter 'CONTINUE' to fortify one of your territories or 'END' to skip the Fortify phase and end your turn\n");
         checkCommand(new String[]{"CONTINUE", "END"});//Checks if user wishes to end their turn or continue
         if(command.equals("CONTINUE")){
             Fortify.fortify();//Executes functionality for players fortify phase
         }
-
     }
 
     public void randTroopPlacement(int troops){
@@ -130,7 +135,7 @@ public class GameLogic {
     }
 
     //Function that allows human player to place troops
-    private void placeTroops(boolean initial){
+    public static void placeTroops(boolean initial){
         do{//Gets the territory where the player wishes to place there troops
             uiWindow.displayString("Please enter the name of the territory in which you wish to place your troops\n");
             command = uiWindow.getCommand();//Get player command
@@ -160,7 +165,7 @@ public class GameLogic {
     }
 
     //Function to get the number of troops that a player earns in a turn
-    private int getTroops(){
+    public static int getTroops(){
         int numTroops;//Holds number of troops
         StringBuilder strForNumTroops= new StringBuilder();//Creates string to tell player how many troops were earned and why
         numTroops= (int) Math.floor(currPlayer.getNumPlayerTerritories()/3.0);//Gets number of troops from territories
@@ -182,6 +187,7 @@ public class GameLogic {
         }
         return numTroops;//returns number of troops earned
     }
+
 
     //Recursive function to check if a player has entered a valid command
     public static void checkCommand(String[] correctInputs) {
@@ -388,7 +394,7 @@ public class GameLogic {
         return true;
     }
 
-    //Recursive to find if there is a valid path between the territories a player wishes to move troops between
+    //Recursive function to find if there is a valid path between the territories a player wishes to move troops between
     public static boolean checkHasValidPath(int territory1,int territory2,ArrayList<Territory> playerTerritories){
         int i=0;
         /*Checks all the paths through a players owned territories to check if there
@@ -410,5 +416,18 @@ public class GameLogic {
             i++;
         }
         return false;
+    }
+
+    public static boolean checkIsValidCombination(String cards){
+        for(int i = 0; i < Constants.VALID_COMBINATIONS.length; i++){
+            if(cards.equals(Constants.VALID_COMBINATIONS[i])){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void setGetsCard(boolean getsCard) {
+        GameLogic.getsCard = getsCard;
     }
 }

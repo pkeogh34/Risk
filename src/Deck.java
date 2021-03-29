@@ -2,54 +2,65 @@
 //Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 
 public class Deck 
 {
-	private static ArrayList<TerritoryCard> theDeck = new ArrayList<TerritoryCard>();
-
-	//not sure if need this yet
-	private static ArrayList<TerritoryCard> discardPile = new ArrayList<TerritoryCard>();
+	private final ArrayList<TerritoryCard> cardPile = new ArrayList<>();
 	
 	public Deck() {
 		reset();
+		Collections.shuffle(cardPile);
 	}
 	
 	public void reset() {
-		theDeck.clear();
-		discardPile.clear();
-		
-		for (int i=0; i<42; i++) {
-			theDeck.add(new TerritoryCard(i));
+		cardPile.clear();
+		for (int i=0; i<44; i++) {
+			cardPile.add(new TerritoryCard(i));
 		}
 	}
-	
-	public void shuffle() 
-	{
-		Random rand = new Random();
-		
-		for (int i = 0; i < 100; i++)
-		{
-			// Obtain a card between [0 - 41].
-			int n = rand.nextInt(42);
-			TerritoryCard c = theDeck.remove(n);
-			theDeck.add(c);
-			
-		}
-	}
-	
+
 	public TerritoryCard drawCard() {
-		TerritoryCard tc = null;
+		TerritoryCard territoryCard=cardPile.get(0);
+		cardPile.remove(0);
 
-		try{
-			tc = theDeck.remove(0);
-			//discardPile.add(tc);
-		}
-		catch(IndexOutOfBoundsException e){
-			System.out.println("Error: desk is empty;");
+		return territoryCard;
+	}
+
+	public ArrayList<TerritoryCard> getCardPile(){
+		return cardPile;
+	}
+
+	static class TerritoryCard
+	{
+		private final int territoryCode;
+		private final String type;
+
+		public TerritoryCard (int territoryCode) {
+			this.territoryCode = territoryCode;
+			this.type = Constants.CARD_UNIT_TYPE[territoryCode];
 		}
 
-		return tc;
+		public int getTerritoryCode(){
+			return territoryCode;
+		}
+
+		public String getType(){
+			return type;
+		}
+
+		// custom String representation for the card
+		public String toString()
+		{
+			String str = switch (type) {
+				case "I" -> "INFANTRY";
+				case "C" -> "CAVALRY";
+				case "A" -> "ARTILLERY";
+				case "W" -> "WILD";
+				default -> null;
+			};
+			return (Constants.COUNTRY_NAMES[territoryCode] + " ("+ str + ")\n");
+		}
 	}
 }

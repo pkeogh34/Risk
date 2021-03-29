@@ -1,7 +1,6 @@
 public class Attack {
     public static void attack(){
-        //Perhaps find a way to generalise getting territory name
-        int attackingTerritory=0,defendingTerritory;
+        int attackingTerritory,defendingTerritory;
         do{
             boolean check=true;
             do {
@@ -56,6 +55,58 @@ public class Attack {
 
         GameLogic.territoryCode=attackingTerritory;
 
+        int numRedDice=executeAttack(attackingTerritory,defendingTerritory);
+        if (numRedDice==-1){
+            return;
+        }
+
+        Player defendingPlayer=GameLogic.players[GameLogic.board.getOccupier(defendingTerritory)];
+        if(GameLogic.board.getTerritory(defendingTerritory).numOccupyingArmies==0){
+            GameLogic.uiWindow.displayString("" + defendingPlayer.getPlayerName() + " has lost " + GameLogic.board.getTerritory(defendingTerritory).territoryName);
+            defendingPlayer.removeTerritory(defendingTerritory);
+            GameLogic.board.setOccupier(defendingTerritory, GameLogic.currPlayer.getPlayerCode());
+            GameLogic.currPlayer.addTerritory(GameLogic.board.getTerritory(defendingTerritory));
+            GameLogic.setGetsCard(true);
+
+            int numTroopsToTransfer;
+            GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + GameLogic.board.getTerritory(defendingTerritory).territoryName +"\n");
+            GameLogic.uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least " + numRedDice + "\n");
+            do {
+                GameLogic.uiWindow.displayString("Please enter the number of troops to be transferred\n");
+                GameLogic.command= GameLogic.uiWindow.getCommand();
+                numTroopsToTransfer=GameLogic.checkNumber(4+(numRedDice));
+                if(numTroopsToTransfer==1){
+                    GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+                }else{
+                    GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+                }
+                GameLogic.checkCommand(new String[]{"YES", "NO"});
+            } while (GameLogic.command.equals("NO"));
+
+            GameLogic.board.addUnits(attackingTerritory,-numTroopsToTransfer);
+            GameLogic.board.addUnits(defendingTerritory,numTroopsToTransfer);
+            GameLogic.uiWindow.displayMap();
+
+        }else if(GameLogic.board.getTerritory(attackingTerritory).numOccupyingArmies==1){
+            GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + " has failed to take over " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "\n");
+        }
+
+        if(defendingPlayer.getNumPlayerTerritories()==0){
+            GameLogic.uiWindow.displayString("" + defendingPlayer.getPlayerName() + " has been wiped out!\n");
+            GameLogic.currPlayer.transferCards(defendingPlayer.getTerritoryCards());
+            defendingPlayer.getTerritoryCards().clear();
+            int i=0;
+            while(GameLogic.playerOrder.get(i)!=defendingPlayer.getPlayerCode()){
+                i++;
+            }
+            if(defendingPlayer.getPlayerCode()==0||defendingPlayer.getPlayerCode()==1){
+                GameLogic.command="GAME OVER";
+            }
+            GameLogic.playerOrder.remove(i);
+        }
+    }
+
+    private static int executeAttack(int attackingTerritory, int defendingTerritory){
         int numRedDice = 0;
         int numWhiteDice;
         label:
@@ -68,7 +119,7 @@ public class Attack {
                     GameLogic.checkCommand(new String[]{"SKIP", "STOP", "BLITZ"});
                 } while (GameLogic.command.equals("CONTINUE"));
                 if (GameLogic.command.equals("SKIP")) {
-                    return;
+                    return -1;
                 } else if (GameLogic.command.equals("STOP")) {
                     break;
                 }
@@ -81,7 +132,7 @@ public class Attack {
             if(!GameLogic.command.equals("BLITZ")) {
                 numRedDice = GameLogic.checkNumber(2);
                 if(numRedDice==-1){
-                    return;
+                    return numRedDice;
                 }
 
                 do {
@@ -90,7 +141,7 @@ public class Attack {
                 } while (GameLogic.command.equals("CONTINUE"));
                 switch (GameLogic.command) {
                     case "SKIP":
-                        return;
+                        return -1;
                     case "CHANGE":
                         continue;
                     case "STOP":
@@ -187,46 +238,6 @@ public class Attack {
             GameLogic.uiWindow.displayMap();
         }
 
-        int defendingPlayer=GameLogic.board.getOccupier(defendingTerritory);
-        if(GameLogic.board.getTerritory(defendingTerritory).numOccupyingArmies==0){
-            GameLogic.uiWindow.displayString("" + GameLogic.players[defendingPlayer].getPlayerName() + " has lost " + GameLogic.board.getTerritory(defendingTerritory).territoryName);
-            GameLogic.players[defendingPlayer].removeTerritory(defendingTerritory);
-            GameLogic.board.setOccupier(defendingTerritory, GameLogic.currPlayer.getPlayerCode());
-            GameLogic.currPlayer.addTerritory(GameLogic.board.getTerritory(defendingTerritory));
-
-            int numTroopsToTransfer;
-            GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + GameLogic.board.getTerritory(defendingTerritory).territoryName +"\n");
-            GameLogic.uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least " + numRedDice + "\n");
-            do {
-                GameLogic.uiWindow.displayString("Please enter the number of troops to be transferred\n");
-                GameLogic.command= GameLogic.uiWindow.getCommand();
-                numTroopsToTransfer=GameLogic.checkNumber(4+(numRedDice));
-                if(numTroopsToTransfer==1){
-                    GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
-                }else{
-                    GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
-                }
-                GameLogic.checkCommand(new String[]{"YES", "NO"});
-            } while (GameLogic.command.equals("NO"));
-
-            GameLogic.board.addUnits(attackingTerritory,-numTroopsToTransfer);
-            GameLogic.board.addUnits(defendingTerritory,numTroopsToTransfer);
-            GameLogic.uiWindow.displayMap();
-
-        }else if(GameLogic.board.getTerritory(attackingTerritory).numOccupyingArmies==1){
-            GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + " has failed to take over " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "\n");
-        }
-
-        if(GameLogic.players[defendingPlayer].getNumPlayerTerritories()==0){
-            GameLogic.uiWindow.displayString("" + GameLogic.players[defendingPlayer].getPlayerName() + " has been wiped out!\n");
-            int i=0;
-            while(GameLogic.playerOrder.get(i)!=defendingPlayer){
-                i++;
-            }
-            if(defendingPlayer==0||defendingPlayer==1){
-                GameLogic.command="GAME OVER";
-            }
-            GameLogic.playerOrder.remove(i);
-        }
+        return numRedDice;
     }
 }

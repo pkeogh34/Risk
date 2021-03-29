@@ -9,9 +9,10 @@ public class Player {
     private final int playerCode;
     private final Color playerColour;
     private int numArmies;
-    private int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
-    private ArrayList<Territory> playerTerritories = new ArrayList<>();
-    private ArrayList<TerritoryCard> territoryCards = new ArrayList<>();
+    private final int[] numTerritoriesInContinent = {0, 0, 0, 0, 0, 0};
+    private final ArrayList<Territory> playerTerritories = new ArrayList<>();
+    private ArrayList<Deck.TerritoryCard> territoryCards = new ArrayList<>();
+    private ArrayList<String> cardTypes = new ArrayList<>();
 
     public Player(String playerName, int playerCode, Color playerColour, int numArmies) {
         this.playerName = playerName;
@@ -47,6 +48,10 @@ public class Player {
         }
     }
 
+    public ArrayList<String> getCardTypes(){
+        return cardTypes;
+    }
+
     public int getNumTerritoriesInContinent(int continentCode) {
         return numTerritoriesInContinent[continentCode];
     }
@@ -67,19 +72,33 @@ public class Player {
         return playerTerritories;
     }
 
+    public void addTerritoryCard(Deck.TerritoryCard territoryCard){
+        territoryCards.add(territoryCard);
+        cardTypes.add(territoryCard.getType());
+    }
 
-    public void drawCard(Deck d) {
-        TerritoryCard tc = d.drawCard();
-        territoryCards.add(tc);
+    public ArrayList<Deck.TerritoryCard> getTerritoryCards(){
+        return territoryCards;
+    }
+
+    public void transferCards(ArrayList<Deck.TerritoryCard> opponentCards){
+        territoryCards.addAll(opponentCards);
+    }
+
+    public void setTerritoryCards(ArrayList<Deck.TerritoryCard> territoryCards){
+        this.territoryCards = new ArrayList<>(territoryCards);
+    }
+
+    public void setCardTypes(ArrayList<String> cardTypes){
+        this.cardTypes = new ArrayList<>(cardTypes);
     }
 
     public String showCards() {
-        String s = "";
-        for (int i = 0; i < territoryCards.size(); i++) {
-            s += territoryCards.get(i);
-
+        StringBuilder str = new StringBuilder();
+        for (Deck.TerritoryCard territoryCard : territoryCards) {
+            str.append(territoryCard);
         }
-        return s;
+        return str.toString();
 
     }
 }

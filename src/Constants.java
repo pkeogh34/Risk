@@ -117,59 +117,105 @@ public class Constants {
             {547,432},        // 40
             {576,515}
     };
-    
-	public enum UnitType
-	{
-		INFANTRY,
-		CAVALRY,
-		ARTILLERY
-	}
 	
-	public static final UnitType[] CARD_UNIT_TYPE = {
-		UnitType.CAVALRY,
-		UnitType.ARTILLERY,
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,
-		UnitType.CAVALRY,
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,
-		UnitType.CAVALRY,
-		UnitType.INFANTRY,		
-		UnitType.CAVALRY,		// 10
-		UnitType.INFANTRY,
-		UnitType.CAVALRY,
-		UnitType.ARTILLERY,
-		UnitType.CAVALRY,
-		UnitType.INFANTRY,
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,
-		UnitType.INFANTRY,
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,		// 20		
-		UnitType.CAVALRY,
-		UnitType.CAVALRY,
-		UnitType.CAVALRY,
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,
-		UnitType.ARTILLERY,
-		UnitType.ARTILLERY,
-		UnitType.CAVALRY,
-		UnitType.INFANTRY,		
-		UnitType.CAVALRY,		// 30
-		UnitType.ARTILLERY,
-		UnitType.CAVALRY,
-		UnitType.ARTILLERY,
-		UnitType.CAVALRY,
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,
-		UnitType.CAVALRY,
-		UnitType.INFANTRY,
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,		// 40
-		UnitType.ARTILLERY,
-		UnitType.INFANTRY,
-		
+	public static final String[] CARD_UNIT_TYPE = {
+			"C",
+			"A",
+			"A",
+			"I",
+			"C",
+			"A",
+			"I",
+			"C",
+			"I",
+			"C",		// 10
+			"I",
+			"C",
+			"A",
+			"C",
+			"I",
+			"A",
+			"I",
+			"I",
+			"A",
+			"I",		// 20
+			"C",
+			"C",
+			"C",
+			"A",
+			"I",
+			"A",
+			"A",
+			"C",
+			"I",
+			"C",		// 30
+			"A",
+			"C",
+			"A",
+			"C",
+			"A",
+			"I",
+			"C",
+			"I",
+			"A",
+			"I",		// 40
+			"A",
+			"I",
+			"W",
+			"W"
 	};
+
+	public static final String[] VALID_COMBINATIONS = {
+			"III",
+			"CCC",
+			"AAA", //3
+
+			"IIW",
+			"IWI",
+			"WII",
+
+			"CCW",
+			"CWC",
+			"WCC",
+
+			"AAW",
+			"AWA",
+			"WAA", //12
+
+			"ICA",
+			"IAC",
+			"CIA",
+			"CAI",
+			"AIC",
+			"ACI",
+
+			"WCA",
+			"IWA",
+			"ICW",
+
+			"WAC",
+			"IWC",
+			"IAW",
+
+			"WIA",
+			"CWA",
+			"CIW",
+
+			"WAI",
+			"CWI",
+			"CAW",
+
+			"WIC",
+			"AWC",
+			"AIW",
+
+			"WCI",
+			"AWI",
+			"ACW",
+
+	};
+
+	public static int[] NUM_ARMIES_FOR_SET = {4, 6, 8, 10, 12, 15};
 
     public static int getCountryCoord(int x, int y) {
         return COUNTRY_COORD[x][y];

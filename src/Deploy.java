@@ -3,7 +3,7 @@
 
 import java.util.ArrayList;
 
-//todo: add fucntionality to allow the user to reenter instructions or not trade in cards
+//todo: add functionality to allow the user to reenter instructions or not trade in cards
 public class Deploy {
     public static void deploy(){
         if(GameLogic.currPlayer.getTerritoryCards().size()>2){

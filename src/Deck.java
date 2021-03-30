@@ -57,9 +57,14 @@ public class Deck
 				case "I" -> "INFANTRY";
 				case "C" -> "CAVALRY";
 				case "A" -> "ARTILLERY";
-				case "W" -> "WILD";
+				case "W" -> "WILD CARD\n";
 				default -> null;
 			};
+
+			if(str.equals("WILD CARD")){
+				return str;
+			}
+
 			return (Constants.COUNTRY_NAMES[territoryCode] + " ("+ str + ")\n");
 		}
 	}

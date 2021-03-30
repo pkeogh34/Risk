@@ -9,39 +9,39 @@ public class Deploy {
         if(GameLogic.currPlayer.getTerritoryCards().size()>2){
             boolean check=false;
             if(GameLogic.currPlayer.getTerritoryCards().size()==3 || GameLogic.currPlayer.getTerritoryCards().size()==4){
-                check=GameLogic.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(0) + GameLogic.currPlayer.getCardTypes().get(1) +GameLogic.currPlayer.getCardTypes().get(2));
+                check=Checks.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(0) + GameLogic.currPlayer.getCardTypes().get(1) +GameLogic.currPlayer.getCardTypes().get(2));
             }
             if(GameLogic.currPlayer.getTerritoryCards().size()==4 && !check) {
-                check = GameLogic.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(0) + GameLogic.currPlayer.getCardTypes().get(1) + GameLogic.currPlayer.getCardTypes().get(3));
+                check = Checks.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(0) + GameLogic.currPlayer.getCardTypes().get(1) + GameLogic.currPlayer.getCardTypes().get(3));
                 if(!check){
-                    GameLogic.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(0) + GameLogic.currPlayer.getCardTypes().get(2) + GameLogic.currPlayer.getCardTypes().get(3));
+                    Checks.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(0) + GameLogic.currPlayer.getCardTypes().get(2) + GameLogic.currPlayer.getCardTypes().get(3));
                 }
                 if(!check){
-                    GameLogic.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(1) + GameLogic.currPlayer.getCardTypes().get(2) + GameLogic.currPlayer.getCardTypes().get(3));
+                    Checks.checkIsValidCombination(GameLogic.currPlayer.getCardTypes().get(1) + GameLogic.currPlayer.getCardTypes().get(2) + GameLogic.currPlayer.getCardTypes().get(3));
                 }
             }
 
             if(GameLogic.currPlayer.getTerritoryCards().size()<5){
                 if(check) {
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'\nYou may also enter 'VIEW' to view you cards.\n");
-                    GameLogic.checkCommand(new String[]{"YES", "NO", "VIEW"});
+                    Checks.checkCommand(new String[]{"YES", "NO", "VIEW"});
                 }
                 if(GameLogic.command.equals("VIEW")){
                     //todo: add functionality to view cards
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
-                    GameLogic.checkCommand(new String[] {"YES", "NO"});
+                    Checks.checkCommand(new String[] {"YES", "NO"});
                 }
             }
 
             if(GameLogic.currPlayer.getTerritoryCards().size()>=5){
                 GameLogic.uiWindow.displayString("As you have more than four cards, you must trade in a set of territory cards");
                 GameLogic.uiWindow.displayString("Would you like to view your territory cards?\nPlease enter 'YES' or 'NO'\n");
-                GameLogic.checkCommand(new String[]{"YES", "NO"});
+                Checks.checkCommand(new String[]{"YES", "NO"});
 
                 if(GameLogic.command.equals("YES")){
                     //todo: add functionality to view cards
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
-                    GameLogic.checkCommand(new String[] {"YES", "NO"});
+                    Checks.checkCommand(new String[] {"YES", "NO"});
                 }
             }
 
@@ -70,7 +70,7 @@ public class Deploy {
             GameLogic.command=GameLogic.uiWindow.getCommand();
 
 
-            while(!GameLogic.checkIsValidCombination(GameLogic.command)){
+            while(!Checks.checkIsValidCombination(GameLogic.command)){
                 GameLogic.uiWindow.displayString("You must enter a valid combination\n");
                 GameLogic.command=GameLogic.uiWindow.getCommand();
             }

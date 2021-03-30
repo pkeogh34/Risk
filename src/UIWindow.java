@@ -8,10 +8,10 @@ public class UIWindow {
 
     final static boolean RIGHT_TO_LEFT = false;
     public final Board board;
-    private JFrame window = new JFrame();
-    private WorldMap map;
-    private UITextArea uiTextArea = new UITextArea();
-    private UserInputArea inputArea = new UserInputArea();
+    private final JFrame window = new JFrame();
+    private final WorldMap map;
+    private final UITextArea uiTextArea = new UITextArea();
+    private final UserInputArea inputArea = new UserInputArea();
 
     UIWindow (Board board) {
         this.board=board;
@@ -54,17 +54,10 @@ public class UIWindow {
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
         SwingUtilities.updateComponentTreeUI(inputArea);
-
     }
 
     public String getCommand () {
@@ -73,12 +66,10 @@ public class UIWindow {
 
     public void displayMap () {
         map.refresh();
-        return;
     }
 
     public void displayString (String string) {
         uiTextArea.addText(string);
-        return;
     }
 
 }

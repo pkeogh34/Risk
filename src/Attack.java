@@ -6,12 +6,12 @@ public class Attack {
             do {
                 do {
                     GameLogic.uiWindow.displayString("Please enter the name of the territory from which you wish to attack\n");
-                    GameLogic.checkCommand(new String[]{"SKIP"});
+                    Checks.checkCommand(new String[]{"SKIP"});
                 } while (GameLogic.command.equals("CONTINUE"));
                 if (GameLogic.command.equals("SKIP")) {
                     return;
                 }
-                GameLogic.territoryCode = GameLogic.checkHasTerritory(1);
+                GameLogic.territoryCode = Checks.checkHasTerritory(1);
                 if (GameLogic.board.getNumUnits(GameLogic.territoryCode) <= 1) {
                     GameLogic.uiWindow.displayString("The attacking territory must have at least 2 troops. Please try again");
                     check=false;
@@ -21,7 +21,7 @@ public class Attack {
             attackingTerritory=GameLogic.territoryCode;
             do {
                 GameLogic.uiWindow.displayString("Do you wish to attack from " + GameLogic.board.getTerritory(attackingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
-                GameLogic.checkCommand(new String[]{"YES", "NO", "SKIP"});
+                Checks.checkCommand(new String[]{"YES", "NO", "SKIP"});
             }while(GameLogic.command.equals("CONTINUE"));
             if(GameLogic.command.equals("SKIP")){
                 return;
@@ -31,18 +31,18 @@ public class Attack {
         do{
             do {
                 GameLogic.uiWindow.displayString("Please enter the name of the territory you wish to attack\n");
-                GameLogic.checkCommand(new String[]{"SKIP"});
+                Checks.checkCommand(new String[]{"SKIP"});
             } while (GameLogic.command.equals("CONTINUE"));
             if (GameLogic.command.equals("SKIP")) {
                 return;
             }
-            GameLogic.territoryCode = GameLogic.checkHasTerritory(2);
-            GameLogic.checkAdjacent(attackingTerritory,GameLogic.territoryCode,1);
+            GameLogic.territoryCode = Checks.checkHasTerritory(2);
+            Checks.checkAdjacent(attackingTerritory,GameLogic.territoryCode,1);
             defendingTerritory=GameLogic.territoryCode;
 
             do {
                 GameLogic.uiWindow.displayString("Do you wish to attack " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to attack from another territory\n");
-                GameLogic.checkCommand(new String[]{"YES", "NO","RETURN","SKIP"});
+                Checks.checkCommand(new String[]{"YES", "NO","RETURN","SKIP"});
             }while(GameLogic.command.equals("CONTINUE"));
             if(GameLogic.command.equals("SKIP")){
                 return;
@@ -74,13 +74,13 @@ public class Attack {
             do {
                 GameLogic.uiWindow.displayString("Please enter the number of troops to be transferred\n");
                 GameLogic.command= GameLogic.uiWindow.getCommand();
-                numTroopsToTransfer=GameLogic.checkNumber(4+(numRedDice));
+                numTroopsToTransfer=Checks.checkNumber(4+(numRedDice));
                 if(numTroopsToTransfer==1){
                     GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
                 }else{
                     GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + GameLogic.board.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
                 }
-                GameLogic.checkCommand(new String[]{"YES", "NO"});
+                Checks.checkCommand(new String[]{"YES", "NO"});
             } while (GameLogic.command.equals("NO"));
 
             GameLogic.board.addUnits(attackingTerritory,-numTroopsToTransfer);
@@ -116,7 +116,7 @@ public class Attack {
             if(!GameLogic.command.equals("BLITZ")) {
                 do {
                     GameLogic.uiWindow.displayString("Please enter the number of dice you wish to roll.\nEnter 'STOP' if you want to stop attacking or enter 'BLITZ' to auto-run the attack sequence\n");
-                    GameLogic.checkCommand(new String[]{"SKIP", "STOP", "BLITZ"});
+                    Checks.checkCommand(new String[]{"SKIP", "STOP", "BLITZ"});
                 } while (GameLogic.command.equals("CONTINUE"));
                 if (GameLogic.command.equals("SKIP")) {
                     return -1;
@@ -130,14 +130,14 @@ public class Attack {
             }
 
             if(!GameLogic.command.equals("BLITZ")) {
-                numRedDice = GameLogic.checkNumber(2);
+                numRedDice = Checks.checkNumber(2);
                 if(numRedDice==-1){
                     return numRedDice;
                 }
 
                 do {
                     GameLogic.uiWindow.displayString("Please enter 'ATTACK' to attack " + GameLogic.board.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n");
-                    GameLogic.checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
+                    Checks.checkCommand(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"});
                 } while (GameLogic.command.equals("CONTINUE"));
                 switch (GameLogic.command) {
                     case "SKIP":

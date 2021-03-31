@@ -22,10 +22,10 @@ public class UIWindow {
         map = new WorldMap(board);
         window.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        window.setSize(1130,660);
+        window.setSize(Constants.getFrameWidth(),Constants.getFrameHeight());
         window.setTitle("Risk");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(true);
+        window.setResizable(false);
         window.setVisible(true);
 
         c.fill = GridBagConstraints.BOTH;

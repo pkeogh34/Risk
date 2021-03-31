@@ -4,7 +4,7 @@
 //Board class may be irrelevant and should be removed later
 public class Board {
 
-   private Territory[] territories =new Territory[Constants.NUM_COUNTRIES];
+   private final Territory[] territories =new Territory[Constants.NUM_COUNTRIES];
 
     Board() {
         for (int i=0; i<Constants.NUM_COUNTRIES; i++) {

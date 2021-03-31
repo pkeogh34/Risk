@@ -67,7 +67,7 @@ public class Checks {
         int territoryCode=0,cutOff=4;
         if(GameLogic.command.length()<4){
             cutOff=GameLogic.command.length();
-            if(cutOff==3 && GameLogic.command.substring(0,cutOff).equalsIgnoreCase("gre")){
+            if(cutOff==3 && GameLogic.command.substring(0,cutOff).equalsIgnoreCase("gre" ) || GameLogic.command.substring(0,cutOff).equalsIgnoreCase("ind")){
                 cutOff=2;
             }
         }

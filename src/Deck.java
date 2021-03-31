@@ -69,5 +69,5 @@ public class Deck
 		}
 	}
 
-	//TODO: Yanni to write discardCard method
+
 }

@@ -28,6 +28,7 @@ public class Deploy {
                 }
                 if(GameLogic.command.equals("VIEW")){
                     //todo: add functionality to view cards
+                    GameLogic.currPlayer.showCards();
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     Checks.checkCommand(new String[] {"YES", "NO"});
                 }
@@ -40,6 +41,7 @@ public class Deploy {
 
                 if(GameLogic.command.equals("YES")){
                     //todo: add functionality to view cards
+                    GameLogic.currPlayer.showCards();
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     Checks.checkCommand(new String[] {"YES", "NO"});
                 }

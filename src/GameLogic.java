@@ -102,6 +102,7 @@ public class GameLogic {
                 getsCard=false;
                 uiWindow.displayString("You have received a territory card for successfully conquering a territory");
                 currPlayer.addTerritoryCard(gameDeck.drawCard());
+                currPlayer.showCards();
             }
         }
 

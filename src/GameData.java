@@ -5,6 +5,7 @@ public class GameData {
     public final Player[] players = new Player[6];
     public final Deck gameDeck = new Deck();//Territory card deck
     public ArrayList<Integer> playerOrder = new ArrayList<>();//Arraylist of the playing order, containing player codes
+    private boolean gameOver=false;
 
     GameData(){
         initialiseTerritories();
@@ -137,5 +138,13 @@ public class GameData {
 
     public Territory getTerritory(int territory){
         return territories[territory];
+    }
+
+    public void gameOver() {
+        this.gameOver = true;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 }

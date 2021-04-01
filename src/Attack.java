@@ -1,5 +1,5 @@
 public class Attack {
-    public static void attack(GameData gameData){
+    public static boolean attack(GameData gameData){
         int attackingTerritory,defendingTerritory;
         do{
             boolean check=true;
@@ -9,7 +9,7 @@ public class Attack {
                     Checks.checkCommand(new String[]{"SKIP"});
                 } while (GameLogic.command.equals("CONTINUE"));
                 if (GameLogic.command.equals("SKIP")) {
-                    return;
+                    return false;
                 }
                 GameLogic.territoryCode = Checks.checkHasTerritory(1);
                 if (gameData.getNumUnits(GameLogic.territoryCode) <= 1) {
@@ -24,7 +24,7 @@ public class Attack {
                 Checks.checkCommand(new String[]{"YES", "NO", "SKIP"});
             }while(GameLogic.command.equals("CONTINUE"));
             if(GameLogic.command.equals("SKIP")){
-                return;
+                return false;
             }
         } while (GameLogic.command.equals("NO"));
 
@@ -34,7 +34,7 @@ public class Attack {
                 Checks.checkCommand(new String[]{"SKIP"});
             } while (GameLogic.command.equals("CONTINUE"));
             if (GameLogic.command.equals("SKIP")) {
-                return;
+                return false;
             }
             GameLogic.territoryCode = Checks.checkHasTerritory(2);
             Checks.checkAdjacent(attackingTerritory,GameLogic.territoryCode,1);
@@ -45,11 +45,11 @@ public class Attack {
                 Checks.checkCommand(new String[]{"YES", "NO","RETURN","SKIP"});
             }while(GameLogic.command.equals("CONTINUE"));
             if(GameLogic.command.equals("SKIP")){
-                return;
+                return false;
             }
             if(GameLogic.command.equals("RETURN")){
                 attack(gameData);
-                return;
+                return false;
             }
         } while (GameLogic.command.equals("NO"));
 
@@ -57,7 +57,7 @@ public class Attack {
 
         int numRedDice=executeAttack(attackingTerritory,defendingTerritory,gameData);
         if (numRedDice==-1){
-            return;
+            return false;
         }
 
         Player defendingPlayer=gameData.players[gameData.getOccupier(defendingTerritory)];
@@ -66,7 +66,6 @@ public class Attack {
             defendingPlayer.removeTerritory(defendingTerritory);
             gameData.setOccupier(defendingTerritory, GameLogic.currPlayer.getPlayerCode());
             GameLogic.currPlayer.addTerritory(gameData.getTerritory(defendingTerritory));
-            GameLogic.setGetsCard(true);
 
             int numTroopsToTransfer;
             GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + ", you must enter the number of troops you wish to transfer to " + gameData.getTerritory(defendingTerritory).territoryName +"\n");
@@ -89,6 +88,7 @@ public class Attack {
 
         }else if(gameData.getTerritory(attackingTerritory).numOccupyingArmies==1){
             GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + " has failed to take over " + gameData.getTerritory(defendingTerritory).territoryName + "\n");
+            return false;
         }
 
         if(defendingPlayer.getNumPlayerTerritories()==0){
@@ -104,6 +104,8 @@ public class Attack {
             }
             gameData.playerOrder.remove(i);
         }
+
+        return true;
     }
 
     private static int executeAttack(int attackingTerritory, int defendingTerritory,GameData gameData){

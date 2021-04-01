@@ -1,19 +1,18 @@
 //Team name: NinjaAPY
 //Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GameLogic {
     private final static GameData gameData = new GameData();
-    private int numTurns=1;//Keeps track of the number turns
-    public int numSets=0;//Keeps track of the number of card sets turned in
-    private boolean getsCard;//True if the current player has conquered at least one territory
-
     public static final UIWindow uiWindow = new UIWindow(gameData);
     public static Player currPlayer;//The current player whose turn it is
     public static int territoryCode;//Holds the code of a territory
     public static String command;//Holds the command entered by the player
+
+    private int numTurns=1;//Keeps track of the number turns
+    public int numSets=0;//Keeps track of the number of card sets turned in
+    private boolean getsCard;//True if the current player has conquered at least one territory
 
     public void game(){
         //Initialises main player data
@@ -79,7 +78,7 @@ public class GameLogic {
         GameLogic.uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase. You may also enter 'SKIP' at any time to move to the Fortify phase\n");
         Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});//Checks if player wishes to continue attack or move to the fortify phase
         while(command.equals("CONTINUE")){
-            Attack.attack(gameData);//Executes the attack functionality for the player
+            getsCard=Attack.attack(gameData);//Executes the attack functionality for the player
             if(command.equals("GAME OVER")){//Returns if the game is over
                 return;
             }
@@ -182,9 +181,5 @@ public class GameLogic {
             GameLogic.uiWindow.displayString(strForNumTroops.toString());
         }
         return numTroops;//returns number of troops earned
-    }
-    
-    public static void setGetsCard(boolean getsCard) {
-        getsCard = getsCard;
     }
 }

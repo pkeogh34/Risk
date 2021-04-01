@@ -4,10 +4,13 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.io.Serial;
 
 class WorldMap extends JPanel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
+    private final GameData gameData;
     private static final int COUNTRY_RADIUS = 12;   // must be even
     private static final int NAME_OFFSET_X = 3;
     private static final int NAME_OFFSET_Y = 13;
@@ -15,13 +18,10 @@ class WorldMap extends JPanel {
     private static final int ADJACENT_LINE = 1;
     private static final Color ADJACENT_COLOR = Color.GRAY;
     private static final int PLAYER_RADIUS = 8;
-   
-    private Board board;
 
-    WorldMap (Board inBoard) {
-        board = inBoard;
+    WorldMap (GameData gameData) {
+        this.gameData = gameData;
         setBackground(new Color(255,255,255));
-        return;
     }
 
     public void paintComponent(Graphics g) {
@@ -50,36 +50,36 @@ class WorldMap extends JPanel {
         // Display countries
         for (int i=0; i<Constants.NUM_COUNTRIES; i++) {
             g2.setColor(Constants.CONTINENT_COLORS[Constants.CONTINENT_IDS[i]]);
-            xPos = Constants.getCountryCoord(i,0) - COUNTRY_RADIUS;
-            yPos = Constants.getCountryCoord(i,1) - COUNTRY_RADIUS;
-            Ellipse2D.Double ellipse = new Ellipse2D.Double(xPos,yPos,2*COUNTRY_RADIUS,2*COUNTRY_RADIUS);
-            g2.fill(ellipse);
-            g2.setColor(TEXT_COLOR);
+            createCircle(g2, i, COUNTRY_RADIUS);
             xPos = Constants.getCountryCoord(i,0) - Constants.COUNTRY_NAMES[i].length()*NAME_OFFSET_X;
             yPos = Constants.getCountryCoord(i,1) - NAME_OFFSET_Y;
             g2.drawString(Constants.COUNTRY_NAMES[i],xPos,yPos);
         }
         // Display players units
         for (int i=0; i<Constants.NUM_COUNTRIES; i++) {
-            if (board.isOccupied(i)) {
-                g2.setColor(Constants.getPlayerColors(board.getOccupier(i)));
-                xPos = Constants.getCountryCoord(i,0) - PLAYER_RADIUS;
-                yPos = Constants.getCountryCoord(i,1) - PLAYER_RADIUS;
-                Ellipse2D.Double ellipse = new Ellipse2D.Double(xPos,yPos,2*PLAYER_RADIUS,2*PLAYER_RADIUS);
-                g2.fill(ellipse);
-                g2.setColor(TEXT_COLOR);
+            if (gameData.isOccupied(i)) {
+                g2.setColor(Constants.getPlayerColors(gameData.getOccupier(i)));
+                createCircle(g2, i, PLAYER_RADIUS);
                 xPos = Constants.getCountryCoord(i,0) - NAME_OFFSET_X;
                 yPos = Constants.getCountryCoord(i,1) + 2*PLAYER_RADIUS + NAME_OFFSET_Y;
-                g2.drawString(String.valueOf(board.getNumUnits(i)),xPos,yPos);
+                g2.drawString(String.valueOf(gameData.getNumUnits(i)),xPos,yPos);
             }
         }
-        return;
+    }
+
+    private void createCircle(Graphics2D g2, int i, int radius) {
+        int xPos;
+        int yPos;
+        xPos = Constants.getCountryCoord(i,0) - radius;
+        yPos = Constants.getCountryCoord(i,1) - radius;
+        Ellipse2D.Double ellipse = new Ellipse2D.Double(xPos,yPos,2* radius,2* radius);
+        g2.fill(ellipse);
+        g2.setColor(TEXT_COLOR);
     }
 
     public void refresh() {
         revalidate();
         repaint();
-        return;
     }
 }
 

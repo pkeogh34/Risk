@@ -119,7 +119,7 @@ public class Checks {
     }
 
     //Recursive function to check if the number supplied by the player is valid
-    public static int checkNumber(int numType){
+    public static int checkNumber(int numType, GameData gameData){
         int number;
         //Checks if the String entered is indeed a number
         try{
@@ -128,7 +128,7 @@ public class Checks {
             //If not a number, ask the player to enter another number
             GameLogic.uiWindow.displayString("You must enter a number. Please try again\n");
             GameLogic.command=GameLogic.uiWindow.getCommand();
-            checkNumber(numType);
+            checkNumber(numType,gameData);
         }
 
         //Converts the String to an int
@@ -137,14 +137,14 @@ public class Checks {
         if(number<=0){//If not less than 0, ask the player to enter another number
             GameLogic.uiWindow.displayString("You must enter a number greater than 0. Please try again\n");
             GameLogic.command=GameLogic.uiWindow.getCommand();
-            number=checkNumber(numType);
+            number=checkNumber(numType,gameData);
         }
 
         if(numType==1){//If placing troops
             if(number>GameLogic.currPlayer.getNumArmies()){//If more troops than player has in reserve, ask the player to enter another number
                 GameLogic.uiWindow.displayString("You do not have that many troops. Please try again\n");
                 GameLogic.command=GameLogic.uiWindow.getCommand();
-                number=checkNumber(numType);
+                number=checkNumber(numType,gameData);
             }
         }else if(numType==2){//If rolling dice
             if(number>3){//If greater than 3, ask the player to enter another number
@@ -152,24 +152,24 @@ public class Checks {
                     GameLogic.uiWindow.displayString("The maximum number of dice that can be rolled is 3. Please try again\n");
                     checkCommand(new String[]{"SKIP"});
                 }while(GameLogic.command.equals("CONTINUE"));
-            }else if(number>= GameLogic.board.getNumUnits(GameLogic.territoryCode)){//If greater than or equal to number of troops in the territory, ask the player to enter another number
+            }else if(number>= gameData.getNumUnits(GameLogic.territoryCode)){//If greater than or equal to number of troops in the territory, ask the player to enter another number
                 do {
-                    GameLogic.uiWindow.displayString("You can only roll " + (GameLogic.board.getNumUnits(GameLogic.territoryCode) - 1) + " dice. Please try again\n");
+                    GameLogic.uiWindow.displayString("You can only roll " + (gameData.getNumUnits(GameLogic.territoryCode) - 1) + " dice. Please try again\n");
                     checkCommand(new String[]{"SKIP"});
                 }while(GameLogic.command.equals("CONTINUE"));
             }
             if(GameLogic.command.equals("SKIP")){//Returns -1 if the player wishes to skip attack phase
                 return -1;
             }
-            number=checkNumber(numType);
-        }else if(number==GameLogic.board.getTerritory(GameLogic.territoryCode).numOccupyingArmies){//If equal to number of troops in the territory, ask the player to enter another number
+            number=checkNumber(numType,gameData);
+        }else if(number==gameData.getTerritory(GameLogic.territoryCode).numOccupyingArmies){//If equal to number of troops in the territory, ask the player to enter another number
             GameLogic.uiWindow.displayString("You must leave at least one troop in your territory at all times\n");
             GameLogic.command=GameLogic.uiWindow.getCommand();
-            number=checkNumber(numType);
-        }else if(number> GameLogic.board.getTerritory(GameLogic.territoryCode).numOccupyingArmies){//If greater than the number of troops in the territory, ask the player to enter another number
+            number=checkNumber(numType,gameData);
+        }else if(number> gameData.getTerritory(GameLogic.territoryCode).numOccupyingArmies){//If greater than the number of troops in the territory, ask the player to enter another number
             GameLogic.uiWindow.displayString("You do not have that many troops to transfer\n");
             GameLogic.command=GameLogic.uiWindow.getCommand();
-            number=checkNumber(numType);
+            number=checkNumber(numType,gameData);
         }else if(numType>3) {//Tell the player the minimum number of troops they must transfer based on the last number of dice they rolled
             if (number < (numType - 4)) {
                 if ((numType - 4) == 1) {
@@ -178,7 +178,7 @@ public class Checks {
                     GameLogic.uiWindow.displayString("You must transfer at least " + (numType - 4) + " troops");
                 }
                 GameLogic.command = GameLogic.uiWindow.getCommand();
-                number = checkNumber(numType);
+                number = checkNumber(numType,gameData);
             }
         }
 

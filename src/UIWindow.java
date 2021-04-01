@@ -7,19 +7,17 @@ import javax.swing.*;
 public class UIWindow {
 
     final static boolean RIGHT_TO_LEFT = false;
-    public final Board board;
     private final JFrame window = new JFrame();
     private final WorldMap map;
     private final UITextArea uiTextArea = new UITextArea();
     private final UserInputArea inputArea = new UserInputArea();
 
-    UIWindow (Board board) {
-        this.board=board;
+    UIWindow (GameData gameData) {
         if (RIGHT_TO_LEFT) {
             window.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         }
 
-        map = new WorldMap(board);
+        map = new WorldMap(gameData);
         window.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         window.setSize(Constants.getFrameWidth(),Constants.getFrameHeight());

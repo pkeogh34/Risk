@@ -92,15 +92,5 @@ public class Player {
     public void setCardTypes(ArrayList<String> cardTypes){
         this.cardTypes = new ArrayList<>(cardTypes);
     }
-
-    public String showCards() {
-        StringBuilder str = new StringBuilder();
-        GameLogic.uiWindow.displayString(("Player Cards: \n"));
-        for (Deck.TerritoryCard territoryCard : territoryCards) {
-            str.append(territoryCard.toString());
-        }
-        return str.toString();
-
-    }
 }
 

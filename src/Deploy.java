@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 //todo: add functionality to allow the user to reenter instructions or not trade in cards
 public class Deploy {
-    public static void deploy(){
+    public static int deploy(GameData gameData, int numSets){
         if(GameLogic.currPlayer.getTerritoryCards().size()>2){
             boolean check=false;
             if(GameLogic.currPlayer.getTerritoryCards().size()==3 || GameLogic.currPlayer.getTerritoryCards().size()==4){
@@ -27,8 +27,7 @@ public class Deploy {
                     Checks.checkCommand(new String[]{"YES", "NO", "VIEW"});
                 }
                 if(GameLogic.command.equals("VIEW")){
-                    //todo: add functionality to view cards
-                    GameLogic.currPlayer.showCards();
+                    showCards(gameData);
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     Checks.checkCommand(new String[] {"YES", "NO"});
                 }
@@ -40,28 +39,38 @@ public class Deploy {
                 Checks.checkCommand(new String[]{"YES", "NO"});
 
                 if(GameLogic.command.equals("YES")){
-                    //todo: add functionality to view cards
-                    GameLogic.currPlayer.showCards();
+                    showCards(gameData);
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     Checks.checkCommand(new String[] {"YES", "NO"});
                 }
             }
 
             if(GameLogic.command.equals("YES") || GameLogic.currPlayer.getTerritoryCards().size()>=5) {
-                exchangeCards();
+                numSets+=exchangeCards(gameData,numSets);//returns the number of sets turned in
             }
         }
 
 
         GameLogic.currPlayer.addArmies(GameLogic.getTroops());//Gives the current player the number of troops that they have earned
-        GameLogic.placeTroops(false);//Allows the current player to place their troops
+        GameLogic.placeTroops(false,gameData);//Allows the current player to place their troops
         while(GameLogic.currPlayer.getNumArmies()>0){//Loops until the player has placed all there troops
             GameLogic.uiWindow.displayString("You have " + GameLogic.currPlayer.getNumArmies() + " troops to place\n");
-            GameLogic.placeTroops(false);
+            GameLogic.placeTroops(false,gameData);
         }
+
+        return numSets;
     }
 
-    private static void exchangeCards(){
+    public static String showCards(GameData gameData) {
+        StringBuilder str = new StringBuilder();
+        GameLogic.uiWindow.displayString(("Player Cards: \n"));
+        for (Deck.TerritoryCard territoryCard : GameLogic.currPlayer.getTerritoryCards()) {
+            str.append(territoryCard.toString());
+        }
+        return str.toString();
+    }
+
+    private static int exchangeCards(GameData gameData,int numSets){
         int match;
         ArrayList<Deck.TerritoryCard> tempCards = new ArrayList<>(GameLogic.currPlayer.getTerritoryCards());
         ArrayList<String> tempTypes=new ArrayList<>(GameLogic.currPlayer.getCardTypes());
@@ -105,20 +114,22 @@ public class Deploy {
             }
         }
 
-        GameLogic.numSets++;
+        numSets++;
         int numTroops;
-        if(GameLogic.numSets<5){
-            numTroops=Constants.NUM_ARMIES_FOR_SET[GameLogic.numSets-1];
+        if(numSets<5){
+            numTroops=Constants.NUM_ARMIES_FOR_SET[numSets-1];
         }else{
-            numTroops=(15+((GameLogic.numSets-6)*5));
+            numTroops=(15+((numSets-6)*5));
         }
-        GameLogic.uiWindow.displayString("You have received " + numTroops + " troops for trading in set number " + GameLogic.numSets +"\n");
+        GameLogic.uiWindow.displayString("You have received " + numTroops + " troops for trading in set number " + numSets +"\n");
         GameLogic.currPlayer.addArmies(numTroops);
 
         if(cardMatchesTerritory>=0) {
             GameLogic.uiWindow.displayString("You have received two extra troops because you own " + GameLogic.currPlayer.getPlayerTerritory(cardMatchesTerritory).territoryName + ". They will be deployed directly\n");
-            GameLogic.uiWindow.board.addUnits(GameLogic.currPlayer.getPlayerTerritory(cardMatchesTerritory).territoryCode, 2);
+            gameData.addUnits(GameLogic.currPlayer.getPlayerTerritory(cardMatchesTerritory).territoryCode, 2);
             GameLogic.uiWindow.displayMap();
         }
+
+        return numSets;
     }
 }

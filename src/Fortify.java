@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Fortify {
-    public static void fortify() {
-        int territory1=0,territory2=0;
+    public static void fortify(GameData gameData) {
+        int territory1=0,territory2;
         do{
             do{
                 GameLogic.uiWindow.displayString("Please enter the name of the territory from which you wish to move your troops\n");
@@ -12,13 +12,13 @@ public class Fortify {
                 return;
             }
             GameLogic.territoryCode = Checks.checkHasTerritory(1);
-            if(GameLogic.board.getNumUnits(GameLogic.territoryCode)<=1){
+            if(gameData.getNumUnits(GameLogic.territoryCode)<=1){
                 GameLogic.uiWindow.displayString("The territory must have at least 2 troops. Please try again\n");
                 continue;
             }
             territory1=GameLogic.territoryCode;
             do {
-                GameLogic.uiWindow.displayString("Do you wish to move your troops from " + GameLogic.board.getTerritory(territory1).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
+                GameLogic.uiWindow.displayString("Do you wish to move your troops from " + gameData.getTerritory(territory1).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
                 Checks.checkCommand(new String[]{"YES", "NO", "SKIP"});
             }while(GameLogic.command.equals("CONTINUE"));
             if(GameLogic.command.equals("SKIP")){
@@ -60,14 +60,14 @@ public class Fortify {
                 }while(!check);
 
                 territory2=GameLogic.territoryCode;
-                GameLogic.uiWindow.displayString("Do you wish to transfer troops from " + GameLogic.board.getTerritory(territory1).territoryName + " to " + GameLogic.board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to move troops from another territory\n");
+                GameLogic.uiWindow.displayString("Do you wish to transfer troops from " + gameData.getTerritory(territory1).territoryName + " to " + gameData.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to move troops from another territory\n");
                 Checks.checkCommand(new String[]{"YES", "NO","RETURN","END"});
             }while(GameLogic.command.equals("CONTINUE"));
             if(GameLogic.command.equals("END")){
                 return;
             }
             if(GameLogic.command.equals("RETURN")){
-                fortify();
+                fortify(gameData);
                 return;
             }
         } while (GameLogic.command.equals("NO"));
@@ -77,17 +77,17 @@ public class Fortify {
             GameLogic.uiWindow.displayString("Please enter the number of troops to be transferred\n");
             GameLogic.command= GameLogic.uiWindow.getCommand();
             GameLogic.territoryCode=territory1;
-            numTroopsToTransfer= Checks.checkNumber(3);
+            numTroopsToTransfer= Checks.checkNumber(3,gameData);
             if(numTroopsToTransfer==1){
-                GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + GameLogic.board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+                GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + gameData.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
             }else{
-                GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + GameLogic.board.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
+                GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + gameData.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
             }
             Checks.checkCommand(new String[]{"YES", "NO"});
         } while (GameLogic.command.equals("NO"));
 
-        GameLogic.board.addUnits(territory1,-numTroopsToTransfer);
-        GameLogic.board.addUnits(territory2,numTroopsToTransfer);
+        gameData.addUnits(territory1,-numTroopsToTransfer);
+        gameData.addUnits(territory2,numTroopsToTransfer);
         GameLogic.uiWindow.displayMap();
     }
 }

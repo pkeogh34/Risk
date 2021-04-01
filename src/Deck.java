@@ -61,7 +61,8 @@ public class Deck
 				default -> null;
 			};
 
-			if(str.equals("WILD CARD")){
+			assert str != null;
+			if(str.equals("WILD CARD\n")){
 				return str;
 			}
 

@@ -118,7 +118,7 @@ public class GameData {
         territories[territory].numOccupyingArmies += addNumUnits;
     }
 
-    //todo: Create just one getter and add getters in Territory class???
+    //todo for Patrick: Create just one getter and add getters in Territory class???
     public boolean isOccupied(int territory) {
         return territories[territory].occupied;
     }

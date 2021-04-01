@@ -51,13 +51,40 @@ public class GameLogic {
     }
 
     public void initialTroopPlacement(){//Function to place initial troops
+        boolean player1Auto=false,player2Auto=false;
+
         for(int i = 0; numTurns<=54; i++){
             currPlayer=gameData.players[gameData.playerOrder.get(i)];
             GameLogic.uiWindow.displayString("Turn "+ numTurns );
+
             if(i<=1){//Human Player
                 GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n\nYou must place 3 troops in a territory that you own\n");
-                //placeTroops(true);
-                randTroopPlacement(3);
+                if(numTurns==1||numTurns==2){
+                    GameLogic.uiWindow.displayString("Do you want to auto place the your troops?\nPlease enter 'YES' or 'NO'\n");
+                    Checks.checkCommand(new String[]{"YES","NO"});
+
+                    if(GameLogic.command.equals("YES")){
+                        if(numTurns==1){
+                            player1Auto=true;
+                        }else{
+                            player2Auto=true;
+                        }
+                    }
+                }
+
+                if(i==0){
+                    if(!player1Auto){
+                        placeTroops(true,gameData);
+                    }else{
+                        randTroopPlacement(3);
+                    }
+                }else{
+                    if(!player2Auto){
+                        placeTroops(true,gameData);
+                    }else{
+                        randTroopPlacement(3);
+                    }
+                }
             }else{//Neutral gameData.players
                 GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()]+ "), it is your turn\n\nYou must place 2 troops in a territory that you own\n");
                 randTroopPlacement(2);

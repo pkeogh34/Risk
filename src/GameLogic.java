@@ -122,7 +122,7 @@ public class GameLogic {
                 getsCard=false;
                 GameLogic.uiWindow.displayString("You have received a territory card for successfully conquering a territory");
                 currPlayer.addTerritoryCard(gameData.gameDeck.drawCard());
-                Deploy.showCards(gameData);
+                uiWindow.displayString(Deploy.showCards(gameData));
             }
         }
 
@@ -169,10 +169,16 @@ public class GameLogic {
         int numTroops=3;
         if(!initial) {//Functionality for non-initial troops placement
             do {
-                GameLogic.uiWindow.displayString("Please enter the number of troops you wish to place: \n");
-                command = GameLogic.uiWindow.getCommand();
-                numTroops = Checks.checkNumber(1,gameData);
-                GameLogic.uiWindow.displayString("Do you wish to place " + numTroops + " troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
+                if(gameData.getNumUnits(territoryCode)==1){
+                    numTroops=1;
+                    GameLogic.uiWindow.displayString("Do you wish to place " + numTroops + " troop in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
+
+                }else{
+                    GameLogic.uiWindow.displayString("Please enter the number of troops you wish to place: \n");
+                    command = GameLogic.uiWindow.getCommand();
+                    numTroops = Checks.checkNumber(1,gameData);
+                    GameLogic.uiWindow.displayString("Do you wish to place " + numTroops + " troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
+                }
                 Checks.checkCommand(new String[]{"YES", "NO", "RETURN"});
                 if (command.equals("RETURN")) {
                     placeTroops(false,gameData);

@@ -27,7 +27,7 @@ public class Deploy {
                     Checks.checkCommand(new String[]{"YES", "NO", "VIEW"});
                 }
                 if(GameLogic.command.equals("VIEW")){
-                    showCards(gameData);
+                    GameLogic.uiWindow.displayString(Deploy.showCards(gameData));
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     Checks.checkCommand(new String[] {"YES", "NO"});
                 }
@@ -39,7 +39,7 @@ public class Deploy {
                 Checks.checkCommand(new String[]{"YES", "NO"});
 
                 if(GameLogic.command.equals("YES")){
-                    showCards(gameData);
+                    GameLogic.uiWindow.displayString(Deploy.showCards(gameData));showCards(gameData);
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     Checks.checkCommand(new String[] {"YES", "NO"});
                 }
@@ -78,12 +78,12 @@ public class Deploy {
         do{
             match=0;
             GameLogic.uiWindow.displayString("Please enter the insignia of the cars you wish to trade in: \n");
-            GameLogic.command=GameLogic.uiWindow.getCommand();
+            GameLogic.command= GameLogic.uiWindow.getCommand();
 
 
             while(!Checks.checkIsValidCombination(GameLogic.command)){
                 GameLogic.uiWindow.displayString("You must enter a valid combination\n");
-                GameLogic.command=GameLogic.uiWindow.getCommand();
+                GameLogic.command= GameLogic.uiWindow.getCommand();
             }
 
             for(int i = 0; i < 3; i++){

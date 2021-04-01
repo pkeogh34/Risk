@@ -51,7 +51,7 @@ public class Fortify {
                         do {
                             GameLogic.uiWindow.displayString("There is no valid path between these territories. Please select another territory\n");
                             Checks.checkCommand(new String[]{"END"});
-                        } while (GameLogic.command.equals("CONTINUE"));
+                        }while(GameLogic.command.equals("CONTINUE"));
                         if (GameLogic.command.equals("END")) {
                             return;
                         }

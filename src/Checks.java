@@ -54,10 +54,10 @@ public class Checks {
             }
         }
 
-        //Displays the correct inputs that the player must enter and asks them to enter a GameLogic.command again
+        //Displays the correct inputs that the player must enter and asks them to enter a command again
         if (!check&&!correctInputs[0].equals("SKIP")&&!correctInputs[0].equals("END")){
             GameLogic.uiWindow.displayString("You must enter " + msg.toString()  + ". Please enter your command again\n");
-            checkCommand(correctInputs);//Checks the new GameLogic.command
+            checkCommand(correctInputs);//Checks the new command
         }
     }
 

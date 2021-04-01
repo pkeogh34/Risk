@@ -95,7 +95,7 @@ public class Player {
 
     public String showCards() {
         StringBuilder str = new StringBuilder();
-        GameLogic.uiWindow.displayString(("Player Cards: \n" + territoryCards));
+        GameLogic.uiWindow.displayString(("Player Cards: \n"));
         for (Deck.TerritoryCard territoryCard : territoryCards) {
             str.append(territoryCard.toString());
         }

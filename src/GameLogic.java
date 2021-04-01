@@ -169,10 +169,9 @@ public class GameLogic {
         int numTroops=3;
         if(!initial) {//Functionality for non-initial troops placement
             do {
-                if(gameData.getNumUnits(territoryCode)==1){
+                if(currPlayer.getNumArmies()==1){
                     numTroops=1;
                     GameLogic.uiWindow.displayString("Do you wish to place " + numTroops + " troop in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
-
                 }else{
                     GameLogic.uiWindow.displayString("Please enter the number of troops you wish to place: \n");
                     command = GameLogic.uiWindow.getCommand();

@@ -28,17 +28,23 @@ public class Fortify {
 
         do{
             do {
-                GameLogic.uiWindow.displayString("Please enter the name of the territory you wish to transfer your troops to\n");
-                Checks.checkCommand(new String[]{"END"});
-            } while (GameLogic.command.equals("CONTINUE"));
+                do {
+                    GameLogic.uiWindow.displayString("Please enter the name of the territory you wish to transfer your troops to\n");
+                    Checks.checkCommand(new String[]{"END"});
+                    if(Checks.checkHasTerritory(1)==territory1){
+                        GameLogic.uiWindow.displayString("You cannot select the same territory\n");
+                    }
+                }while(Checks.checkHasTerritory(1)==territory1);
+            }while (GameLogic.command.equals("CONTINUE"));
             if (GameLogic.command.equals("END")) {
                 return;
             }
 
             do {
-                boolean check=true;
+                boolean check;
                 do {
-                    GameLogic.territoryCode = Checks.checkHasTerritory(1);
+                    check=true;
+                    territory2 = Checks.checkHasTerritory(1);
                     ArrayList<Territory> temp = new ArrayList<>(GameLogic.currPlayer.getPlayerTerritories());
                     for (int i = 0; i < temp.size(); i++) {
                         if (temp.get(i).territoryCode == territory1) {
@@ -47,7 +53,7 @@ public class Fortify {
                         }
                     }
 
-                    if (!Checks.checkHasValidPath(territory1, GameLogic.territoryCode, temp)) {
+                    if (!Checks.checkHasValidPath(territory1, territory2, temp)) {
                         do {
                             GameLogic.uiWindow.displayString("There is no valid path between these territories. Please select another territory\n");
                             Checks.checkCommand(new String[]{"END"});

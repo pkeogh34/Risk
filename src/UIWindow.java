@@ -6,13 +6,14 @@ import javax.swing.*;
 
 public class UIWindow {
 
+    private final GameData gameData=new GameData();
     final static boolean RIGHT_TO_LEFT = false;
     private final JFrame window = new JFrame();
     private final WorldMap map;
     private final UITextArea uiTextArea = new UITextArea();
     private final UserInputArea inputArea = new UserInputArea();
 
-    UIWindow (GameData gameData) {
+    UIWindow () {
         if (RIGHT_TO_LEFT) {
             window.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         }
@@ -56,6 +57,10 @@ public class UIWindow {
             e.printStackTrace();
         }
         SwingUtilities.updateComponentTreeUI(inputArea);
+    }
+
+    public GameData getGameData() {
+        return gameData;
     }
 
     public String getCommand () {

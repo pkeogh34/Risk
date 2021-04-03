@@ -3,7 +3,6 @@
 
 import java.util.ArrayList;
 
-//todo: add functionality to allow the user to reenter instructions or not trade in cards
 public class Deploy {
     public static int deploy(GameData gameData, int numSets,String command){
         if(GameLogic.currPlayer.getTerritoryCards().size()>2){
@@ -27,7 +26,7 @@ public class Deploy {
                     command = Checks.checkCommand(new String[]{"YES", "NO", "VIEW"});
                 }
                 if(command.equals("VIEW")){
-                    GameLogic.uiWindow.displayString(Deploy.showCards(gameData));
+                    GameLogic.uiWindow.displayString(Deploy.showCards());
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     command = Checks.checkCommand(new String[] {"YES", "NO"});
                 }
@@ -39,29 +38,29 @@ public class Deploy {
                 command = Checks.checkCommand(new String[]{"YES", "NO"});
 
                 if(command.equals("YES")){
-                    GameLogic.uiWindow.displayString(Deploy.showCards(gameData));showCards(gameData);
+                    GameLogic.uiWindow.displayString(Deploy.showCards());
                     GameLogic.uiWindow.displayString("Would you like to trade in territory cards?\nPlease enter 'YES' or 'NO'");
                     command = Checks.checkCommand(new String[] {"YES", "NO"});
                 }
             }
 
             if(command.equals("YES") || GameLogic.currPlayer.getTerritoryCards().size()>=5) {
-                numSets+=exchangeCards(gameData,numSets,command);//returns the number of sets turned in
+                numSets+=exchangeCards(gameData,numSets);//returns the number of sets turned in
             }
         }
 
 
         GameLogic.currPlayer.addArmies(GameLogic.getTroops());//Gives the current player the number of troops that they have earned
-        GameLogic.placeTroops(false,gameData,command);//Allows the current player to place their troops
+        GameLogic.placeTroops(false,gameData);//Allows the current player to place their troops
         while(GameLogic.currPlayer.getNumArmies()>0){//Loops until the player has placed all there troops
             GameLogic.uiWindow.displayString("You have " + GameLogic.currPlayer.getNumArmies() + " troops to place\n");
-            GameLogic.placeTroops(false,gameData,command);
+            GameLogic.placeTroops(false,gameData);
         }
 
         return numSets;
     }
 
-    public static String showCards(GameData gameData) {
+    public static String showCards() {
         StringBuilder str = new StringBuilder();
         GameLogic.uiWindow.displayString(("\nPlayer Cards: \n"));
         for (Deck.TerritoryCard territoryCard : GameLogic.currPlayer.getTerritoryCards()) {
@@ -70,7 +69,7 @@ public class Deploy {
         return str.toString();
     }
 
-    private static int exchangeCards(GameData gameData,int numSets,String command){
+    private static int exchangeCards(GameData gameData, int numSets){
         int match;
         ArrayList<Deck.TerritoryCard> tempCards = new ArrayList<>(GameLogic.currPlayer.getTerritoryCards());
         ArrayList<String> tempTypes=new ArrayList<>(GameLogic.currPlayer.getCardTypes());
@@ -78,12 +77,12 @@ public class Deploy {
         do{
             match=0;
             GameLogic.uiWindow.displayString("Please enter the insignia of the cars you wish to trade in: \n");
-            command = GameLogic.uiWindow.getCommand();
+            String command = GameLogic.uiWindow.getCommand();
 
 
             while(!Checks.checkIsValidCombination(command)){
                 GameLogic.uiWindow.displayString("You must enter a valid combination\n");
-                command= GameLogic.uiWindow.getCommand();
+                command = GameLogic.uiWindow.getCommand();
             }
 
             for(int i = 0; i < 3; i++){

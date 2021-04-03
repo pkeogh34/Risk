@@ -4,26 +4,27 @@
 import java.util.Random;
 
 public class GameLogic {
-    private final static GameData gameData = new GameData();
-    public static final UIWindow uiWindow = new UIWindow(gameData);
+    public static final UIWindow uiWindow = new UIWindow();
     public static Player currPlayer;//The current player whose turn it is
-    public static int territoryCode;//Holds the code of a territory
 
+    private GameData gameData;//Holds game data
     private String command;//Holds the command entered by the player
+    public int territoryCode;//Holds the code of a territory
     private int numTurns=1;//Keeps track of the number turns
     public int numSets=0;//Keeps track of the number of card sets turned in
     private boolean getsCard;//True if the current player has conquered at least one territory
 
     public void game(){
+        gameData = uiWindow.getGameData();
         //Initialises main player data
         gameData.initialisePlayersAndUnits();
         //Decides player order
         gameData.firstPlayer();
         initialTroopPlacement();//Runs the initial troop placement for the game
         for(int i = 0; !gameData.isGameOver(); i++){//Runs the loop until the game id finished i.e a player wins
-            GameLogic.uiWindow.displayString("Turn "+ numTurns);//Prints turn number
+            uiWindow.displayString("Turn "+ numTurns);//Prints turn number
             currPlayer=gameData.players[gameData.playerOrder.get(i)];//Changes current player
-            GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
+            uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n");
             if(i<=1){//Human Player
                 turnPlayer();
             }else{//Neutral Player
@@ -39,7 +40,7 @@ public class GameLogic {
                     }
                     randTroopPlacement(troops);//Random places the neutral gameData.players troops
                 }
-                GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() + " has placed all their troops\n");
+                uiWindow.displayString("" + currPlayer.getPlayerName() + " has placed all their troops\n");
             }
             if(i==gameData.playerOrder.size()-1){//Resets turn loop
                 i=-1;
@@ -47,7 +48,7 @@ public class GameLogic {
             numTurns++;//Increases number of turns
         }
         //Prints who has won the game
-        GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() +" has won the game!");
+        uiWindow.displayString("" + currPlayer.getPlayerName() +" has won the game!");
     }
 
     public void initialTroopPlacement(){//Function to place initial troops
@@ -55,12 +56,12 @@ public class GameLogic {
 
         for(int i = 0; numTurns<=54; i++){
             currPlayer=gameData.players[gameData.playerOrder.get(i)];
-            GameLogic.uiWindow.displayString("Turn "+ numTurns );
+            uiWindow.displayString("Turn "+ numTurns );
 
             if(i<=1){//Human Player
-                GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n\nYou must place 3 troops in a territory that you own\n");
+                uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()] + "), it is your turn\n\nYou must place 3 troops in a territory that you own\n");
                 if(numTurns==1||numTurns==2){
-                    GameLogic.uiWindow.displayString("Do you want to auto place the your troops?\nPlease enter 'YES' or 'NO'\n");
+                    uiWindow.displayString("Do you want to auto place the your troops?\nPlease enter 'YES' or 'NO'\n");
                     command = Checks.checkCommand(new String[]{"YES","NO"});
 
                     if(command.equals("YES")){
@@ -74,19 +75,19 @@ public class GameLogic {
 
                 if(i==0){
                     if(!player1Auto){
-                        placeTroops(true,gameData,command);
+                        placeTroops(true,gameData);
                     }else{
                         randTroopPlacement(3);
                     }
                 }else{
                     if(!player2Auto){
-                        placeTroops(true,gameData,command);
+                        placeTroops(true,gameData);
                     }else{
                         randTroopPlacement(3);
                     }
                 }
             }else{//Neutral gameData.players
-                GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()]+ "), it is your turn\n\nYou must place 2 troops in a territory that you own\n");
+                uiWindow.displayString("" + currPlayer.getPlayerName() +" (" + Constants.PLAYER_COLOR_NAME[currPlayer.getPlayerCode()]+ "), it is your turn\n\nYou must place 2 troops in a territory that you own\n");
                 randTroopPlacement(2);
             }
 
@@ -102,7 +103,7 @@ public class GameLogic {
         numSets=Deploy.deploy(gameData,numSets,command);
 
         //Attack phase
-        GameLogic.uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase. You may also enter 'SKIP' at any time to move to the Fortify phase\n");
+        uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase.\nYou may also enter 'SKIP' at any time to move to the Fortify phase\n");
         command = Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});//Checks if player wishes to continue attack or move to the fortify phase
         while(command.equals("CONTINUE")){
             getsCard=Attack.attack(gameData);//Executes the attack functionality for the player
@@ -112,7 +113,7 @@ public class GameLogic {
             if (command.equals("SKIP")){//Moves to the fortify phase
                 break;
             }
-            GameLogic.uiWindow.displayString("Please enter 'CONTINUE' to continue attacking with your troops or 'SKIP' to move to the Fortify phase\n");
+            uiWindow.displayString("Please enter 'CONTINUE' to continue attacking with your troops or 'SKIP' to move to the Fortify phase\n");
             command = Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});
         }
 
@@ -120,17 +121,17 @@ public class GameLogic {
         if(gameData.gameDeck.getCardPile().size()!=0){
             if(getsCard){
                 getsCard=false;
-                GameLogic.uiWindow.displayString("You have received a territory card for successfully conquering a territory");
+                uiWindow.displayString("You have received a territory card for successfully conquering a territory");
                 currPlayer.addTerritoryCard(gameData.gameDeck.drawCard());
-                uiWindow.displayString(Deploy.showCards(gameData));
+                uiWindow.displayString(Deploy.showCards());
             }
         }
 
         //Fortify phase
-        GameLogic.uiWindow.displayString("It is now your fortify phase.\nPlease enter 'CONTINUE' to fortify one of your territories or 'END' to skip the Fortify phase and end your turn\n");
+        uiWindow.displayString("It is now your fortify phase.\nPlease enter 'CONTINUE' to fortify one of your territories or 'END' to skip the Fortify phase and end your turn\n");
         command = Checks.checkCommand(new String[]{"CONTINUE", "END"});//Checks if user wishes to end their turn or continue
         if(command.equals("CONTINUE")){
-            Fortify.fortify(gameData,command);//Executes functionality for gameData.players fortify phase
+            Fortify.fortify(gameData);//Executes functionality for gameData.players fortify phase
         }
     }
 
@@ -143,11 +144,11 @@ public class GameLogic {
         currPlayer.addArmies(-troops);//Removes the troops from the gameData.players reserves
         //Displays where the troops were placed
         if(troops==1){
-            GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() + " placed " + troops + " troop in " + gameData.getTerritory(territoryCode).territoryName + "\n");
+            uiWindow.displayString("" + currPlayer.getPlayerName() + " placed " + troops + " troop in " + gameData.getTerritory(territoryCode).territoryName + "\n");
         }else {
-            GameLogic.uiWindow.displayString("" + currPlayer.getPlayerName() + " placed " + troops + " troops in " + gameData.getTerritory(territoryCode).territoryName + "\n");
+            uiWindow.displayString("" + currPlayer.getPlayerName() + " placed " + troops + " troops in " + gameData.getTerritory(territoryCode).territoryName + "\n");
         }
-        GameLogic.uiWindow.displayMap();//Refreshes map
+        uiWindow.displayMap();//Refreshes map
     }
 
     //Function for simulating a dice roll
@@ -157,12 +158,14 @@ public class GameLogic {
     }
     
     //Function that allows human player to place troops
-    public static void placeTroops(boolean initial,GameData gameData,String command){
+    public static void placeTroops(boolean initial, GameData gameData){
+        int territoryCode;
+        String command;
         do{//Gets the territory where the player wishes to place there troops
-            GameLogic.uiWindow.displayString("Please enter the name of the territory in which you wish to place your troops\n");
-            command = GameLogic.uiWindow.getCommand();//Get player command
-            territoryCode = Checks.checkHasTerritory(1,command);//Checks they own the territory
-            GameLogic.uiWindow.displayString("Do you wish to place your troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
+            uiWindow.displayString("Please enter the name of the territory in which you wish to place your troops\n");
+            command = uiWindow.getCommand();//Get player command
+            territoryCode = Checks.checkHasTerritory(1, command);//Checks they own the territory
+            uiWindow.displayString("Do you wish to place your troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
             command = Checks.checkCommand(new String[]{"YES", "NO"});//Double checks the player has selected the right territory
         } while (command.equals("NO"));
 
@@ -171,16 +174,16 @@ public class GameLogic {
             do {
                 if(currPlayer.getNumArmies()==1){
                     numTroops=1;
-                    GameLogic.uiWindow.displayString("Do you wish to place " + numTroops + " troop in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
+                    uiWindow.displayString("Do you wish to place " + numTroops + " troop in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
                 }else{
-                    GameLogic.uiWindow.displayString("Please enter the number of troops you wish to place: \n");
-                    command = GameLogic.uiWindow.getCommand();
-                    numTroops = Checks.checkNumber(1,gameData,command);
-                    GameLogic.uiWindow.displayString("Do you wish to place " + numTroops + " troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
+                    uiWindow.displayString("Please enter the number of troops you wish to place: \n");
+                    command = uiWindow.getCommand();
+                    numTroops = Checks.checkNumber(1,gameData, command,territoryCode);
+                    uiWindow.displayString("Do you wish to place " + numTroops + " troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
                 }
                 command = Checks.checkCommand(new String[]{"YES", "NO", "RETURN"});
                 if (command.equals("RETURN")) {
-                    placeTroops(false,gameData,command);
+                    placeTroops(false,gameData);
                     return;
                 }
             } while (command.equals("NO"));
@@ -188,7 +191,7 @@ public class GameLogic {
         //adds troops to the board from player reserves
         gameData.addUnits(territoryCode,numTroops);
         currPlayer.addArmies(-numTroops);
-        GameLogic.uiWindow.displayMap();//refreshes map
+        uiWindow.displayMap();//refreshes map
     }
 
     //Function to get the number of troops that a player earns in a turn
@@ -207,11 +210,24 @@ public class GameLogic {
 
         if((currPlayer.getNumPlayerTerritories()<9&&numTroops<3)) {
             numTroops=3;
-            GameLogic.uiWindow.displayString("You have received " + numTroops + " troops in total\n");
+            uiWindow.displayString("You have received " + numTroops + " troops in total\n");
         }else{
-            GameLogic.uiWindow.displayString("You have received " + numTroops + " troops in total\n");
-            GameLogic.uiWindow.displayString(strForNumTroops.toString());
+            uiWindow.displayString("You have received " + numTroops + " troops in total\n");
+            uiWindow.displayString(strForNumTroops.toString());
         }
         return numTroops;//returns number of troops earned
+    }
+
+    public static String skipOption(String msg, String[] correctInputs, String skipMsg){
+        String command;
+        do {
+            uiWindow.displayString(msg);
+            command=Checks.checkCommand(correctInputs);
+        } while (command.equals("CONTINUE"));
+        if (command.equals(skipMsg)) {
+            return skipMsg;
+        }
+
+        return command;
     }
 }

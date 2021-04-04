@@ -165,8 +165,10 @@ public class GameLogic {
             uiWindow.displayString("Please enter the name of the territory in which you wish to place your troops\n");
             command = uiWindow.getCommand();//Get player command
             territoryCode = Checks.checkHasTerritory(1, command);//Checks they own the territory
-            uiWindow.displayString("Do you wish to place your troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
-            command = Checks.checkCommand(new String[]{"YES", "NO"});//Double checks the player has selected the right territory
+            if(currPlayer.getNumArmies()!=1){
+                uiWindow.displayString("Do you wish to place your troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n");
+                command = Checks.checkCommand(new String[]{"YES", "NO"});//Double checks the player has selected the right territory
+            }
         } while (command.equals("NO"));
 
         int numTroops=3;

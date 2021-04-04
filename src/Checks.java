@@ -88,6 +88,7 @@ public class Checks {
             GameLogic.uiWindow.displayString("You must enter a valid territory name. Please try again\n");
             command = GameLogic.uiWindow.getCommand();
             territoryCode = checkHasTerritory(checkType,command);
+            return territoryCode;
         }
 
         check=false;
@@ -102,10 +103,12 @@ public class Checks {
             GameLogic.uiWindow.displayString("You do not own " + command + ". Please enter the name of another territory\n");
             command = GameLogic.uiWindow.getCommand();
             territoryCode=checkHasTerritory(1,command);
+            return territoryCode;
         }else if(check&&checkType==2){//Tells the player that they do not own the territory and must select another one (for attacking)
             GameLogic.uiWindow.displayString("You already own " + command + ". Please enter the name of another territory\n");
             command = GameLogic.uiWindow.getCommand();
             territoryCode=checkHasTerritory(2,command);
+            return territoryCode;
         }
 
         //If a territory that a player does not own is required,  this searches all territories

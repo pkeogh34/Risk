@@ -62,7 +62,7 @@ public class Deploy {
 
     public static String showCards() {
         StringBuilder str = new StringBuilder();
-        GameLogic.uiWindow.displayString(("\nPlayer Cards: \n"));
+        GameLogic.uiWindow.displayString(("\nPlayer Cards: "));
         for (Deck.TerritoryCard territoryCard : GameLogic.currPlayer.getTerritoryCards()) {
             str.append(territoryCard.toString());
         }

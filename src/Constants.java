@@ -17,11 +17,17 @@ public class Constants {
 	//                                                        N.America                            Europe                              Asia                         Australia                         S.America                      Africa
     public static final Color[] CONTINENT_COLORS = {new Color(195,133,83), new Color(75, 203, 215), new Color(255,127,90), new Color(224, 172, 213), new Color(100,0,150), new Color(255,223,0)};
     public static final String[] COUNTRY_NAMES = {
+    		//0
             "Ontario", "Quebec", "NW Territory", "Alberta", "Greenland", "E United States", "W United States", "Central America", "Alaska",
-            "Great Britain", "W Europe", "S Europe", "Ukraine", "N Europe", "Iceland", "Scandinavia",
-            "Afghanistan", "India", "Middle East", "Japan", "Ural", "Yakutsk", "Kamchatka", "Siam", "Irkutsk", "Siberia", "Mongolia", "China",
-            "E Australia", "New Guinea", "W Australia", "Indonesia",
+            //9
+			"Great Britain", "W Europe", "S Europe", "Ukraine", "N Europe", "Iceland", "Scandinavia",
+            //16
+			"Afghanistan", "India", "Middle East", "Japan", "Ural", "Yakutsk", "Kamchatka", "Siam", "Irkutsk", "Siberia", "Mongolia", "China",
+            //28
+			"E Australia", "New Guinea", "W Australia", "Indonesia",
+			//32
             "Venezuela", "Peru", "Brazil", "Argentina",
+			//36
             "Congo", "N Africa", "S Africa", "Egypt", "E Africa", "Madagascar"};  // for reference
     public static final int[][] ADJACENT = {
             {4, 1, 5, 6, 3, 2},    // 0
@@ -33,15 +39,17 @@ public class Constants {
             {3, 0, 5, 7},
             {6, 5, 32},
             {2, 3, 22},
+			//done from 9 (below)
             {14, 15, 13, 10},
             {9, 13, 11, 37},     // 10
             {13, 12, 18, 37, 39, 10},
             {20, 16, 18, 11, 13, 15},
             {15, 12, 11, 10, 9},
             {15, 9, 4},
-            {12, 13, 14},
+            {9, 12, 13, 14},
             {20, 27, 17, 18, 12},
-            {16, 27, 23, 18},
+			{16, 27, 23, 18},
+			//to 17 (above)
             {12, 16, 17, 40, 39, 11},
             {26, 22},
             {25, 27, 16, 12},    // 20

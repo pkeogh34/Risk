@@ -76,7 +76,7 @@ public class Deploy {
         int[] removedCards = new int[3];
         do{
             match=0;
-            GameLogic.uiWindow.displayString("Please enter the insignia of the cars you wish to trade in: \n");
+            GameLogic.uiWindow.displayString("Please enter the insignia of the cards you wish to trade in: \n");
             String command = GameLogic.uiWindow.getCommand();
 
 

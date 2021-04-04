@@ -138,7 +138,6 @@ public class Attack {
                         break;
                     }else{
                         numRedDice = Checks.checkNumber(2, gameData, command, attackingTerritory);
-                        System.out.println(numRedDice);
                     }
                     j++;
                 } while (numRedDice == -2);

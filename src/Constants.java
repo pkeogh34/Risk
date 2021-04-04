@@ -218,7 +218,6 @@ public class Constants {
 			"WCI",
 			"AWI",
 			"ACW",
-
 	};
 
 	public static int[] NUM_ARMIES_FOR_SET = {4, 6, 8, 10, 12, 15};

@@ -132,7 +132,7 @@ public class Checks {
         }catch(Exception e){
             //If not a number, ask the player to enter another number
             GameLogic.uiWindow.displayString("You must enter a number. Please try again\n");
-            command=GameLogic.uiWindow.getCommand();
+            command= GameLogic.uiWindow.getCommand();
             checkNumber(numType,gameData,command,territoryCode);
         }
 
@@ -248,14 +248,16 @@ public class Checks {
             }
 
             if(checkAdjacent(territory1,playerTerritories.get(i).territoryCode,2)){
-                territory1=playerTerritories.get(i).territoryCode;
+                int tmp=playerTerritories.get(i).territoryCode;
+                System.out.print(playerTerritories.get(i).territoryName + " -> ");
                 playerTerritories.remove(i);//Removes the territory once it is visited
                 i=-1;
                 //Recursive call
-                if(checkHasValidPath(territory1,territory2,playerTerritories)){
+                if(checkHasValidPath(tmp,territory2,playerTerritories)){
                     return true;
                 }
             }
+
             i++;
         }
         return false;

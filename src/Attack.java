@@ -1,5 +1,5 @@
 public class Attack {
-    public static boolean attack(GameData gameData){
+    public static int attack(GameData gameData){
         String command;
         int attackingTerritory,defendingTerritory;
         do{
@@ -9,17 +9,17 @@ public class Attack {
 
                 command=GameLogic.skipOption(("Please enter the name of the territory from which you wish to attack\n"),(new String[]{"SKIP"}),"SKIP");
                 if (command.equals("SKIP")) {
-                    return false;
+                    return -1;
                 }
 
                 attackingTerritory = Checks.checkHasTerritory(1,command);
                 if(attackingTerritory==-1){
-                    return false;
+                    return -1;
                 }
 
                 attackingTerritory = Checks.checkHasAttackableTerritory(attackingTerritory, GameLogic.currPlayer.getPlayerCode(),gameData);
                 if(attackingTerritory==-1){
-                    return false;
+                    return -1;
                 }
 
                 if (gameData.getNumUnits(attackingTerritory) <= 1) {
@@ -30,14 +30,14 @@ public class Attack {
 
             command=GameLogic.skipOption(("Do you wish to attack from " + gameData.getTerritory(attackingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\n"),(new String[]{"YES", "NO", "SKIP"}),"SKIP");
             if (command.equals("SKIP")) {
-                return false;
+                return -1;
             }
         } while (command.equals("NO"));
 
         do{
             command=GameLogic.skipOption(("Please enter the name of the territory you wish to attack\n"),(new String[]{"SKIP"}),"SKIP");
             if (command.equals("SKIP")) {
-                return false;
+                return -1;
             }
 
             defendingTerritory = Checks.checkHasTerritory(2,command);
@@ -45,17 +45,17 @@ public class Attack {
 
             command=GameLogic.skipOption(("Do you wish to attack " + gameData.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to choose another territory\nYou may enter 'RETURN' to attack from another territory\n"),(new String[]{"YES", "NO","RETURN","SKIP"}),"SKIP");
             if (command.equals("SKIP")) {
-                return false;
+                return -1;
             }
             if(command.equals("RETURN")){
                 attack(gameData);
-                return false;
+                return 0;
             }
         } while (command.equals("NO"));
 
         int numRedDice=executeAttack(attackingTerritory,defendingTerritory,gameData,command);
         if (numRedDice==-1){
-            return false;
+            return -1;
         }
 
         Player defendingPlayer=gameData.players[gameData.getOccupier(defendingTerritory)];
@@ -87,7 +87,7 @@ public class Attack {
 
         }else if(gameData.getTerritory(attackingTerritory).numOccupyingArmies==1){
             GameLogic.uiWindow.displayString("" + GameLogic.currPlayer.getPlayerName() + " has failed to take over " + gameData.getTerritory(defendingTerritory).territoryName + "\n");
-            return false;
+            return 0;
         }
 
         if(defendingPlayer.getNumPlayerTerritories()==0){
@@ -100,11 +100,12 @@ public class Attack {
             }
             if(defendingPlayer.getPlayerCode()==0||defendingPlayer.getPlayerCode()==1){
                 gameData.gameOver();
+                return -2;
             }
             gameData.playerOrder.remove(i);
         }
 
-        return true;
+        return 1;
     }
 
     private static int executeAttack(int attackingTerritory, int defendingTerritory,GameData gameData,String command){

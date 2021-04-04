@@ -250,7 +250,7 @@ public class Checks {
             if(checkAdjacent(territory1,playerTerritories.get(i).territoryCode,2)){
                 territory1=playerTerritories.get(i).territoryCode;
                 playerTerritories.remove(i);//Removes the territory once it is visited
-                i--;
+                i=-1;
                 //Recursive call
                 if(checkHasValidPath(territory1,territory2,playerTerritories)){
                     return true;

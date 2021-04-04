@@ -2,6 +2,7 @@
 //Team members: Yanni Qu (19415824), Patrick Keogh (19321326), Anamaria Andreian (19459304)
 
 import java.awt.event.ActionEvent;
+import java.io.Serial;
 import java.util.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import javax.swing.JTextField;
 
 public class UserInputArea extends JPanel  {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private static final int FONT_SIZE = 14;
 
@@ -25,7 +27,6 @@ public class UserInputArea extends JPanel  {
                     commandField.setText("");
                     commandBuffer.notify();
                 }
-                return;
             }
         }
         ActionListener listener = new AddActionListener();
@@ -33,7 +34,6 @@ public class UserInputArea extends JPanel  {
         commandField.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, FONT_SIZE));
         setLayout(new BorderLayout());
         add(commandField, BorderLayout.CENTER);
-        return;
     }
 
     public String getCommand() {

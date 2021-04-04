@@ -4,9 +4,11 @@
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.io.Serial;
 
 public class UITextArea extends JPanel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private static final int CHARACTER_WIDTH = 16;
     private static final int FONT_SIZE = 14;
@@ -21,7 +23,6 @@ public class UITextArea extends JPanel {
         textArea.setEditable(false);
         DefaultCaret caret = (DefaultCaret)textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        return;
     }
 
     public void addText(String text) {

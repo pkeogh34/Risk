@@ -78,7 +78,7 @@ public class Fortify {
             if(numTroopsToTransfer==1){
                 GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + gameData.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may also enter 'RETURN' to move troops from different territories\n");
             }else{
-                GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + gameData.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\\nYou may also enter 'RETURN' to move troops from different territories\n");
+                GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troops into " + gameData.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may also enter 'RETURN' to move troops from different territories\n");
             }
             command = Checks.checkCommand(new String[]{"YES", "NO"});
         } while (command.equals("NO"));

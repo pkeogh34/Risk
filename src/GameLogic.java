@@ -12,7 +12,7 @@ public class GameLogic {
     public int territoryCode;//Holds the code of a territory
     private int numTurns=1;//Keeps track of the number turns
     public int numSets=0;//Keeps track of the number of card sets turned in
-    private boolean getsCard;//True if the current player has conquered at least one territory
+    private int getsCard;//True if the current player has conquered at least one territory
 
     public void game(){
         gameData = uiWindow.getGameData();
@@ -107,10 +107,10 @@ public class GameLogic {
         command = Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});//Checks if player wishes to continue attack or move to the fortify phase
         while(command.equals("CONTINUE")){
             getsCard=Attack.attack(gameData);//Executes the attack functionality for the player
-            if(command.equals("GAME OVER")){//Returns if the game is over
+            if(getsCard==-2){//Returns if the game is over
                 return;
             }
-            if (command.equals("SKIP")){//Moves to the fortify phase
+            if (getsCard==-1){//Moves to the fortify phase
                 break;
             }
             uiWindow.displayString("Please enter 'CONTINUE' to continue attacking with your troops or 'SKIP' to move to the Fortify phase\n");
@@ -119,8 +119,8 @@ public class GameLogic {
 
         //Draw a card if a territory was conquered
         if(gameData.gameDeck.getCardPile().size()!=0){
-            if(getsCard){
-                getsCard=false;
+            if(getsCard==1){
+                getsCard=0;
                 uiWindow.displayString("You have received a territory card for successfully conquering a territory");
                 currPlayer.addTerritoryCard(gameData.gameDeck.drawCard());
                 uiWindow.displayString(Deploy.showCards());

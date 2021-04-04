@@ -97,7 +97,7 @@ public class GameData {
         }
 
         if (roll1 > roll2) {
-            GameLogic.uiWindow.displayString("" + players[1].getPlayerName() + " will go first\n");
+            GameLogic.uiWindow.displayString("" + players[0].getPlayerName() + " will go first\n");
             playerOrder.add(0);
             playerOrder.add(1);
         }else{

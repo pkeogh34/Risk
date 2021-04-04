@@ -31,18 +31,18 @@ public class Fortify {
                 boolean check;
                 do {
                     do{
-                        command =GameLogic.skipOption(("Please enter the name of the territory you wish to transfer your troops to\n"),(new String[]{"END"}),"END");
+                        command = GameLogic.skipOption(("Please enter the name of the territory you wish to transfer your troops to\n"),(new String[]{"END"}),"END");
                         if(command.equals("END")){
                             return;
                         }
 
-                        if(Checks.checkHasTerritory(1, command)==territory1){
+                        territory2 = Checks.checkHasTerritory(1, command);
+                        if(territory2==territory1){
                             GameLogic.uiWindow.displayString("You cannot select the same territory\n");
                         }
-                    }while (Checks.checkHasTerritory(1, command)==territory1);
+                    }while (territory2==territory1);
 
                     check=true;
-                    territory2 = Checks.checkHasTerritory(1, command);
                     ArrayList<Territory> temp = new ArrayList<>(GameLogic.currPlayer.getPlayerTerritories());
                     for (int i = 0; i < temp.size(); i++) {
                         if (temp.get(i).territoryCode == territory1) {
@@ -72,8 +72,10 @@ public class Fortify {
         int numTroopsToTransfer;
         do{
             GameLogic.uiWindow.displayString("Please enter the number of troops to be transferred\n");
-            command = GameLogic.uiWindow.getCommand();
-            numTroopsToTransfer = Checks.checkNumber(3,gameData, command,territory1);
+            do {
+                command = GameLogic.uiWindow.getCommand();
+                numTroopsToTransfer = Checks.checkNumber(3, gameData, command, territory1);
+            }while(numTroopsToTransfer==-2);
 
             if(numTroopsToTransfer==1){
                 GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + gameData.getTerritory(territory2).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may also enter 'RETURN' to move troops from different territories\n");

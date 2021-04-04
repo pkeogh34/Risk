@@ -85,8 +85,10 @@ public class Checks {
             check=false;
         }
         if(!check){
+            System.out.println(command);
             GameLogic.uiWindow.displayString("You must enter a valid territory name. Please try again\n");
             command = GameLogic.uiWindow.getCommand();
+            System.out.println(command);
             territoryCode = checkHasTerritory(checkType,command);
             return territoryCode;
         }
@@ -131,9 +133,8 @@ public class Checks {
             Integer.parseInt(command);
         }catch(Exception e){
             //If not a number, ask the player to enter another number
-            GameLogic.uiWindow.displayString("You must enter a number. Please try again\n");
-            command= GameLogic.uiWindow.getCommand();
-            checkNumber(numType,gameData,command,territoryCode);
+            GameLogic.uiWindow.displayString("You must enter a number.\n");
+            return -2;
         }
 
         //Converts the String to an int
@@ -141,40 +142,29 @@ public class Checks {
 
         if(number<=0){//If not less than 0, ask the player to enter another number
             GameLogic.uiWindow.displayString("You must enter a number greater than 0. Please try again\n");
-            command=GameLogic.uiWindow.getCommand();
-            number=checkNumber(numType,gameData,command,territoryCode);
+            number=-2;
         }
 
         if(numType==1){//If placing troops
             if(number>GameLogic.currPlayer.getNumArmies()){//If more troops than player has in reserve, ask the player to enter another number
                 GameLogic.uiWindow.displayString("You do not have that many troops. Please try again\n");
-                command=GameLogic.uiWindow.getCommand();
-                number=checkNumber(numType,gameData,command,territoryCode);
+                number=-2;
             }
         }else if(numType==2){//If rolling dice
             if(number>3){//If greater than 3, ask the player to enter another number
-                do {
-                    GameLogic.uiWindow.displayString("The maximum number of dice that can be rolled is 3. Please try again\n");
-                    command=checkCommand(new String[]{"SKIP"});
-                }while(command.equals("CONTINUE"));
+                GameLogic.uiWindow.displayString("The maximum number of dice that can be rolled is 3. Please try again\n");
+                return -2;
             }else if(number>= gameData.getNumUnits(territoryCode)){//If greater than or equal to number of troops in the territory, ask the player to enter another number
-                do {
-                    GameLogic.uiWindow.displayString("You can only roll " + (gameData.getNumUnits(territoryCode) - 1) + " dice. Please try again\n");
-                    command=checkCommand(new String[]{"SKIP"});
-                }while(command.equals("CONTINUE"));
+                GameLogic.uiWindow.displayString("You can only roll " + (gameData.getNumUnits(territoryCode) - 1) + " dice. Please try again\n");
+                return -2;
             }
-            if(command.equals("SKIP")){//Returns -1 if the player wishes to skip attack phase
-                return -1;
-            }
-            number=checkNumber(numType,gameData,command,territoryCode);
+
         }else if(number==gameData.getTerritory(territoryCode).numOccupyingArmies){//If equal to number of troops in the territory, ask the player to enter another number
             GameLogic.uiWindow.displayString("You must leave at least one troop in your territory at all times\n");
-            command=GameLogic.uiWindow.getCommand();
-            number=checkNumber(numType,gameData,command,territoryCode);
+            number=-2;
         }else if(number> gameData.getTerritory(territoryCode).numOccupyingArmies){//If greater than the number of troops in the territory, ask the player to enter another number
             GameLogic.uiWindow.displayString("You do not have that many troops to transfer\n");
-            command=GameLogic.uiWindow.getCommand();
-            number=checkNumber(numType,gameData,command,territoryCode);
+            number=-2;
         }else if(numType>3) {//Tell the player the minimum number of troops they must transfer based on the last number of dice they rolled
             if (number < (numType - 4)) {
                 if ((numType - 4) == 1) {
@@ -182,8 +172,7 @@ public class Checks {
                 } else {
                     GameLogic.uiWindow.displayString("You must transfer at least " + (numType - 4) + " troops");
                 }
-                command = GameLogic.uiWindow.getCommand();
-                number = checkNumber(numType,gameData,command,territoryCode);
+                number = -2;
             }
         }
 
@@ -211,30 +200,49 @@ public class Checks {
         return true;
     }
 
-    public static int checkHasAttackableTerritory(int territoryCode, int playerCode, GameData gameData){
+    public static int checkHasSurrounding(int territoryCode, int playerCode, GameData gameData, int checkType){
         boolean check=false;
         for(int i = 0; i < Constants.ADJACENT[territoryCode].length; i++) {
             if(gameData.getOccupier(Constants.ADJACENT[territoryCode][i])!=playerCode){
-                check =true;
+                check = true;
                 break;
             }
         }
 
-        if(!check){
-            GameLogic.uiWindow.displayString("You already own all of the territories surrounding " + gameData.getTerritory(territoryCode).territoryName + "\n");
-            String command=GameLogic.skipOption(("Please enter the name of another territory\n"),(new String[]{"SKIP"}),"SKIP");
-            if (command.equals("SKIP")) {
-                return -1;
-            }
+        if(checkType==1) {
+            if (!check) {
+                GameLogic.uiWindow.displayString("You already own all of the territories surrounding " + gameData.getTerritory(territoryCode).territoryName + "\n");
+                String command = GameLogic.skipOption(("Please enter the name of another territory\n"), (new String[]{"SKIP"}), "SKIP");
+                if (command.equals("SKIP")) {
+                    return -1;
+                }
 
-            territoryCode = Checks.checkHasTerritory(1, command);
-            if(territoryCode==-1){
-                return -1;
+                territoryCode = Checks.checkHasTerritory(1, command);
+                if (territoryCode == -1) {
+                    return -1;
+                }
+                territoryCode = Checks.checkHasSurrounding(territoryCode, GameLogic.currPlayer.getPlayerCode(), gameData, checkType);
             }
-            territoryCode = Checks.checkHasAttackableTerritory(territoryCode, GameLogic.currPlayer.getPlayerCode(),gameData);
+        }
+
+        if(checkType==2){
+            if(!check){
+                return -2;
+            }
         }
 
         return territoryCode;
+    }
+
+    public static boolean checkCanAttack(ArrayList<Territory> playerTerritories, int playerCode, GameData gameData){
+        for(int i = 0; i < playerTerritories.size(); i++) {
+            if(checkHasSurrounding(playerTerritories.get(i).territoryCode, playerCode,gameData,2)!=-2 && gameData.getTerritory(i).numOccupyingArmies!=1){
+                return true;
+            }
+        }
+
+        GameLogic.uiWindow.displayString("You have no territories from which you can attack.\n");
+        return false;
     }
 
     //Recursive function to find if there is a valid path between the territories a player wishes to move troops between
@@ -249,7 +257,6 @@ public class Checks {
 
             if(checkAdjacent(territory1,playerTerritories.get(i).territoryCode,2)){
                 int tmp=playerTerritories.get(i).territoryCode;
-                System.out.print(playerTerritories.get(i).territoryName + " -> ");
                 playerTerritories.remove(i);//Removes the territory once it is visited
                 i=-1;
                 //Recursive call

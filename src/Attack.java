@@ -17,7 +17,7 @@ public class Attack {
                     return -1;
                 }
 
-                attackingTerritory = Checks.checkHasAttackableTerritory(attackingTerritory, GameLogic.currPlayer.getPlayerCode(),gameData);
+                attackingTerritory = Checks.checkHasSurrounding(attackingTerritory, GameLogic.currPlayer.getPlayerCode(),gameData,1);
                 if(attackingTerritory==-1){
                     return -1;
                 }
@@ -70,8 +70,10 @@ public class Attack {
             GameLogic.uiWindow.displayString("As you rolled " + numRedDice + " dice on your last attack, you must transfer at least " + numRedDice + "\n");
             do {
                 GameLogic.uiWindow.displayString("Please enter the number of troops to be transferred\n");
-                command= GameLogic.uiWindow.getCommand();
-                numTroopsToTransfer=Checks.checkNumber(4+(numRedDice),gameData,command,attackingTerritory);
+                do {
+                    command = GameLogic.uiWindow.getCommand();
+                    numTroopsToTransfer = Checks.checkNumber(4 + (numRedDice), gameData, command, attackingTerritory);
+                }while(numTroopsToTransfer==-2);
 
                 if(numTroopsToTransfer==1){
                     GameLogic.uiWindow.displayString("Do you wish to transfer " + numTroopsToTransfer + " troop into " + gameData.getTerritory(defendingTerritory).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\n");
@@ -108,34 +110,51 @@ public class Attack {
         return 1;
     }
 
-    private static int executeAttack(int attackingTerritory, int defendingTerritory,GameData gameData,String command){
+    private static int executeAttack(int attackingTerritory, int defendingTerritory, GameData gameData, String command){
         int numRedDice = 0;
         int numWhiteDice;
         label:
         while(gameData.getTerritory(attackingTerritory).numOccupyingArmies>1&&gameData.getTerritory(defendingTerritory).numOccupyingArmies>0) {
             numRedDice = 0;
-            numWhiteDice = 1;
-            if(!command.equals("BLITZ")) {
-                command=GameLogic.skipOption(("Please enter the number of dice you wish to roll.\nEnter 'STOP' if you want to stop attacking or enter 'BLITZ' to auto-run the attack sequence\n"),(new String[]{"SKIP", "STOP", "BLITZ"}),"SKIP");
-                if (command.equals("SKIP")) {
-                    return -1;
-                } else if (command.equals("STOP")) {
-                    break;
-                }
-            }
 
             if (gameData.getTerritory(defendingTerritory).numOccupyingArmies > 1) {
                 numWhiteDice = 2;
+            } else {
+                numWhiteDice = 1;
+            }
+
+            int j = 0;
+            if(!command.equals("BLITZ")) {
+                do {
+                    if (j == 0) {
+                        command = GameLogic.skipOption(("Please enter the number of dice you wish to roll.\nEnter 'STOP' if you want to stop attacking or enter 'BLITZ' to auto-run the attack sequence\n"), (new String[]{"SKIP", "STOP", "BLITZ"}), "SKIP");
+                    } else {
+                        command = GameLogic.skipOption("", (new String[]{"SKIP", "STOP", "BLITZ"}), "SKIP");
+                    }
+
+                    if (command.equals("SKIP")) {
+                        return -1;
+                    } else if (command.equals("STOP") || command.equals("BLITZ")) {
+                        break;
+                    }else{
+                        numRedDice = Checks.checkNumber(2, gameData, command, attackingTerritory);
+                        System.out.println(numRedDice);
+                    }
+                    j++;
+                } while (numRedDice == -2);
+            }
+
+            if(command.equals("STOP")){
+                break;
             }
 
             if(!command.equals("BLITZ")) {
-                numRedDice = Checks.checkNumber(2,gameData,command,attackingTerritory);
+
                 if(numRedDice==-1){
                     return numRedDice;
                 }
 
-
-                command=GameLogic.skipOption(("Please enter 'ATTACK' to attack " + gameData.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n"),(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"}),"SKIP");
+                command =GameLogic.skipOption(("Please enter 'ATTACK' to attack " + gameData.getTerritory(defendingTerritory).territoryName + ", 'CHANGE' to change the number of dice to attack with or 'STOP' if you wish to stop attacking\n"),(new String[]{"ATTACK", "CHANGE", "STOP", "SKIP"}),"SKIP");
                 switch (command) {
                     case "SKIP":
                         return -1;

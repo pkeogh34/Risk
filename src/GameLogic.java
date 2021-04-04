@@ -103,18 +103,24 @@ public class GameLogic {
         numSets=Deploy.deploy(gameData,numSets,command);
 
         //Attack phase
-        uiWindow.displayString("You have placed all your troops. It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase.\nYou may also enter 'SKIP' at any time to move to the Fortify phase\n");
-        command = Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});//Checks if player wishes to continue attack or move to the fortify phase
-        while(command.equals("CONTINUE")){
-            getsCard=Attack.attack(gameData);//Executes the attack functionality for the player
-            if(getsCard==-2){//Returns if the game is over
-                return;
+        uiWindow.displayString("You have placed all your troops.\n");
+        if(Checks.checkCanAttack(currPlayer.getPlayerTerritories(),currPlayer.getPlayerCode(),gameData)) {
+            uiWindow.displayString("It is now your attack phase.\nPlease enter 'CONTINUE' to attack with your troops or 'SKIP' to skip the Attack phase.\nYou may also enter 'SKIP' at any time to move to the Fortify phase\n");
+            command = Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});//Checks if player wishes to continue attack or move to the fortify phase
+            while (command.equals("CONTINUE")) {
+                getsCard = Attack.attack(gameData);//Executes the attack functionality for the player
+                if (getsCard == -2) {//Returns if the game is over
+                    return;
+                }
+                if (getsCard == -1) {//Moves to the fortify phase
+                    break;
+                }
+                if(!Checks.checkCanAttack(currPlayer.getPlayerTerritories(),currPlayer.getPlayerCode(),gameData)) {
+                    break;
+                }
+                uiWindow.displayString("Please enter 'CONTINUE' to continue attacking with your troops or 'SKIP' to move to the Fortify phase\n");
+                command = Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});
             }
-            if (getsCard==-1){//Moves to the fortify phase
-                break;
-            }
-            uiWindow.displayString("Please enter 'CONTINUE' to continue attacking with your troops or 'SKIP' to move to the Fortify phase\n");
-            command = Checks.checkCommand(new String[]{"CONTINUE", "SKIP"});
         }
 
         //Draw a card if a territory was conquered
@@ -179,8 +185,10 @@ public class GameLogic {
                     uiWindow.displayString("Do you wish to place " + numTroops + " troop in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
                 }else{
                     uiWindow.displayString("Please enter the number of troops you wish to place: \n");
-                    command = uiWindow.getCommand();
-                    numTroops = Checks.checkNumber(1,gameData, command,territoryCode);
+                    do {
+                        command = uiWindow.getCommand();
+                        numTroops = Checks.checkNumber(1, gameData, command, territoryCode);
+                    }while(numTroops==-2);
                     uiWindow.displayString("Do you wish to place " + numTroops + " troops in " + gameData.getTerritory(territoryCode).territoryName + "?\nEnter 'YES' to continue or 'NO' to change number of troops.\nYou may enter 'RETURN' to choose the territory again\n");
                 }
                 command = Checks.checkCommand(new String[]{"YES", "NO", "RETURN"});

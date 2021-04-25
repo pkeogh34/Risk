@@ -201,16 +201,16 @@ public class Checks {
     }
 
     public static int checkHasSurrounding(int territoryCode, int playerCode, GameData gameData, int checkType){
-        boolean check=false;
+        boolean check=true;
         for(int i = 0; i < Constants.ADJACENT[territoryCode].length; i++) {
             if(gameData.getOccupier(Constants.ADJACENT[territoryCode][i])!=playerCode){
-                check = true;
+                check = false;
                 break;
             }
         }
 
         if(checkType==1) {
-            if (!check) {
+            if (check) {
                 GameLogic.uiWindow.displayString("You already own all of the territories surrounding " + gameData.getTerritory(territoryCode).territoryName + "\n");
                 String command = GameLogic.skipOption(("Please enter the name of another territory\n"), (new String[]{"SKIP"}), "SKIP");
                 if (command.equals("SKIP")) {
@@ -226,7 +226,7 @@ public class Checks {
         }
 
         if(checkType==2){
-            if(!check){
+            if(check){
                 return -2;
             }
         }
